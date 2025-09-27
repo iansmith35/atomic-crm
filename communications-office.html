@@ -3,141 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Communications Office - ISHE GROUP CRM</title>
+    <title>Communications Office - Stacy</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white">
-    <div class="min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="max-w-6xl mx-auto p-6">
         <!-- Header -->
-        <header class="bg-gray-800 p-8 text-center">
-            <div class="mb-4">
-                <a href="index.html" class="text-blue-400 hover:text-blue-300 text-sm">← Back to Dashboard</a>
-            </div>
-            <div class="text-6xl mb-4">📧</div>
-            <h1 class="text-4xl font-bold text-green-400 mb-2">Communications Office</h1>
-            <p class="text-gray-300 mb-2">Email, WhatsApp, SMS</p>
-            <p class="text-green-300">Unified Messaging - Stacy</p>
-            <div class="mt-4 flex justify-center space-x-8">
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-green-400">15</div>
-                    <div class="text-sm text-gray-400">Active Tasks</div>
+        <div class="bg-gradient-to-r from-green-500 to-teal-600 rounded-xl p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold flex items-center">
+                        📧 Communications Office - Stacy
+                    </h1>
+                    <p class="text-green-100 mt-2">Unified messaging hub - Email, WhatsApp, SMS across all brands</p>
                 </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-blue-400">247</div>
-                    <div class="text-sm text-gray-400">Messages Today</div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold" id="pendingCount">15</div>
+                    <div class="text-sm text-green-200">Pending Messages</div>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- Communications Content -->
-        <main class="p-8">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold mb-8 text-center">Communications Hub</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- Unified Inbox -->
+            <div class="md:col-span-2 bg-gray-800 rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold">📥 Unified Inbox</h2>
+                    <div class="flex space-x-2">
+                        <button onclick="filterChannel('all')" id="filterAll" class="px-3 py-1 bg-green-600 rounded text-sm">All</button>
+                        <button onclick="filterChannel('email')" id="filterEmail" class="px-3 py-1 bg-gray-600 rounded text-sm">Email</button>
+                        <button onclick="filterChannel('whatsapp')" id="filterWhatsApp" class="px-3 py-1 bg-gray-600 rounded text-sm">WhatsApp</button>
+                        <button onclick="filterChannel('sms')" id="filterSMS" class="px-3 py-1 bg-gray-600 rounded text-sm">SMS</button>
+                    </div>
+                </div>
                 
-                <!-- Communication Channels -->
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-gradient-to-br from-green-500 to-teal-600 p-6 rounded-xl">
-                        <div class="text-3xl mb-3">📧</div>
-                        <h3 class="text-lg font-bold mb-2">Email Management</h3>
-                        <p class="text-sm opacity-80 mb-3">Inbox monitoring & responses</p>
-                        <button class="w-full bg-white bg-opacity-20 p-2 rounded" onclick="alert('Opening Email Dashboard')">
-                            Open Email
-                        </button>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-teal-500 to-cyan-600 p-6 rounded-xl">
-                        <div class="text-3xl mb-3">💬</div>
-                        <h3 class="text-lg font-bold mb-2">WhatsApp Business</h3>
-                        <p class="text-sm opacity-80 mb-3">Customer messaging & support</p>
-                        <button class="w-full bg-white bg-opacity-20 p-2 rounded" onclick="alert('Opening WhatsApp Business')">
-                            Open WhatsApp
-                        </button>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-cyan-500 to-blue-600 p-6 rounded-xl">
-                        <div class="text-3xl mb-3">📱</div>
-                        <h3 class="text-lg font-bold mb-2">SMS Gateway</h3>
-                        <p class="text-sm opacity-80 mb-3">Bulk messaging & notifications</p>
-                        <button class="w-full bg-white bg-opacity-20 p-2 rounded" onclick="alert('Opening SMS Gateway')">
-                            Open SMS
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Message Queue -->
-                <div class="bg-gray-800 rounded-xl p-6 mb-6">
-                    <h3 class="text-xl font-bold mb-4">📥 Priority Messages</h3>
-                    <div class="space-y-3">
-                        <div class="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">Customer Service Inquiry</h4>
-                                <p class="text-sm text-gray-400">john.smith@email.com - Product support request</p>
+                <div id="messageList" class="space-y-3 max-h-96 overflow-y-auto">
+                    <!-- Email Message -->
+                    <div class="message-item bg-gray-700 rounded-lg p-4 border-l-4 border-blue-500" data-channel="email">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-blue-400">📧</span>
+                                <span class="font-semibold">john@example.com</span>
+                                <span class="bg-blue-600 text-xs px-2 py-1 rounded">Email</span>
                             </div>
-                            <span class="bg-red-600 text-xs px-2 py-1 rounded">Urgent</span>
+                            <span class="text-xs text-gray-400">2 min ago</span>
                         </div>
-                        <div class="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">Partnership Proposal</h4>
-                                <p class="text-sm text-gray-400">Partnership team - New collaboration opportunity</p>
-                            </div>
-                            <span class="bg-yellow-600 text-xs px-2 py-1 rounded">Follow-up</span>
+                        <h3 class="font-medium mb-1">Gas Safety Certificate Query</h3>
+                        <p class="text-sm text-gray-300 mb-3">Hi, I need to schedule a gas safety inspection...</p>
+                        <div class="flex space-x-2">
+                            <button onclick="replyMessage('email', 'john@example.com')" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">Reply</button>
+                            <button onclick="routeMessage('virtual_engineer')" class="bg-yellow-600 hover:bg-yellow-700 px-3 py-1 rounded text-sm">→ Engineer</button>
                         </div>
-                        <div class="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">Marketing Campaign Update</h4>
-                                <p class="text-sm text-gray-400">Marketing team - Weekly performance report</p>
+                    </div>
+
+                    <!-- WhatsApp Message -->
+                    <div class="message-item bg-gray-700 rounded-lg p-4 border-l-4 border-green-500" data-channel="whatsapp">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-green-400">📱</span>
+                                <span class="font-semibold">+44 7700 900123</span>
+                                <span class="bg-green-600 text-xs px-2 py-1 rounded">WhatsApp</span>
                             </div>
-                            <span class="bg-green-600 text-xs px-2 py-1 rounded">Completed</span>
+                            <span class="text-xs text-gray-400">5 min ago</span>
+                        </div>
+                        <h3 class="font-medium mb-1">Event Planning Inquiry</h3>
+                        <p class="text-sm text-gray-300 mb-3">Hello! Can you help me plan a birthday party?</p>
+                        <div class="flex space-x-2">
+                            <button onclick="replyMessage('whatsapp', '+44 7700 900123')" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">Reply</button>
+                            <button onclick="routeMessage('events')" class="bg-cyan-600 hover:bg-cyan-700 px-3 py-1 rounded text-sm">→ Events</button>
+                        </div>
+                    </div>
+
+                    <!-- SMS Message -->
+                    <div class="message-item bg-gray-700 rounded-lg p-4 border-l-4 border-purple-500" data-channel="sms">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-purple-400">💬</span>
+                                <span class="font-semibold">+44 7700 900456</span>
+                                <span class="bg-purple-600 text-xs px-2 py-1 rounded">SMS</span>
+                            </div>
+                            <span class="text-xs text-gray-400">8 min ago</span>
+                        </div>
+                        <h3 class="font-medium mb-1">Property Management</h3>
+                        <p class="text-sm text-gray-300 mb-3">Tenant reporting heating issue. Can you help?</p>
+                        <div class="flex space-x-2">
+                            <button onclick="replyMessage('sms', '+44 7700 900456')" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">Reply</button>
+                            <button onclick="routeMessage('coastview')" class="bg-teal-600 hover:bg-teal-700 px-3 py-1 rounded text-sm">→ CoastView</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Communication Stats -->
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-gray-800 rounded-xl p-6">
-                        <h3 class="text-lg font-bold mb-4">📊 Today's Activity</h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-400">Emails Sent</span>
-                                <span class="font-bold text-green-400">42</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-400">WhatsApp Messages</span>
-                                <span class="font-bold text-blue-400">128</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-400">SMS Sent</span>
-                                <span class="font-bold text-purple-400">77</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-400">Response Rate</span>
-                                <span class="font-bold text-yellow-400">94%</span>
-                            </div>
-                        </div>
-                    </div>
+                <button onclick="loadMoreMessages()" class="w-full mt-4 bg-green-600 hover:bg-green-700 py-2 rounded-lg font-semibold">
+                    📬 Load More Messages
+                </button>
+            </div>
 
-                    <div class="bg-gray-800 rounded-xl p-6">
-                        <h3 class="text-lg font-bold mb-4">⚡ Quick Actions</h3>
-                        <div class="space-y-3">
-                            <button class="w-full bg-green-600 bg-opacity-80 p-3 rounded text-left" onclick="alert('Opening Email Templates')">
-                                📧 Email Templates
-                            </button>
-                            <button class="w-full bg-blue-600 bg-opacity-80 p-3 rounded text-left" onclick="alert('Opening Contact Lists')">
-                                👥 Contact Lists
-                            </button>
-                            <button class="w-full bg-purple-600 bg-opacity-80 p-3 rounded text-left" onclick="alert('Opening Campaign Manager')">
-                                🎯 Campaign Manager
-                            </button>
-                        </div>
+            <!-- Stacy's Assistant -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">🤖 Stacy AI Assistant</h2>
+                <div id="stacyChat" class="bg-gray-700 rounded-lg p-4 h-48 overflow-y-auto mb-4">
+                    <div class="text-green-400 mb-2">
+                        <strong>Stacy:</strong> Hi! I'm managing all communications. How can I help?
+                    </div>
+                </div>
+                <div class="flex">
+                    <input type="text" id="stacyInput" placeholder="Ask Stacy..." 
+                           class="flex-1 bg-gray-700 rounded-l-lg px-3 py-2 text-white text-sm">
+                    <button onclick="chatWithStacy()" 
+                            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-r-lg text-sm">
+                        Send
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="mt-6">
+                    <h3 class="font-semibold mb-3">⚡ Quick Actions</h3>
+                    <div class="space-y-2">
+                        <button onclick="composeMessage()" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-sm">
+                            ✏️ Compose Message
+                        </button>
+                        <button onclick="scheduleMessage()" class="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded text-sm">
+                            ⏰ Schedule Message
+                        </button>
+                        <button onclick="bulkSend()" class="w-full bg-orange-600 hover:bg-orange-700 py-2 rounded text-sm">
+                            📢 Bulk Send
+                        </button>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
 
-        <!-- Footer -->
-        <footer class="bg-gray-800 text-center p-6 mt-12">
-            <p class="text-gray-400">Communications Office • Managed by Stacy • ISHE Group CRM</p>
-        </footer>
+        <!-- Channel Statistics -->
+        <div class="mt-8 bg-gray-800 rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4">📈 Today's Communication Stats</h2>
+            <div class="grid md:grid-cols-4 gap-4">
+                <div class="text-center bg-blue-600 bg-opacity-20 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-blue-400">86</div>
+                    <div class="text-sm text-gray-300">📧 Emails</div>
+                </div>
+                <div class="text-center bg-green-600 bg-opacity-20 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-green-400">23</div>
+                    <div class="text-sm text-gray-300">📱 WhatsApp</div>
+                </div>
+                <div class="text-center bg-purple-600 bg-opacity-20 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-purple-400">18</div>
+                    <div class="text-sm text-gray-300">💬 SMS</div>
+                </div>
+                <div class="text-center bg-yellow-600 bg-opacity-20 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-yellow-400">97%</div>
+                    <div class="text-sm text-gray-300">📈 Response Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-8 text-center">
+            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
+                ← Back to Office Dashboard
+            </a>
+        </div>
     </div>
+
+    <script>
+        function filterChannel(channel) {
+            document.querySelectorAll('[id^="filter"]').forEach(btn => {
+                btn.className = 'px-3 py-1 bg-gray-600 rounded text-sm';
+            });
+            document.getElementById('filter' + channel.charAt(0).toUpperCase() + channel.slice(1)).className = 'px-3 py-1 bg-green-600 rounded text-sm';
+
+            document.querySelectorAll('.message-item').forEach(item => {
+                if (channel === 'all' || item.dataset.channel === channel) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function replyMessage(channel, recipient) {
+            const message = prompt(`Reply via ${channel.toUpperCase()}\nTo: ${recipient}\n\nEnter your message:`);
+            if (message) {
+                alert(`✅ Message sent via ${channel.toUpperCase()}\nTo: ${recipient}\nStacy handled the delivery!`);
+            }
+        }
+
+        function routeMessage(office) {
+            alert(`📤 Message Routed to ${office.charAt(0).toUpperCase() + office.slice(1)} Office\n\n✅ Appropriate agent will handle this inquiry.`);
+        }
+
+        function chatWithStacy() {
+            const input = document.getElementById('stacyInput');
+            const chat = document.getElementById('stacyChat');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            chat.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
+            
+            setTimeout(() => {
+                const responses = [
+                    "I've processed 86 emails today and routed them to the right offices.",
+                    "I can help you compose messages for any channel - email, WhatsApp, or SMS.",
+                    "There are 15 pending messages that need your review.",
+                    "I've automatically sorted messages by brand and urgency level.",
+                    "Would you like me to schedule bulk messages for the weekend?"
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                chat.innerHTML += `<div class="text-green-400 mb-2"><strong>Stacy:</strong> ${response}</div>`;
+                chat.scrollTop = chat.scrollHeight;
+            }, 1000);
+            
+            input.value = '';
+        }
+
+        function composeMessage() {
+            alert('✏️ Compose New Message\n\nChoose channel:\n📧 Email\n📱 WhatsApp\n💬 SMS\n\nStacy will help you craft and deliver the message.');
+        }
+
+        function scheduleMessage() {
+            alert('⏰ Schedule Messages\n\nOptions:\n📅 Send later today\n📅 Schedule for tomorrow\n📅 Weekly recurring\n\nStacy will ensure optimal delivery times.');
+        }
+
+        function bulkSend() {
+            alert('📢 Bulk Message Campaign\n\nOptions:\n🎯 Customer newsletters\n📢 Service announcements\n📢 Promotional campaigns\n\nStacy will personalize by brand and segment.');
+        }
+
+        function loadMoreMessages() {
+            alert('📬 Loaded 15 additional messages\n📧 5 emails\n📱 7 WhatsApp\n💬 3 SMS\n\nAll sorted by priority and urgency!');
+        }
+
+        // Enter key support
+        document.getElementById('stacyInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                chatWithStacy();
+            }
+        });
+    </script>
 </body>
 </html>
