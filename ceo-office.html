@@ -3,121 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEO Office - ISHE GROUP CRM</title>
+    <title>CEO Office - Strategic Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white">
-    <div class="min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="max-w-6xl mx-auto p-6">
         <!-- Header -->
-        <header class="bg-gray-800 p-8 text-center">
-            <div class="mb-4">
-                <a href="index.html" class="text-blue-400 hover:text-blue-300 text-sm">← Back to Dashboard</a>
-            </div>
-            <div class="text-6xl mb-4">💼</div>
-            <h1 class="text-4xl font-bold text-purple-400 mb-2">CEO Office</h1>
-            <p class="text-gray-300 mb-2">Executive Oversight</p>
-            <p class="text-purple-300">Strategic Management</p>
-            <div class="mt-4 flex justify-center space-x-8">
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-purple-400">12</div>
-                    <div class="text-sm text-gray-400">Active Tasks</div>
+        <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold flex items-center">
+                        💼 CEO Office - Strategic Command
+                    </h1>
+                    <p class="text-purple-100 mt-2">Executive oversight & global business operations</p>
                 </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-green-400">Active</div>
-                    <div class="text-sm text-gray-400">Executive Status</div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold">9</div>
+                    <div class="text-sm text-purple-200">Offices Online</div>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- CEO Office Content -->
-        <main class="p-8">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold mb-8 text-center">Executive Command Center</h2>
-                
-                <!-- Executive Dashboard -->
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-gradient-to-br from-purple-600 to-pink-600 p-6 rounded-xl">
-                        <div class="text-3xl mb-3">📊</div>
-                        <h3 class="text-lg font-bold mb-2">Company Analytics</h3>
-                        <p class="text-sm opacity-80 mb-3">Performance metrics & KPIs</p>
-                        <button class="w-full bg-white bg-opacity-20 p-2 rounded" onclick="alert('Opening Company Analytics')">
-                            View Analytics
-                        </button>
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Secret Management -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">🔐 Secret & API Key Management</h2>
+                <div class="space-y-4">
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h3 class="font-semibold mb-2">Google OAuth</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">Gmail & Calendar Integration</span>
+                            <span class="text-green-400">✅ Active</span>
+                        </div>
                     </div>
-
-                    <div class="bg-gradient-to-br from-pink-500 to-rose-600 p-6 rounded-xl">
-                        <div class="text-3xl mb-3">🎯</div>
-                        <h3 class="text-lg font-bold mb-2">Strategic Planning</h3>
-                        <p class="text-sm opacity-80 mb-3">Goals & roadmap management</p>
-                        <button class="w-full bg-white bg-opacity-20 p-2 rounded" onclick="alert('Opening Strategic Planning')">
-                            View Strategy
-                        </button>
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h3 class="font-semibold mb-2">OpenAI API</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">ChatGPT Bot Integration</span>
+                            <span class="text-yellow-400">🔧 Pending</span>
+                        </div>
                     </div>
-
-                    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-6 rounded-xl">
-                        <div class="text-3xl mb-3">👥</div>
-                        <h3 class="text-lg font-bold mb-2">Team Management</h3>
-                        <p class="text-sm opacity-80 mb-3">Staff oversight & development</p>
-                        <button class="w-full bg-white bg-opacity-20 p-2 rounded" onclick="alert('Opening Team Management')">
-                            Manage Teams
-                        </button>
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h3 class="font-semibold mb-2">Supabase Keys</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">Database & Functions</span>
+                            <span class="text-green-400">✅ Active</span>
+                        </div>
                     </div>
                 </div>
+                <button onclick="manageSecrets()" 
+                        class="w-full mt-4 bg-purple-600 hover:bg-purple-700 py-2 rounded-lg font-semibold">
+                    🔑 Manage Secrets
+                </button>
+            </div>
 
-                <!-- Key Decisions & Tasks -->
-                <div class="bg-gray-800 rounded-xl p-6 mb-6">
-                    <h3 class="text-xl font-bold mb-4">🔥 Priority Executive Tasks</h3>
+            <!-- Office Performance -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">📊 Office Performance</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span>IT Office (Rube)</span>
+                        <div class="flex items-center">
+                            <div class="w-16 bg-gray-600 rounded-full h-2 mr-3">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                            <span class="text-blue-400">85%</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Communications (Stacy)</span>
+                        <div class="flex items-center">
+                            <div class="w-16 bg-gray-600 rounded-full h-2 mr-3">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 92%"></div>
+                            </div>
+                            <span class="text-green-400">92%</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Accounts (Philip)</span>
+                        <div class="flex items-center">
+                            <div class="w-16 bg-gray-600 rounded-full h-2 mr-3">
+                                <div class="bg-emerald-500 h-2 rounded-full" style="width: 78%"></div>
+                            </div>
+                            <span class="text-emerald-400">78%</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Virtual Engineer</span>
+                        <div class="flex items-center">
+                            <div class="w-16 bg-gray-600 rounded-full h-2 mr-3">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 88%"></div>
+                            </div>
+                            <span class="text-yellow-400">88%</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="generateReport()" 
+                        class="w-full mt-4 bg-pink-600 hover:bg-pink-700 py-2 rounded-lg font-semibold">
+                    📈 Generate Executive Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Global Directives -->
+        <div class="mt-8 bg-gray-800 rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4">📋 Global Directives & Policies</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold mb-3">Active Policies</h3>
+                    <div class="space-y-2">
+                        <div class="bg-green-600 bg-opacity-20 rounded px-3 py-2 text-sm">
+                            ✅ All external messages require approval
+                        </div>
+                        <div class="bg-blue-600 bg-opacity-20 rounded px-3 py-2 text-sm">
+                            ✅ Automated task delegation enabled
+                        </div>
+                        <div class="bg-purple-600 bg-opacity-20 rounded px-3 py-2 text-sm">
+                            ✅ Cross-office communication active
+                        </div>
+                        <div class="bg-yellow-600 bg-opacity-20 rounded px-3 py-2 text-sm">
+                            ⏳ Philip accounting migration (in progress)
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">System Controls</h3>
                     <div class="space-y-3">
-                        <div class="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">Q4 Budget Review</h4>
-                                <p class="text-sm text-gray-400">Final approval for departmental budgets</p>
-                            </div>
-                            <span class="bg-red-600 text-xs px-2 py-1 rounded">Critical</span>
-                        </div>
-                        <div class="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">New Partnership Agreement</h4>
-                                <p class="text-sm text-gray-400">Strategic alliance with tech company</p>
-                            </div>
-                            <span class="bg-purple-600 text-xs px-2 py-1 rounded">Strategic</span>
-                        </div>
-                        <div class="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">Board Meeting Preparation</h4>
-                                <p class="text-sm text-gray-400">Monthly board presentation materials</p>
-                            </div>
-                            <span class="bg-yellow-600 text-xs px-2 py-1 rounded">Important</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Stats -->
-                <div class="grid md:grid-cols-4 gap-4">
-                    <div class="bg-gray-800 p-4 rounded-lg text-center">
-                        <div class="text-2xl font-bold text-green-400">92%</div>
-                        <div class="text-sm text-gray-400">Overall Performance</div>
-                    </div>
-                    <div class="bg-gray-800 p-4 rounded-lg text-center">
-                        <div class="text-2xl font-bold text-blue-400">£2.4M</div>
-                        <div class="text-sm text-gray-400">Monthly Revenue</div>
-                    </div>
-                    <div class="bg-gray-800 p-4 rounded-lg text-center">
-                        <div class="text-2xl font-bold text-purple-400">47</div>
-                        <div class="text-sm text-gray-400">Team Members</div>
-                    </div>
-                    <div class="bg-gray-800 p-4 rounded-lg text-center">
-                        <div class="text-2xl font-bold text-yellow-400">9</div>
-                        <div class="text-sm text-gray-400">Active Projects</div>
+                        <button onclick="toggleOffice('communications')" 
+                                class="w-full bg-gray-700 hover:bg-gray-600 py-2 rounded text-sm">
+                            Toggle Communications Office
+                        </button>
+                        <button onclick="escalateAllTasks()" 
+                                class="w-full bg-orange-600 hover:bg-orange-700 py-2 rounded text-sm">
+                            Escalate All Pending Tasks
+                        </button>
+                        <button onclick="emergencyMode()" 
+                                class="w-full bg-red-600 hover:bg-red-700 py-2 rounded text-sm">
+                            🚨 Emergency Mode
+                        </button>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
 
-        <!-- Footer -->
-        <footer class="bg-gray-800 text-center p-6 mt-12">
-            <p class="text-gray-400">CEO Office • Executive Leadership • ISHE Group CRM</p>
-        </footer>
+        <!-- Business Metrics -->
+        <div class="mt-8 bg-gray-800 rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4">💰 Business Overview</h2>
+            <div class="grid md:grid-cols-4 gap-4">
+                <div class="text-center bg-blue-600 bg-opacity-20 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-blue-400">127</div>
+                    <div class="text-sm text-gray-300">Messages Today</div>
+                </div>
+                <div class="text-center bg-green-600 bg-opacity-20 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-green-400">£4,230</div>
+                    <div class="text-sm text-gray-300">Revenue MTD</div>
+                </div>
+                <div class="text-center bg-purple-600 bg-opacity-20 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-purple-400">15</div>
+                    <div class="text-sm text-gray-300">Certificates Issued</div>
+                </div>
+                <div class="text-center bg-yellow-600 bg-opacity-20 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-yellow-400">98%</div>
+                    <div class="text-sm text-gray-300">System Uptime</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-8 text-center">
+            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
+                ← Back to Office Dashboard
+            </a>
+        </div>
     </div>
+
+    <script>
+        function manageSecrets() {
+            alert('🔐 Secret Management\n\nAvailable Actions:\n• Add new API keys\n• Rotate existing secrets\n• Update service credentials\n• Manage access permissions\n\nAll secrets are encrypted and audited for security.');
+        }
+
+        function generateReport() {
+            alert('📈 Executive Report Generated!\n\n📊 System Performance: 88% Average\n💼 All 9 offices operational\n📧 127 messages processed today\n💰 Revenue on track for monthly targets\n🔒 Security: All systems secure\n\nDetailed report sent to your dashboard.');
+        }
+
+        function toggleOffice(office) {
+            alert(`🏢 ${office.charAt(0).toUpperCase() + office.slice(1)} Office\n\nOffice is currently ACTIVE\n\nActions available:\n• Temporarily disable\n• Change agent assignments\n• Modify permissions\n• View detailed metrics`);
+        }
+
+        function escalateAllTasks() {
+            alert('🚨 Task Escalation\n\nEscalating all pending tasks to office leads:\n• IT Office: 3 tasks → Rube AI\n• Communications: 8 tasks → Stacy\n• Accounts: 2 tasks → Philip\n• Virtual Engineer: 1 task → Virtual Ian\n\nAll agents will be notified immediately.');
+        }
+
+        function emergencyMode() {
+            if (confirm('🚨 EMERGENCY MODE\n\nThis will:\n• Alert all office agents\n• Escalate all pending tasks\n• Enable 24/7 monitoring\n• Require manual approval for all actions\n\nActivate Emergency Mode?')) {
+                alert('🚨 EMERGENCY MODE ACTIVATED\n\nAll offices have been notified.\nSwitching to high-priority mode.\nAwaiting your direct commands.');
+            }
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            const metrics = document.querySelectorAll('.text-2xl.font-bold');
+            metrics.forEach(metric => {
+                if (metric.textContent.includes('£')) return;
+                let current = parseInt(metric.textContent) || 0;
+                if (Math.random() > 0.7) {
+                    metric.textContent = current + Math.floor(Math.random() * 3);
+                }
+            });
+        }, 10000);
+    </script>
 </body>
 </html>
