@@ -1,5 +1,5 @@
-# atomic-crm
-Atomic CRM system with Supabase backend and GitHub integration
+# ishe-group-crm
+ISHE Group Crm system with Supabase backend and GitHub integration
 
 ## 🚀 Live Demo
 Visit the live application: [https://iansmith35.github.io/atomic-crm/](https://iansmith35.github.io/atomic-crm/)

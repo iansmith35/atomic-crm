@@ -190,4 +190,4 @@ document.head.appendChild(style);
 document.documentElement.style.scrollBehavior = 'smooth';
 
 // Initialize the application
-console.log('🚀 Atomic CRM loaded successfully!');
+console.log('🚀 ISHE Group Crm loaded successfully!');
