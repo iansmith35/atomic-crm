@@ -1,0 +1,53 @@
+/* Font Awesome Replacement CSS - Uses Unicode symbols and emojis for Atomic CRM icons */
+
+/* Base Classes */
+.fas, .fab {
+  display: inline-block;
+  font-style: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Icon Definitions using Unicode symbols and emojis */
+.fa-atom::before { content: "⚛"; }
+.fa-rocket::before { content: "🚀"; }
+.fa-tachometer-alt::before { content: "📊"; }
+.fa-users::before { content: "👥"; }
+.fa-bullseye::before { content: "🎯"; }
+.fa-dollar-sign::before { content: "$"; }
+.fa-chart-line::before { content: "📈"; }
+.fa-edit::before { content: "✏"; }
+.fa-trash::before { content: "🗑"; }
+.fa-chart-bar::before { content: "📊"; }
+.fa-github::before { content: "🐙"; }
+
+/* Ensure proper spacing and styling */
+.fas::before, .fab::before {
+  margin-right: 0.25em;
+}
+
+/* Special styling for navigation and button icons */
+.nav-logo .fas {
+  margin-right: 8px;
+  font-size: 1.2em;
+}
+
+.cta-button .fas {
+  margin-right: 8px;
+}
+
+.section h2 .fas {
+  margin-right: 12px;
+  font-size: 1.1em;
+}
+
+.btn-small .fas {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.chart-icon {
+  font-size: 3em;
+  margin-bottom: 0.5em;
+}
