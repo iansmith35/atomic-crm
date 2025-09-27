@@ -8,7 +8,8 @@ const SUPABASE_CONFIG = {
     ceoOffice: 'ceo-office',
     communicationsO: 'communications',
     accounts: 'accounts',
-    virtualEngineer: 'virtual-engineer'
+    virtualEngineer: 'virtual-engineer',
+    musicStudio: 'music-studio'
   }
 };
 
