@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atomic CRM - Customer Relationship Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-atom"></i>
+                <span>Atomic CRM</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#dashboard" class="nav-link">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#customers" class="nav-link">Customers</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#leads" class="nav-link">Leads</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#analytics" class="nav-link">Analytics</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <h1>Welcome to Atomic CRM</h1>
+                <p>A powerful Customer Relationship Management system with Supabase backend and GitHub integration</p>
+                <button class="cta-button" onclick="showSection('dashboard')">
+                    <i class="fas fa-rocket"></i> Get Started
+                </button>
+            </div>
+        </section>
+
+        <section id="dashboard" class="section hidden">
+            <div class="container">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Total Customers</h3>
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-content">
+                            <span class="stat-number">247</span>
+                            <span class="stat-change positive">+12%</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Active Leads</h3>
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="card-content">
+                            <span class="stat-number">89</span>
+                            <span class="stat-change positive">+8%</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Monthly Revenue</h3>
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="card-content">
+                            <span class="stat-number">$45,230</span>
+                            <span class="stat-change positive">+15%</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Conversion Rate</h3>
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="card-content">
+                            <span class="stat-number">23.5%</span>
+                            <span class="stat-change negative">-2%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="customers" class="section hidden">
+            <div class="container">
+                <h2><i class="fas fa-users"></i> Customers</h2>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Company</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Smith</td>
+                                <td>john@example.com</td>
+                                <td>Acme Corp</td>
+                                <td><span class="status active">Active</span></td>
+                                <td>
+                                    <button class="btn-small"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-small"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sarah Johnson</td>
+                                <td>sarah@company.com</td>
+                                <td>Tech Solutions</td>
+                                <td><span class="status active">Active</span></td>
+                                <td>
+                                    <button class="btn-small"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-small"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Mike Davis</td>
+                                <td>mike@startup.io</td>
+                                <td>Innovation Labs</td>
+                                <td><span class="status inactive">Inactive</span></td>
+                                <td>
+                                    <button class="btn-small"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-small"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="leads" class="section hidden">
+            <div class="container">
+                <h2><i class="fas fa-bullseye"></i> Leads</h2>
+                <div class="leads-container">
+                    <div class="lead-card">
+                        <h3>Emma Wilson</h3>
+                        <p><strong>Company:</strong> Digital Marketing Pro</p>
+                        <p><strong>Email:</strong> emma@marketingpro.com</p>
+                        <p><strong>Source:</strong> Website Form</p>
+                        <div class="lead-status">
+                            <span class="status hot">Hot Lead</span>
+                        </div>
+                        <button class="btn">Contact Lead</button>
+                    </div>
+                    <div class="lead-card">
+                        <h3>Robert Chen</h3>
+                        <p><strong>Company:</strong> E-commerce Solutions</p>
+                        <p><strong>Email:</strong> robert@ecommerce.com</p>
+                        <p><strong>Source:</strong> LinkedIn</p>
+                        <div class="lead-status">
+                            <span class="status warm">Warm Lead</span>
+                        </div>
+                        <button class="btn">Contact Lead</button>
+                    </div>
+                    <div class="lead-card">
+                        <h3>Lisa Rodriguez</h3>
+                        <p><strong>Company:</strong> Consulting Group</p>
+                        <p><strong>Email:</strong> lisa@consulting.com</p>
+                        <p><strong>Source:</strong> Referral</p>
+                        <div class="lead-status">
+                            <span class="status cold">Cold Lead</span>
+                        </div>
+                        <button class="btn">Contact Lead</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="section hidden">
+            <div class="container">
+                <h2><i class="fas fa-chart-bar"></i> Analytics</h2>
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <h3>Customer Growth</h3>
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-line chart-icon"></i>
+                            <p>Interactive charts coming soon...</p>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Revenue Trends</h3>
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-bar chart-icon"></i>
+                            <p>Revenue analytics dashboard</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Atomic CRM. Built with ❤️ and deployed on GitHub Pages.</p>
+            <div class="footer-links">
+                <a href="https://github.com/iansmith35/atomic-crm" target="_blank">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
