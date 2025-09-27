@@ -439,10 +439,10 @@
         function muteTrack(track) {
             trackStates[track].muted = !trackStates[track].muted;
             const btn = document.getElementById(`${track}Mute`);
-            if (trackStates[track].muted) {
+            if (btn && trackStates[track].muted) {
                 btn.classList.add('bg-red-800');
                 btn.textContent = 'UNMUTE';
-            } else {
+            } else if (btn) {
                 btn.classList.remove('bg-red-800');
                 btn.textContent = 'MUTE';
             }
@@ -451,10 +451,10 @@
         function soloTrack(track) {
             trackStates[track].solo = !trackStates[track].solo;
             const btn = document.getElementById(`${track}Solo`);
-            if (trackStates[track].solo) {
+            if (btn && trackStates[track].solo) {
                 btn.classList.add('bg-yellow-800');
                 btn.textContent = 'UNSOLO';
-            } else {
+            } else if (btn) {
                 btn.classList.remove('bg-yellow-800');
                 btn.textContent = 'SOLO';
             }
