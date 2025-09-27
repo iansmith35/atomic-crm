@@ -9,7 +9,9 @@ const SUPABASE_CONFIG = {
     communicationsO: 'communications',
     accounts: 'accounts',
     virtualEngineer: 'virtual-engineer',
+
     musicStudio: 'music-studio'
+
   }
 };
 
