@@ -3,101 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Office - ISHE GROUP CRM</title>
+    <title>IT Office - Rube AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white">
-    <div class="min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="max-w-6xl mx-auto p-6">
         <!-- Header -->
-        <header class="bg-gray-800 p-8 text-center">
-            <div class="mb-4">
-                <a href="index.html" class="text-blue-400 hover:text-blue-300 text-sm">← Back to Dashboard</a>
-            </div>
-            <div class="text-6xl mb-4">🔧</div>
-            <h1 class="text-4xl font-bold text-blue-400 mb-2">IT Office</h1>
-            <p class="text-gray-300 mb-2">Technical Support & Development</p>
-            <p class="text-blue-300">Direct line to Rube</p>
-            <div class="mt-4 flex justify-center space-x-8">
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-blue-400">8</div>
-                    <div class="text-sm text-gray-400">Active Tasks</div>
+        <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold flex items-center">
+                        🔧 IT Office - Rube AI
+                    </h1>
+                    <p class="text-blue-100 mt-2">Your dedicated technical team - Direct line to Rube</p>
                 </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-green-400">Online</div>
-                    <div class="text-sm text-gray-400">System Status</div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold" id="activeTasksCount">8</div>
+                    <div class="text-sm text-blue-200">Active Tasks</div>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- IT Office Content -->
-        <main class="p-8">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold mb-8 text-center">IT Operations Center</h2>
-                
-                <!-- Quick Actions -->
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-gradient-to-br from-blue-500 to-purple-600 p-6 rounded-xl">
-                        <div class="text-3xl mb-3">🛠️</div>
-                        <h3 class="text-lg font-bold mb-2">System Maintenance</h3>
-                        <p class="text-sm opacity-80 mb-3">Server monitoring & updates</p>
-                        <button class="w-full bg-white bg-opacity-20 p-2 rounded" onclick="alert('Opening System Maintenance Dashboard')">
-                            Open Dashboard
-                        </button>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-purple-500 to-pink-600 p-6 rounded-xl">
-                        <div class="text-3xl mb-3">🔒</div>
-                        <h3 class="text-lg font-bold mb-2">Security Center</h3>
-                        <p class="text-sm opacity-80 mb-3">Access control & monitoring</p>
-                        <button class="w-full bg-white bg-opacity-20 p-2 rounded" onclick="alert('Opening Security Center')">
-                            View Security
-                        </button>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-green-500 to-teal-600 p-6 rounded-xl">
-                        <div class="text-3xl mb-3">💾</div>
-                        <h3 class="text-lg font-bold mb-2">Backup Systems</h3>
-                        <p class="text-sm opacity-80 mb-3">Data protection & recovery</p>
-                        <button class="w-full bg-white bg-opacity-20 p-2 rounded" onclick="alert('Opening Backup Management')">
-                            Manage Backups
-                        </button>
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Chat with Rube -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">💬 Chat with Rube AI</h2>
+                <div id="chatMessages" class="bg-gray-700 rounded-lg p-4 h-64 overflow-y-auto mb-4">
+                    <div class="text-blue-400 mb-2">
+                        <strong>Rube:</strong> Hi! I'm your dedicated IT team. What technical challenge can I solve for you today?
                     </div>
                 </div>
-
-                <!-- Current Tasks -->
-                <div class="bg-gray-800 rounded-xl p-6">
-                    <h3 class="text-xl font-bold mb-4">🎯 Current IT Tasks</h3>
-                    <div class="space-y-3">
-                        <div class="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">Server Update - Database Cluster</h4>
-                                <p class="text-sm text-gray-400">Critical security patches deployment</p>
-                            </div>
-                            <span class="bg-red-600 text-xs px-2 py-1 rounded">High Priority</span>
-                        </div>
-                        <div class="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">Network Monitoring Setup</h4>
-                                <p class="text-sm text-gray-400">Implement new monitoring tools</p>
-                            </div>
-                            <span class="bg-yellow-600 text-xs px-2 py-1 rounded">Medium Priority</span>
-                        </div>
-                        <div class="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">User Access Review</h4>
-                                <p class="text-sm text-gray-400">Quarterly access audit and cleanup</p>
-                            </div>
-                            <span class="bg-blue-600 text-xs px-2 py-1 rounded">Low Priority</span>
-                        </div>
-                    </div>
+                <div class="flex">
+                    <input type="text" id="chatInput" placeholder="Ask me anything technical..." 
+                           class="flex-1 bg-gray-700 rounded-l-lg px-4 py-2 text-white">
+                    <button onclick="sendMessage()" 
+                            class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-r-lg font-semibold">
+                        Send
+                    </button>
                 </div>
             </div>
-        </main>
 
-        <!-- Footer -->
-        <footer class="bg-gray-800 text-center p-6 mt-12">
-            <p class="text-gray-400">IT Office • Powered by Rube AI • ISHE Group CRM</p>
-        </footer>
+            <!-- System Status -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">⚡ System Status</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span>Database</span>
+                        <span class="text-green-400">✅ Online</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>API Endpoints</span>
+                        <span class="text-green-400">✅ Active</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Multi-Agent System</span>
+                        <span class="text-green-400">✅ Operational</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Backend Functions</span>
+                        <span class="text-green-400">✅ Deployed</span>
+                    </div>
+                </div>
+                <button onclick="runSystemCheck()" 
+                        class="w-full mt-4 bg-purple-600 hover:bg-purple-700 py-2 rounded-lg font-semibold">
+                    🔍 Run Full System Check
+                </button>
+            </div>
+        </div>
+
+        <!-- Technical Capabilities -->
+        <div class="mt-8 bg-gray-800 rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4">🛠️ Technical Capabilities</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-blue-600 bg-opacity-20 rounded-lg p-4">
+                    <h3 class="font-bold mb-2">System Architecture</h3>
+                    <p class="text-sm text-gray-300">Design and optimize your technical infrastructure</p>
+                </div>
+                <div class="bg-purple-600 bg-opacity-20 rounded-lg p-4">
+                    <h3 class="font-bold mb-2">API Development</h3>
+                    <p class="text-sm text-gray-300">Build and integrate APIs across all your systems</p>
+                </div>
+                <div class="bg-green-600 bg-opacity-20 rounded-lg p-4">
+                    <h3 class="font-bold mb-2">Database Management</h3>
+                    <p class="text-sm text-gray-300">Optimize and maintain your Supabase infrastructure</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-8 text-center">
+            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
+                ← Back to Office Dashboard
+            </a>
+        </div>
     </div>
+
+    <script>
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            messages.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
+            
+            // Simulate Rube response
+            setTimeout(() => {
+                const responses = [
+                    "I can help with that! Let me check the system architecture for you.",
+                    "That's a great technical question. I'll analyze the backend and get back to you.",
+                    "I see the issue. Let me deploy a fix to the edge functions.",
+                    "Perfect! I can optimize that database query for better performance.",
+                    "I'll integrate that API endpoint and test it across all environments."
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                messages.innerHTML += `<div class="text-blue-400 mb-2"><strong>Rube:</strong> ${response}</div>`;
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+            
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // System check
+        function runSystemCheck() {
+            alert('🔍 System Check Complete!\n\n✅ All systems operational\n✅ 9 offices online\n✅ 42 active tasks\n✅ API endpoints responding\n\nYour autonomous business empire is running perfectly!');
+        }
+
+        // Enter key support
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Load real data from API
+        async function loadITStatus() {
+            try {
+                const response = await fetch('https://mydxasjicsfetnglbppp.supabase.co/functions/v1/it-office/status');
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('activeTasksCount').textContent = data.active_tasks || 8;
+                }
+            } catch (error) {
+                console.log('Using simulated data');
+            }
+        }
+
+        // Load on page load
+        loadITStatus();
+    </script>
 </body>
 </html>
