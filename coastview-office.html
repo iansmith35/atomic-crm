@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoastView Holiday Letting Office - Peter Ellis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="max-w-7xl mx-auto p-6">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-teal-500 to-cyan-600 rounded-xl p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold">🏠 CoastView Holiday Letting Office</h1>
+                    <p class="text-teal-100 mt-2">AI-Powered Property Management • Peter Ellis - Director</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold">15</div>
+                    <div class="text-sm text-teal-200">Active Properties</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Dashboard -->
+        <div class="grid md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-green-600 bg-opacity-20 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-green-400">£12,450</div>
+                <div class="text-sm text-gray-300">Monthly Revenue</div>
+            </div>
+            <div class="bg-blue-600 bg-opacity-20 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-blue-400">28</div>
+                <div class="text-sm text-gray-300">Current Bookings</div>
+            </div>
+            <div class="bg-purple-600 bg-opacity-20 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-purple-400">94%</div>
+                <div class="text-sm text-gray-300">Occupancy Rate</div>
+            </div>
+            <div class="bg-yellow-600 bg-opacity-20 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-yellow-400">4.8</div>
+                <div class="text-sm text-gray-300">Avg Rating</div>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <!-- Property Management Panel -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Property Listings Manager -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4">🏡 Property Listings Manager</h2>
+                    <div class="space-y-4">
+                        <!-- Featured Property -->
+                        <div class="bg-gray-700 rounded-lg p-4 border-l-4 border-teal-500">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-semibold">Seaside Cottage - Brighton</h3>
+                                    <p class="text-sm text-gray-300">3 bed, 2 bath • Sleeps 6 • Sea view</p>
+                                </div>
+                                <span class="bg-green-600 text-xs px-2 py-1 rounded">🟢 Live</span>
+                            </div>
+                            <div class="text-sm text-gray-400 mb-3">
+                                £180/night • Next available: Dec 15 • Rating: 4.9/5 (47 reviews)
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="editProperty('seaside-cottage')" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">✏️ Edit</button>
+                                <button onclick="viewBookings('seaside-cottage')" class="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-sm">📅 Bookings</button>
+                                <button onclick="promoteProperty('seaside-cottage')" class="bg-pink-600 hover:bg-pink-700 px-3 py-1 rounded text-sm">📱 Promote</button>
+                            </div>
+                        </div>
+
+                        <!-- Property 2 -->
+                        <div class="bg-gray-700 rounded-lg p-4 border-l-4 border-yellow-500">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-semibold">Mountain Retreat - Peak District</h3>
+                                    <p class="text-sm text-gray-300">2 bed, 1 bath • Sleeps 4 • Mountain view</p>
+                                </div>
+                                <span class="bg-yellow-600 text-xs px-2 py-1 rounded">⏳ Pending</span>
+                            </div>
+                            <div class="text-sm text-gray-400 mb-3">
+                                £120/night • Photos uploading • Ready for review
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="completeSetup('mountain-retreat')" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">✅ Complete</button>
+                                <button onclick="editProperty('mountain-retreat')" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">✏️ Edit</button>
+                            </div>
+                        </div>
+
+                        <!-- Add New Property Button -->
+                        <button onclick="createNewListing()" class="w-full bg-teal-600 hover:bg-teal-700 py-3 rounded-lg font-semibold">
+                            ➕ Create New Property Listing
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Booking Management -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4">📅 Booking Management</h2>
+                    <div class="space-y-4">
+                        <!-- Upcoming Booking -->
+                        <div class="bg-gray-700 rounded-lg p-4 border-l-4 border-green-500">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-semibold">Sarah & Mike Thompson</h3>
+                                    <p class="text-sm text-gray-300">Seaside Cottage • Check-in: Tomorrow 3PM</p>
+                                </div>
+                                <span class="bg-green-600 text-xs px-2 py-1 rounded">✅ Confirmed</span>
+                            </div>
+                            <div class="text-sm text-gray-400 mb-3">
+                                5 nights • £900 total • Payment: Complete • Key code: 4521
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="sendWelcomeMessage('thompson-booking')" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">💬 Welcome</button>
+                                <button onclick="prepareProperty('seaside-cottage')" class="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-sm">🧹 Prepare</button>
+                                <button onclick="viewBookingDetails('thompson-booking')" class="bg-gray-600 hover:bg-gray-700 px-3 py-1 rounded text-sm">👁️ Details</button>
+                            </div>
+                        </div>
+
+                        <!-- Pending Booking -->
+                        <div class="bg-gray-700 rounded-lg p-4 border-l-4 border-yellow-500">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-semibold">James Wilson</h3>
+                                    <p class="text-sm text-gray-300">Mountain Retreat • Dates: Dec 20-23</p>
+                                </div>
+                                <span class="bg-yellow-600 text-xs px-2 py-1 rounded">⏳ Payment Pending</span>
+                            </div>
+                            <div class="text-sm text-gray-400 mb-3">
+                                3 nights • £360 total • Deposit paid: £120 • Balance due: £240
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="sendPaymentReminder('wilson-booking')" class="bg-orange-600 hover:bg-orange-700 px-3 py-1 rounded text-sm">💳 Payment</button>
+                                <button onclick="contactGuest('wilson-booking')" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">📞 Contact</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Assistant & Tools Panel -->
+            <div class="space-y-6">
+                <!-- AI Assistant -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4">🤖 CoastView AI Assistant</h2>
+                    <div id="coastviewChat" class="bg-gray-700 rounded-lg p-4 h-40 overflow-y-auto mb-4">
+                        <div class="text-teal-400 mb-2">
+                            <strong>CoastView AI:</strong> Hello Peter! I've analyzed your properties and found 3 optimization opportunities. Would you like me to create automated social media posts for your December availability?
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <input type="text" id="coastviewInput" placeholder="Ask about bookings, pricing, marketing..." class="flex-1 bg-gray-700 rounded px-3 py-2 text-sm">
+                        <button onclick="chatWithCoastviewAI()" class="bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded text-sm">Send</button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4">⚡ Quick Actions</h2>
+                    <div class="space-y-2">
+                        <button onclick="generateSocialContent()" class="w-full bg-pink-600 hover:bg-pink-700 py-2 rounded text-sm">📱 Generate Social Media</button>
+                        <button onclick="optimizePricing()" class="w-full bg-green-600 hover:bg-green-700 py-2 rounded text-sm">💰 Optimize Pricing</button>
+                        <button onclick="bulkMessaging()" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-sm">📧 Bulk Guest Messaging</button>
+                        <button onclick="maintenanceSchedule()" class="w-full bg-yellow-600 hover:bg-yellow-700 py-2 rounded text-sm">🔧 Schedule Maintenance</button>
+                        <button onclick="marketingCampaign()" class="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded text-sm">🎯 Launch Campaign</button>
+                    </div>
+                </div>
+
+                <!-- Payment Processing -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4">💳 Payment Management</h2>
+                    <div class="space-y-3">
+                        <div class="bg-green-600 bg-opacity-20 rounded-lg p-3">
+                            <div class="text-sm text-gray-300">Today's Collections</div>
+                            <div class="text-lg font-bold text-green-400">£1,240</div>
+                        </div>
+                        <div class="bg-yellow-600 bg-opacity-20 rounded-lg p-3">
+                            <div class="text-sm text-gray-300">Pending Payments</div>
+                            <div class="text-lg font-bold text-yellow-400">£860</div>
+                        </div>
+                        <button onclick="processPayments()" class="w-full bg-emerald-600 hover:bg-emerald-700 py-2 rounded text-sm">💸 Process Payments</button>
+                        <button onclick="sendInvoices()" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-sm">📄 Send Invoices</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Media & Marketing Panel -->
+        <div class="mt-8 bg-gray-800 rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4">📱 Social Media & Marketing Hub</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Social Media Posts -->
+                <div>
+                    <h3 class="font-semibold mb-3">Recent Posts</h3>
+                    <div class="space-y-3">
+                        <div class="bg-gray-700 rounded p-3">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-blue-500">📘</span>
+                                <span class="text-xs text-gray-400">Facebook • 2h ago</span>
+                            </div>
+                            <p class="text-sm">"Escape to our cozy seaside cottage! 🌊 Perfect for winter getaways..."</p>
+                            <div class="text-xs text-gray-500 mt-1">15 likes, 3 shares</div>
+                        </div>
+                        <div class="bg-gray-700 rounded p-3">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="text-pink-500">📷</span>
+                                <span class="text-xs text-gray-400">Instagram • 5h ago</span>
+                            </div>
+                            <p class="text-sm">"Mountain views that take your breath away 🏔️ #PeakDistrict"</p>
+                            <div class="text-xs text-gray-500 mt-1">42 likes, 8 comments</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign Performance -->
+                <div>
+                    <h3 class="font-semibold mb-3">Campaign Performance</h3>
+                    <div class="space-y-3">
+                        <div class="bg-green-600 bg-opacity-20 rounded p-3">
+                            <div class="text-sm text-gray-300">December Bookings</div>
+                            <div class="text-lg font-bold text-green-400">+34%</div>
+                        </div>
+                        <div class="bg-blue-600 bg-opacity-20 rounded p-3">
+                            <div class="text-sm text-gray-300">Website Traffic</div>
+                            <div class="text-lg font-bold text-blue-400">+22%</div>
+                        </div>
+                        <div class="bg-purple-600 bg-opacity-20 rounded p-3">
+                            <div class="text-sm text-gray-300">Social Engagement</div>
+                            <div class="text-lg font-bold text-purple-400">+45%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Calendar -->
+                <div>
+                    <h3 class="font-semibold mb-3">Content Calendar</h3>
+                    <div class="space-y-2">
+                        <div class="bg-gray-700 rounded p-2 text-sm">
+                            <div class="font-medium">Today: Holiday Special Post</div>
+                            <div class="text-xs text-gray-400">Instagram, Facebook</div>
+                        </div>
+                        <div class="bg-gray-700 rounded p-2 text-sm">
+                            <div class="font-medium">Tomorrow: Guest Feature</div>
+                            <div class="text-xs text-gray-400">All platforms</div>
+                        </div>
+                        <div class="bg-gray-700 rounded p-2 text-sm">
+                            <div class="font-medium">Friday: Property Showcase</div>
+                            <div class="text-xs text-gray-400">YouTube, TikTok</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-8 text-center">
+            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
+                ← Back to Office Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // Property Management Functions
+        function createNewListing() {
+            alert('🏡 Create New Property Listing\n\nCoastView AI will help you:\n✅ Generate compelling descriptions\n✅ Suggest optimal pricing\n✅ Create photo galleries\n✅ Set up booking calendar\n✅ Auto-post to all platforms\n\n🎯 New listing ready in 15 minutes!');
+        }
+
+        function editProperty(propertyId) {
+            alert(`✏️ Editing Property: ${propertyId}\n\nAI-powered tools available:\n📝 Smart description generator\n💰 Dynamic pricing optimizer\n📷 Photo enhancement\n📅 Availability sync\n🔄 Multi-platform updates\n\n✨ All changes sync automatically!`);
+        }
+
+        function promoteProperty(propertyId) {
+            alert(`📱 Promoting Property: ${propertyId}\n\nSocial media campaign launching:\n📘 Facebook targeted ads\n📷 Instagram stories & posts\n🐦 Twitter promotional tweets\n📺 YouTube property tour\n🎵 TikTok virtual walkthrough\n\n🚀 Campaign live in 5 minutes!`);
+        }
+
+        // Booking Management Functions
+        function sendWelcomeMessage(bookingId) {
+            alert(`💬 Welcome Message Sent!\n\nPersonalized message includes:\n🗝️ Check-in instructions & key code\n🏠 Property guidebook & WiFi\n📍 Local recommendations\n📞 Emergency contact details\n🎁 Welcome basket arranged\n\n✅ Guest experience optimized!`);
+        }
+
+        function prepareProperty(propertyId) {
+            alert(`🧹 Property Preparation: ${propertyId}\n\nAI-coordinated checklist:\n✅ Cleaning team scheduled\n✅ Linen & towel refresh\n✅ Welcome basket prepared\n✅ Utilities check completed\n✅ Security system armed\n✅ Guest amenities stocked\n\n🏡 Property guest-ready!`);
+        }
+
+        function sendPaymentReminder(bookingId) {
+            alert(`💳 Payment Reminder Sent!\n\nAutomated sequence initiated:\n📧 Friendly email reminder\n💬 SMS notification\n🔗 Secure payment link\n📋 Booking confirmation\n⏰ 24h follow-up scheduled\n\n💰 Payment processing simplified!`);
+        }
+
+        // AI Assistant Functions
+        function chatWithCoastviewAI() {
+            const input = document.getElementById('coastviewInput');
+            const chat = document.getElementById('coastviewChat');
+            
+            if (input.value.trim()) {
+                chat.innerHTML += `<div class="text-blue-400 mb-2"><strong>You:</strong> ${input.value}</div>`;
+                
+                setTimeout(() => {
+                    const responses = [
+                        "I've analyzed your booking patterns and suggest increasing rates by 15% for peak weekend dates.",
+                        "Your Seaside Cottage has 3 inquiry messages waiting. Shall I draft personalized responses?",
+                        "Winter promotion idea: '20% off 7+ night stays' could boost your December occupancy to 98%.",
+                        "I've detected a maintenance request from your last guest. Shall I schedule a handyman visit?",
+                        "Your Instagram engagement is up 45%! I recommend posting the sunset photos from Mountain Retreat.",
+                        "Payment reminder sent to 3 guests. Two have already completed payment after my follow-up."
+                    ];
+                    const response = responses[Math.floor(Math.random() * responses.length)];
+                    chat.innerHTML += `<div class="text-teal-400 mb-2"><strong>CoastView AI:</strong> ${response}</div>`;
+                    chat.scrollTop = chat.scrollHeight;
+                }, 1000);
+                
+                input.value = '';
+            }
+        }
+
+        // Social Media & Marketing Functions
+        function generateSocialContent() {
+            alert('📱 Social Media Content Generated!\n\nAI created content for:\n📘 Facebook: Holiday booking special\n📷 Instagram: Property showcase reel\n🐦 Twitter: Guest testimonial thread\n📺 YouTube: Virtual property tour\n🎵 TikTok: "Hidden gems" series\n\n🚀 Content scheduled for optimal posting times!');
+        }
+
+        function marketingCampaign() {
+            alert('🎯 Marketing Campaign Launched!\n\nMulti-channel campaign active:\n📧 Email to 2,500 past guests\n📱 Social media ads (£500 budget)\n🔍 Google Ads optimization\n📰 Local tourism board partnership\n🎁 Referral reward program\n\n📈 Expected 40% booking increase!');
+        }
+
+        // Pricing & Revenue Functions
+        function optimizePricing() {
+            alert('💰 Pricing Optimization Complete!\n\nAI analysis results:\n📊 Market comparison completed\n📈 Demand forecasting updated\n💡 Rate adjustments suggested:\n  • Weekends: +12% increase\n  • Peak season: +18% increase\n  • Last-minute: -8% discount\n\n💸 Estimated revenue impact: +£3,200/month');
+        }
+
+        function processPayments() {
+            alert('💸 Payment Processing Initiated!\n\nAutomated payment collection:\n✅ 5 successful card charges\n✅ 2 bank transfers confirmed\n✅ 1 PayPal payment processed\n📧 Receipt emails sent\n📱 SMS confirmations dispatched\n\n💰 Total processed: £1,840');
+        }
+
+        // Bulk Operations
+        function bulkMessaging() {
+            alert('📧 Bulk Messaging System\n\nMessage categories available:\n🎄 Christmas booking promotions\n❄️ Winter availability updates\n⭐ Review request follow-ups\n🎁 Loyalty program invitations\n📅 Booking confirmation reminders\n\n📨 Send to targeted guest segments!');
+        }
+
+        function maintenanceSchedule() {
+            alert('🔧 Maintenance Scheduler\n\nUpcoming maintenance:\n🧹 Deep cleaning: Dec 15 (Seaside)\n🔥 Heating service: Dec 18 (Mountain)\n🛏️ Mattress replacement: Dec 20\n📶 WiFi upgrade: Jan 5\n🎨 Repainting: Jan 15\n\n✅ All auto-scheduled between bookings!');
+        }
+
+        // Enter key support for AI chat
+        document.getElementById('coastviewInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                chatWithCoastviewAI();
+            }
+        });
+
+        // Load real data from backend
+        async function loadCoastviewData() {
+            try {
+                const response = await api.call('coastview', '/status');
+                if (response.success && response.data) {
+                    // Update dashboard with real data
+                    console.log('CoastView data loaded:', response.data);
+                }
+            } catch (error) {
+                console.log('Using simulated data for CoastView');
+            }
+        }
+
+        // Initialize CoastView Office
+        loadCoastviewData();
+    </script>
+</body>
+</html>

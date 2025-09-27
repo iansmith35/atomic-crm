@@ -10,7 +10,7 @@ const SUPABASE_CONFIG = {
     accounts: 'accounts',
     virtualEngineer: 'virtual-engineer',
 
-    musicStudio: 'music-studio'
+    coastview: 'coastview'
 
   }
 };
