@@ -2,7 +2,7 @@
 const PRINTFUL_CONFIG = {
   // API Configuration
   apiBaseUrl: 'https://api.printful.com',
-  apiKey: process.env.PRINTFUL_API_KEY || 'PRINTFUL_API_KEY_PLACEHOLDER',
+  apiKey: typeof process !== 'undefined' && process.env ? process.env.PRINTFUL_API_KEY : 'PRINTFUL_API_KEY_PLACEHOLDER',
   storeId: 'kinky-brizzle-store-001',
   
   // Store Configuration
