@@ -1,7 +1,20 @@
 // pages/accounts.jsx
+import { useState, useEffect } from "react";
+
 export default function AccountsOffice() {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    async function fetchTasks() {
+      const res = await fetch("/api/tasks?office=accounts");
+      const data = await res.json();
+      setTasks(data.tasks || []);
+    }
+    fetchTasks();
+  }, []);
+
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-6 max-w-6xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">💼 Accounts Office</h1>
 
       <section className="mb-6">
@@ -21,7 +34,7 @@ export default function AccountsOffice() {
         </div>
       </section>
 
-      <section>
+      <section className="mb-6">
         <h2 className="text-xl font-semibold mb-2">Recent Transactions</h2>
         <ul className="space-y-2 text-sm">
           <li className="flex justify-between border-b py-2">
@@ -32,6 +45,22 @@ export default function AccountsOffice() {
             <span>30 Aug 2025 – Web Hosting</span>
             <span>-£50</span>
           </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-semibold mb-2">Taskbar – All Offices</h2>
+        <ul className="space-y-3">
+          {tasks.map((task) => (
+            <li key={task.id} className="p-4 bg-white border rounded-xl shadow">
+              <div className="font-semibold">{task.title}</div>
+              <div className="text-sm text-gray-600">Status: {task.status}</div>
+              <div className="text-xs text-gray-500">
+                Created: {task.created_at} | Updated: {task.updated_at}
+              </div>
+              <div className="text-xs italic text-gray-400">Office: {task.office}</div>
+            </li>
+          ))}
         </ul>
       </section>
     </div>
