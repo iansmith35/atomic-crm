@@ -321,5 +321,21 @@
 <!-- 🔐 LOGIN.HTML PLACEHOLDER -->
 <div id="gSignIn" class="flex justify-center mt-8"></div>
 
+<!-- Google OAuth Login Handler -->
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  const supabase = createClient(
+    'https://mydxasjcsfetnglbppp.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE'
+  )
+  const loginBtn = document.querySelector('#login-button')
+  loginBtn.addEventListener('click', async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    })
+    if (error) console.error('Login error:', error.message)
+  })
+</script>
+
 </body>
 </html>

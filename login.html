@@ -24,6 +24,12 @@
                 <div class="text-center">
                     <p class="text-gray-400 mb-4">Sign in with your Google account</p>
                     <div id="googleSignIn" class="flex justify-center"></div>
+                    <!-- Alternative OAuth Login Button -->
+                    <div class="mt-4">
+                        <button id="login-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Sign in with Google
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Status Messages -->
@@ -122,6 +128,22 @@
         if (auth.isAuthenticated()) {
             window.location.href = 'index.html';
         }
+    </script>
+
+    <!-- Google OAuth Login Handler -->
+    <script type="module">
+      import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+      const supabase = createClient(
+        'https://mydxasjcsfetnglbppp.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE'
+      )
+      const loginBtn = document.querySelector('#login-button')
+      loginBtn.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+        })
+        if (error) console.error('Login error:', error.message)
+      })
     </script>
 </body>
 </html>
