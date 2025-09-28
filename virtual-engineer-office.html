@@ -5,269 +5,157 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Virtual Engineer Office - Virtual Ian</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .panel {
+            background-color: #1f2937;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .panel h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .panel h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .panel ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+        .panel li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #374151;
+        }
+        .panel li:last-child {
+            border-bottom: none;
+        }
+        .panel button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .panel button:hover {
+            background-color: #2563eb;
+        }
+        .panel textarea {
+            width: 100%;
+            background-color: #374151;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid #4b5563;
+            margin-bottom: 1rem;
+            resize: vertical;
+        }
+        .panel input[type="file"] {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #374151;
+            border: 2px dashed #6b7280;
+            border-radius: 0.375rem;
+            color: white;
+        }
+        .status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .status.warning {
+            background-color: #f59e0b;
+            color: #1f2937;
+        }
+        .status.ok {
+            background-color: #10b981;
+            color: white;
+        }
+        .status.alert {
+            background-color: #ef4444;
+            color: white;
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <div class="max-w-6xl mx-auto p-6">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl p-6 mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold">⚙️ Virtual Engineer Office - Virtual Ian</h1>
-                    <p class="text-yellow-100 mt-2">Gas Safety & Compliance - Certificate Generation & Inspections</p>
-                </div>
-                <div class="text-right">
-                    <div class="text-2xl font-bold" id="pendingCount">3</div>
-                    <div class="text-sm text-yellow-200">Pending Certificates</div>
-                </div>
-            </div>
+        <div class="panel">
+            <h2>🛠️ Virtual Engineer Office – Gas Certs & Field Ops</h2>
+            <p>Manage certifications, offline data capture, job schedules, and engineering support.</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-6">
-            <!-- Certificate Management -->
-            <div class="md:col-span-2 bg-gray-800 rounded-xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-bold">📋 Certificate Management</h2>
-                    <button onclick="generateCertificate()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded font-semibold">
-                        ➕ Generate Certificate
-                    </button>
-                </div>
-                
-                <div id="certificateList" class="space-y-3 max-h-96 overflow-y-auto">
-                    <!-- Certificate Item -->
-                    <div class="bg-gray-700 rounded-lg p-4 border-l-4 border-green-500">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <h3 class="font-semibold">GS-2025-001 - John Smith</h3>
-                                <p class="text-sm text-gray-300">123 Oak Street, Manchester</p>
-                            </div>
-                            <span class="bg-green-600 text-xs px-2 py-1 rounded">✅ Issued</span>
-                        </div>
-                        <div class="text-sm text-gray-400 mb-3">
-                            Issued: Today • Valid until: Dec 2025 • Appliances: 3
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="viewCertificate('GS-2025-001')" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">👁️ View</button>
-                            <button onclick="downloadCertificate('GS-2025-001')" class="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-sm">📄 Download</button>
-                        </div>
-                    </div>
-
-                    <!-- Pending Certificate -->
-                    <div class="bg-gray-700 rounded-lg p-4 border-l-4 border-yellow-500">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <h3 class="font-semibold">PENDING - Sarah Johnson</h3>
-                                <p class="text-sm text-gray-300">456 Pine Road, Leeds</p>
-                            </div>
-                            <span class="bg-yellow-600 text-xs px-2 py-1 rounded">⏳ Pending</span>
-                        </div>
-                        <div class="text-sm text-gray-400 mb-3">
-                            Inspection scheduled: Tomorrow 2PM • Appliances: 2
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="completeInspection('sarah-johnson')" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">✅ Complete</button>
-                            <button onclick="scheduleInspection('sarah-johnson')" class="bg-orange-600 hover:bg-orange-700 px-3 py-1 rounded text-sm">📅 Reschedule</button>
-                        </div>
-                    </div>
-
-                    <!-- Expiring Certificate -->
-                    <div class="bg-gray-700 rounded-lg p-4 border-l-4 border-red-500">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <h3 class="font-semibold">GS-2024-089 - Mike Davis</h3>
-                                <p class="text-sm text-gray-300">789 Elm Avenue, Birmingham</p>
-                            </div>
-                            <span class="bg-red-600 text-xs px-2 py-1 rounded">⚠️ Expiring</span>
-                        </div>
-                        <div class="text-sm text-gray-400 mb-3">
-                            Expires: Jan 15, 2025 • Renewal needed • Appliances: 4
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="renewCertificate('GS-2024-089')" class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm">🔄 Renew</button>
-                            <button onclick="contactCustomer('mike-davis')" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">📞 Contact</button>
-                        </div>
-                    </div>
-                </div>
-
-                <button onclick="loadMoreCertificates()" class="w-full mt-4 bg-yellow-600 hover:bg-yellow-700 py-2 rounded-lg font-semibold">
-                    📜 Load More Certificates
-                </button>
-            </div>
-
-            <!-- Virtual Ian's Panel -->
-            <div class="bg-gray-800 rounded-xl p-6">
-                <h2 class="text-xl font-bold mb-4">🤖 Virtual Ian</h2>
-                
-                <div class="bg-yellow-600 bg-opacity-20 rounded-lg p-4 mb-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="font-semibold">Virtual Ian Status</span>
-                        <span class="text-green-400">✅ Active</span>
-                    </div>
-                    <div class="text-sm text-gray-300">
-                        Gas Safe Registered Engineer<br>
-                        Certificates issued: 147<br>
-                        Compliance rate: 100%
-                    </div>
-                </div>
-
-                <div class="bg-gray-700 rounded-lg p-4 mb-4">
-                    <h3 class="font-semibold mb-3">⚡ Quick Actions</h3>
-                    <div class="space-y-2">
-                        <button onclick="emergencyInspection()" class="w-full bg-red-600 hover:bg-red-700 py-2 rounded text-sm">🚨 Emergency Inspection</button>
-                        <button onclick="complianceCheck()" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-sm">🔍 Compliance Check</button>
-                        <button onclick="generateReport()" class="w-full bg-green-600 hover:bg-green-700 py-2 rounded text-sm">📊 Generate Report</button>
-                        <button onclick="scheduleInspections()" class="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded text-sm">📅 Schedule Batch</button>
-                    </div>
-                </div>
-
-                <div id="ianChat" class="bg-gray-700 rounded-lg p-4 h-40 overflow-y-auto mb-4">
-                    <div class="text-yellow-400 mb-2">
-                        <strong>Virtual Ian:</strong> Ready for gas safety inspections and certificate generation!
-                    </div>
-                </div>
-                <div class="flex">
-                    <input type="text" id="ianInput" placeholder="Ask Virtual Ian..." 
-                           class="flex-1 bg-gray-700 rounded-l-lg px-3 py-2 text-white text-sm">
-                    <button onclick="chatWithIan()" 
-                            class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded-r-lg text-sm">
-                        Send
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Gas Certificates Section -->
-        <div class="mt-8 bg-gray-800 rounded-xl p-6">
-            <h1 class="text-2xl font-bold mb-4">🔥 Gas Certificates</h1>
-
-            <section class="mb-6">
-                <h2 class="text-xl font-semibold mb-2">Upload New Certificate</h2>
-                <div class="border-2 border-dashed border-gray-400 rounded-xl p-6 text-center bg-gray-700">
-                    <p class="text-gray-300 mb-2">Drag & drop your certificate PDF here or</p>
-                    <input type="file" class="mt-2 text-white" accept=".pdf" />
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-semibold mb-2">Saved Certificates</h2>
-                <ul class="space-y-3">
-                    <li class="p-4 border border-gray-600 rounded-xl flex justify-between bg-gray-700">
-                        <span class="text-gray-300">🔧 123 King St – 2025-09-01</span>
-                        <button onclick="viewSavedCertificate('123 King St')" class="text-blue-400 hover:text-blue-300 hover:underline">View</button>
-                    </li>
-                    <li class="p-4 border border-gray-600 rounded-xl flex justify-between bg-gray-700">
-                        <span class="text-gray-300">🏢 76 Queen Rd – 2025-08-20</span>
-                        <button onclick="viewSavedCertificate('76 Queen Rd')" class="text-blue-400 hover:text-blue-300 hover:underline">View</button>
-                    </li>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="panel">
+                <h3>📄 Active Gas Certificates</h3>
+                <ul>
+                    <li>Smith Property – Expires: 02/11/2025 <span class="status warning">Renew Soon</span></li>
+                    <li>Jones Flat – Expires: 09/10/2025 <span class="status ok">Valid</span></li>
+                    <li>Bristol HQ – Awaiting Upload <span class="status alert">Missing</span></li>
                 </ul>
-            </section>
+                <button onclick="uploadCert()">Upload New Certificate</button>
+            </div>
+
+            <div class="panel">
+                <h3>📅 Jobs in Progress</h3>
+                <ul>
+                    <li>Boiler Inspection – 29 Sept 2025 – Assigned: Ellie</li>
+                    <li>Gas Safety Check – 1 Oct 2025 – Assigned: Liam</li>
+                </ul>
+                <button onclick="syncOffline()">Sync Offline Data</button>
+            </div>
         </div>
 
-        <!-- Engineering Statistics -->
-        <div class="mt-8 bg-gray-800 rounded-xl p-6">
-            <h2 class="text-xl font-bold mb-4">📈 Engineering Performance</h2>
-            <div class="grid md:grid-cols-4 gap-4">
-                <div class="text-center bg-green-600 bg-opacity-20 rounded-lg p-4">
-                    <div class="text-2xl font-bold text-green-400">15</div>
-                    <div class="text-sm text-gray-300">🏆 Certificates Today</div>
-                </div>
-                <div class="text-center bg-blue-600 bg-opacity-20 rounded-lg p-4">
-                    <div class="text-2xl font-bold text-blue-400">100%</div>
-                    <div class="text-sm text-gray-300">✅ Compliance Rate</div>
-                </div>
-                <div class="text-center bg-yellow-600 bg-opacity-20 rounded-lg p-4">
-                    <div class="text-2xl font-bold text-yellow-400">8</div>
-                    <div class="text-sm text-gray-300">⏰ Pending Inspections</div>
-                </div>
-                <div class="text-center bg-purple-600 bg-opacity-20 rounded-lg p-4">
-                    <div class="text-2xl font-bold text-purple-400">23</div>
-                    <div class="text-sm text-gray-300">🔔 Expiring Soon</div>
-                </div>
-            </div>
+        <div class="panel">
+            <h3>📥 Offline Upload Centre</h3>
+            <p>Drag and drop gas certs, job reports, or images. All data syncs on connection.</p>
+            <input type="file" multiple />
+        </div>
+
+        <div class="panel">
+            <h3>🤖 Chat with Riley – Site Ops AI</h3>
+            <script src="https://rube.app/embed/chat?agent=riley-virtual-engineer&apikey=3bNQHCLJ3gnQxhxzdMMmlX5V" defer></script>
+        </div>
+
+        <div class="panel">
+            <h3>📘 Directive Hub</h3>
+            <textarea rows="4" placeholder="Enter site-specific AI instructions here...">Gas certs must be renewed 30 days in advance. Alert if missing uploads. All certs must be PDF only.</textarea>
+            <button onclick="updateDirectives()">Update Directives</button>
         </div>
 
         <!-- Back Button -->
         <div class="mt-8 text-center">
-            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
+            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold text-white">
                 ← Back to Office Dashboard
             </a>
         </div>
     </div>
 
     <script>
-        function generateCertificate() {
-            alert('📋 Generate Gas Safety Certificate\n\nVirtual Ian will:\n✅ Perform virtual inspection\n✅ Check all gas appliances\n✅ Generate compliance certificate\n✅ Send to Communications Office\n✅ Create invoice via Accounts\n\n🎯 Certificate generated in 30 seconds!');
+        function uploadCert() {
+            alert('📄 Upload New Certificate\n\nSelect a gas safety certificate PDF to upload:\n✅ Automatically categorized\n✅ Expiry date extracted\n✅ Customer notified\n✅ Synced across all devices\n\n🎯 Upload successful!');
         }
 
-        function completeInspection(customer) {
-            alert(`✅ Completing inspection for ${customer}\n\nVirtual Ian performed:\n🔍 Gas pressure tests\n🔍 Appliance safety checks\n🔍 Ventilation verification\n🔍 Flue gas analysis\n\n✅ All systems PASS - Certificate ready!`);
+        function syncOffline() {
+            alert('📱 Sync Offline Data\n\nSyncing all offline data:\n✅ Job reports uploaded\n✅ Certificate photos synced\n✅ Site inspection notes saved\n✅ Engineer timesheets updated\n\n🔄 All data synchronized!');
         }
 
-        function emergencyInspection() {
-            alert('🚨 EMERGENCY GAS INSPECTION\n\nVirtual Ian activated for urgent call:\n⚡ Priority response within 1 hour\n🚨 Safety assessment protocol\n📞 Customer contacted immediately\n🚗 Engineer dispatched if required\n\n📋 Emergency certificate issued same day!');
+        function updateDirectives() {
+            alert('📘 Directive Hub Updated\n\nSite-specific AI instructions saved:\n✅ Gas cert renewal reminders configured\n✅ Upload monitoring enabled\n✅ PDF-only validation active\n✅ Riley AI updated with new directives\n\n🎯 Directives applied successfully!');
         }
 
-        function complianceCheck() {
-            alert('🔍 Compliance Assessment\n\nVirtual Ian checking:\n✅ Gas Safe Register compliance\n✅ UK Gas Safety Regulations\n✅ BS Standards adherence\n✅ Appliance certification status\n\n📊 Full compliance report generated!');
+        // Back to Dashboard
+        function goBack() {
+            window.location.href = 'index.html';
         }
-
-        function chatWithIan() {
-            const input = document.getElementById('ianInput');
-            const chat = document.getElementById('ianChat');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            chat.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
-            
-            setTimeout(() => {
-                const responses = [
-                    "I've completed 15 gas safety certificates today - all passed!",
-                    "I can schedule batch inspections for your rental properties.",
-                    "Emergency gas leak? I'll dispatch immediately and issue safety cert.",
-                    "All appliances checked and compliant with Gas Safe standards.",
-                    "Certificate GS-2025-047 generated and sent to Communications Office!"
-                ];
-                const response = responses[Math.floor(Math.random() * responses.length)];
-                chat.innerHTML += `<div class="text-yellow-400 mb-2"><strong>Virtual Ian:</strong> ${response}</div>`;
-                chat.scrollTop = chat.scrollHeight;
-            }, 1000);
-            
-            input.value = '';
-        }
-
-        function viewCertificate(certNumber) {
-            alert(`📄 Certificate ${certNumber}\n\n👤 Customer: John Smith\n🏠 Property: 123 Oak Street\n📅 Issued: Today\n✅ Status: Valid\n🔧 Appliances: 3 checked\n⭐ Compliance: 100%\n\n🎯 All safety requirements met!`);
-        }
-
-        function scheduleInspections() {
-            alert('📅 Batch Inspection Scheduler\n\nVirtual Ian can schedule:\n🏠 Residential properties\n🏢 Commercial buildings\n⚡ Emergency callouts\n🔄 Annual renewals\n\nOptimal routing and time management!');
-        }
-
-        function viewSavedCertificate(address) {
-            alert(`📄 Gas Certificate\n\n🏠 Property: ${address}\n📅 Issue Date: Valid\n✅ Status: Compliant\n🔧 Gas Safe Engineer: Virtual Ian\n⭐ All safety checks passed\n\n🎯 Certificate ready for download!`);
-        }
-
-        // Enter key support
-        document.getElementById('ianInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                chatWithIan();
-            }
-        });
-
-        // Load real data from backend
-        async function loadEngineerData() {
-            try {
-                const response = await fetch('https://mydxasjicsfetnglbppp.supabase.co/functions/v1/virtual-engineer/status');
-                const data = await response.json();
-                if (data.success && data.statistics) {
-                    document.getElementById('pendingCount').textContent = data.statistics.pending_certificates || 3;
-                }
-            } catch (error) {
-                console.log('Using simulated data');
-            }
-        }
-
-        loadEngineerData();
     </script>
 </body>
 </html>
