@@ -669,8 +669,10 @@
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
+
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE";
   const SUPABASE_URL = 'https://mydxasjicsfetnglbppp.supabase.co';
+
   const GOOGLE_CLIENT_ID = '624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com';
   const ALLOWED_EMAIL = 'ian@ishe-ltd.co.uk';
 
@@ -689,6 +691,7 @@
       options: {
         redirectTo: window.location.href,
       },
+
     });
     if (error) alert('Login failed: ' + error.message);
   });
@@ -710,33 +713,50 @@
     google.accounts.id.initialize({
       client_id: "624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com",
       callback: handleCredentialResponse
-    });
-    google.accounts.id.renderButton(
-      document.getElementById("googleSignIn"),
-      { theme: "outline", size: "large" }
-    );
-  }
-  function handleCredentialResponse(response) {
-    fetch("/functions/v1/save-google-token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: response.credential })
-    }).then(() => alert("Google linked! Reload page."));
-  }
-  window.onload = initClient;
-</script>
-<div id="googleSignIn"></div>
 
-<!-- === DIRECT OPENAI CHAT WIDGET === -->
-<script src="https://cdn.jsdelivr.net/npm/@openai/chat-widget"></script>
+    });
+    if (error) alert('Login failed: ' + error.message);
+  });
+
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
+
+  if (!user || user.email !== ALLOWED_EMAIL) {
+    document.body.innerHTML = '<h2 style="color:white;text-align:center;margin-top:20vh">Access Denied. Private System.</h2>';
+  } else {
+    console.log('✅ Authenticated:', user.email);
+  }
+</script>
+
+<!-- STEP 2: Inject Dynamic AI Voice & Bot Linking -->
 <script>
-  new OpenAIChatWidget({
-    apiKey: "lUepvP1YcbQtr75QPYZzZrELqqdRnk72KxZ3On5cY_rgeduG7q-m12s74s4vwczZP1HEIoWwW_T3BlbkFJNkpxiHDdAzSZvKitmOPezOvhsFJVzswOZ5jSIL3MeQCxUGdTIwluch6oLbltVO5-nmSJeWnNMA  ",
-    model: "gpt-4o-mini",
-    container: document.body,
-    persona: document.title // uses room name automatically
+  const officeMap = {
+    'CEO Office': 'Brian',
+    'Admin Mailroom': 'Stacy',
+    'Logistics Office': 'Ellie',
+    'Accounts Office': 'Ava',
+    'Virtual Engineer': 'Riley',
+    'Therapy Room': 'Luna',
+    'Health & Fitness': 'Max',
+    'Personal Banking': 'Kate',
+    'Documents': 'Clerk',
+    'Task Center': 'Tina',
+  };
+
+  const currentTitle = document.title.trim();
+  const voice = officeMap[currentTitle] || 'Brian';
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const aiAgent = document.querySelector('rube-chat-agent');
+    if (aiAgent) {
+      aiAgent.setAttribute('voice', voice);
+      console.log(`🎤 Assigned AI voice for ${currentTitle}: ${voice}`);
+    }
   });
 </script>
+
+<!-- STEP 3: Drop Root Agent if Absent -->
+<script src="https://rube.app/embed/chat?agent=core&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM"></script>
 
 </body>
 </html>
