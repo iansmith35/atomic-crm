@@ -3,119 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Mailroom - Stacy</title>
+    <title>Admin Mailroom - Full Email Console</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .panel {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        .panel h2, .panel h3 {
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        .panel p, .panel li {
+            color: #4b5563;
+        }
+        body {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="min-h-screen">
     <div class="p-6 max-w-6xl mx-auto">
-        <h1 class="text-2xl font-bold mb-4">📨 Admin Mailroom</h1>
+        <div class="panel">
+            <h2 class="text-3xl font-bold text-gray-800">📬 Admin Mailroom — Full Email Console</h2>
+            <p class="text-gray-600">Live inbox, pre-approved replies, message tracking, and AI-powered handling.</p>
+        </div>
 
-        <section>
-            <h2 class="text-lg font-semibold mb-2">Taskbar – Mailing Only</h2>
-            <ul class="space-y-3" id="taskList">
-                <!-- Tasks will be populated by JavaScript -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <div class="panel">
+                <h3 class="text-xl font-semibold">📥 Live Gmail Feed</h3>
+                <iframe
+                    src="https://mail.google.com/mail/u/0/#inbox"
+                    width="100%"
+                    height="350px"
+                    frameborder="0"
+                    class="rounded border mb-2"
+                ></iframe>
+                <p class="text-sm text-gray-600">Real-time inbox view. AI will suggest replies below.</p>
+            </div>
+
+            <div class="panel">
+                <h3 class="text-xl font-semibold">📝 Pre-Approved Replies</h3>
+                <ul class="mb-4 space-y-2">
+                    <li class="flex items-center">
+                        <span class="text-green-600 mr-2">✅</span>
+                        "Thanks for your message — I'll get back shortly."
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-600 mr-2">✅</span>
+                        "Yes, I can confirm that appointment."
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-600 mr-2">✅</span>
+                        "Here's your requested documentation."
+                    </li>
+                </ul>
+                <textarea 
+                    class="w-full p-2 border rounded mb-2" 
+                    rows="3"
+                    placeholder="Draft new pre-approvals..."
+                    id="newReplyText"
+                ></textarea>
+                <button 
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    onclick="savePreApprovedReply()"
+                >
+                    Save
+                </button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3 class="text-xl font-semibold">🤖 Talk to Stacy – Mailroom AI</h3>
+            <div class="bg-gray-50 border rounded p-4 mb-4">
+                <div id="stacyChat" class="h-64 overflow-y-auto mb-4">
+                    <div class="mb-2">
+                        <strong class="text-blue-600">Stacy:</strong> 
+                        <span class="text-gray-700">Hello! I'm Stacy, your AI mailroom assistant. I can help you manage emails, draft replies, and keep track of important messages. What would you like me to help you with today?</span>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <input 
+                        type="text" 
+                        id="stacyInput" 
+                        class="flex-1 p-2 border rounded" 
+                        placeholder="Ask Stacy about emails, drafts, or anything else..."
+                        onkeypress="handleStacyKeyPress(event)"
+                    />
+                    <button 
+                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                        onclick="sendStacyMessage()"
+                    >
+                        Send
+                    </button>
+                </div>
+            </div>
+            <!-- External AI Chat Integration -->
+            <script src="https://rube.app/embed/chat?agent=stacy-mail-ai&apikey=3bNQHCLJ3gnQxhxzdMMmlX5V" defer></script>
+        </div>
+
+        <div class="panel">
+            <h3 class="text-xl font-semibold">📋 Email Task Tracker</h3>
+            <ul class="space-y-2" id="emailTaskTracker">
+                <li class="flex items-center justify-between p-3 bg-yellow-50 rounded border-l-4 border-yellow-400">
+                    <span>📌 Drafts needing approval</span>
+                    <span class="font-bold text-yellow-600">3</span>
+                </li>
+                <li class="flex items-center justify-between p-3 bg-red-50 rounded border-l-4 border-red-400">
+                    <span>⚠️ Unread important</span>
+                    <span class="font-bold text-red-600">6</span>
+                </li>
+                <li class="flex items-center justify-between p-3 bg-green-50 rounded border-l-4 border-green-400">
+                    <span>✔️ Replied and archived</span>
+                    <span class="font-bold text-green-600">12</span>
+                </li>
             </ul>
-        </section>
+            <p class="text-sm text-gray-600 mt-4">Stacy will prompt if any email goes unhandled over 24h.</p>
+        </div>
 
         <!-- Back Button -->
         <div class="mt-8 text-center">
-            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
+            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold">
                 ← Back to Office Dashboard
             </a>
         </div>
     </div>
 
     <script>
-        // Sample task data - simulating API response structure
-        let tasks = [
-            {
-                id: 1,
-                title: "Process incoming customer inquiries",
-                status: "pending",
-                created_at: "2024-01-15 09:30",
-                updated_at: "2024-01-15 14:22"
-            },
-            {
-                id: 2,
-                title: "Send follow-up emails to prospects",
-                status: "in_progress", 
-                created_at: "2024-01-15 08:15",
-                updated_at: "2024-01-15 15:45"
-            },
-            {
-                id: 3,
-                title: "Update mailing list subscriptions",
-                status: "completed",
-                created_at: "2024-01-14 16:20",
-                updated_at: "2024-01-15 10:30"
-            },
-            {
-                id: 4,
-                title: "Draft newsletter for property updates",
-                status: "pending",
-                created_at: "2024-01-15 11:00",
-                updated_at: "2024-01-15 11:00"
-            },
-            {
-                id: 5,
-                title: "Review automated email campaigns",
-                status: "in_progress",
-                created_at: "2024-01-15 07:45",
-                updated_at: "2024-01-15 13:15"
-            }
+        // Pre-approved replies storage
+        let preApprovedReplies = [
+            "Thanks for your message — I'll get back shortly.",
+            "Yes, I can confirm that appointment.",
+            "Here's your requested documentation."
         ];
 
-        // Initialize the task list on page load
+        // Email task tracker data
+        let emailTasks = {
+            drafts: 3,
+            unreadImportant: 6,
+            repliedArchived: 12
+        };
+
+        // Stacy chat history
+        let stacyChatHistory = [];
+
+        // Initialize the interface
         document.addEventListener('DOMContentLoaded', function() {
-            fetchTasks();
+            updateEmailTaskTracker();
+            loadStacyChat();
         });
 
-        // Simulate API call to fetch tasks
-        async function fetchTasks() {
-            try {
-                // Try to fetch from API first
-                const response = await fetch('/api/tasks?office=mailroom');
-                if (response.ok) {
-                    const data = await response.json();
-                    tasks = data.tasks || [];
-                }
-            } catch (error) {
-                // Use sample data if API is not available
-                console.log('Using sample task data - API not available');
-            }
+        // Save new pre-approved reply
+        function savePreApprovedReply() {
+            const textarea = document.getElementById('newReplyText');
+            const newReply = textarea.value.trim();
             
-            populateTaskList();
+            if (newReply) {
+                preApprovedReplies.push(newReply);
+                textarea.value = '';
+                
+                // Add new reply to the list
+                const repliesList = document.querySelector('.panel ul');
+                const newLi = document.createElement('li');
+                newLi.className = 'flex items-center';
+                newLi.innerHTML = `
+                    <span class="text-green-600 mr-2">✅</span>
+                    "${newReply}"
+                `;
+                repliesList.appendChild(newLi);
+                
+                // Show confirmation
+                showNotification('Pre-approved reply saved successfully!', 'success');
+            }
         }
 
-        function populateTaskList() {
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = '';
-            
-            if (tasks.length === 0) {
-                taskList.innerHTML = '<li class="p-4 bg-gray-800 border border-gray-600 rounded-xl"><div class="text-gray-400">No mailing tasks available</div></li>';
-                return;
+        // Handle Stacy chat key press
+        function handleStacyKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendStacyMessage();
             }
+        }
+
+        // Send message to Stacy
+        function sendStacyMessage() {
+            const input = document.getElementById('stacyInput');
+            const message = input.value.trim();
             
-            tasks.forEach((task) => {
-                const li = document.createElement('li');
-                li.className = 'p-4 bg-white border rounded-xl shadow';
+            if (message) {
+                // Add user message to chat
+                addMessageToStacyChat('user', message);
+                input.value = '';
                 
-                // Get status color
-                let statusColor = 'text-gray-600';
-                if (task.status === 'completed') statusColor = 'text-green-600';
-                else if (task.status === 'in_progress') statusColor = 'text-blue-600';
-                else if (task.status === 'pending') statusColor = 'text-yellow-600';
-                
-                li.innerHTML = `
-                    <div class="font-semibold text-gray-900">${task.title}</div>
-                    <div class="text-sm ${statusColor}">Status: ${task.status}</div>
-                    <div class="text-xs text-gray-500">
-                        Created: ${task.created_at} | Updated: ${task.updated_at}
-                    </div>
-                `;
-                taskList.appendChild(li);
+                // Simulate AI response (in real implementation, this would call the API)
+                setTimeout(() => {
+                    const response = generateStacyResponse(message);
+                    addMessageToStacyChat('stacy', response);
+                }, 1000);
+            }
+        }
+
+        // Add message to Stacy chat
+        function addMessageToStacyChat(sender, message) {
+            const chatDiv = document.getElementById('stacyChat');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'mb-2';
+            
+            const senderName = sender === 'user' ? 'You' : 'Stacy';
+            const senderColor = sender === 'user' ? 'text-gray-800' : 'text-blue-600';
+            
+            messageDiv.innerHTML = `
+                <strong class="${senderColor}">${senderName}:</strong> 
+                <span class="text-gray-700">${message}</span>
+            `;
+            
+            chatDiv.appendChild(messageDiv);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+            
+            // Store in history
+            stacyChatHistory.push({ sender, message, timestamp: new Date() });
+        }
+
+        // Generate simulated Stacy responses
+        function generateStacyResponse(userMessage) {
+            const responses = [
+                "I'll help you with that email task right away. Let me check your inbox for any urgent messages.",
+                "That sounds like a great idea! I can draft a reply for you. Would you like me to use one of your pre-approved templates?",
+                "I've analyzed your recent email patterns. You have some important messages that need attention.",
+                "I can help you organize those emails better. Would you like me to create some filters or labels?",
+                "Based on your email activity, I recommend checking your important folder. There are some time-sensitive messages there.",
+                "I'll add that to your email task list. Is there a specific deadline for this task?",
+                "Your email management is looking good today! You've handled most of your priority messages."
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Load initial Stacy chat
+        function loadStacyChat() {
+            // Initial greeting is already in HTML
+            stacyChatHistory.push({
+                sender: 'stacy',
+                message: "Hello! I'm Stacy, your AI mailroom assistant. I can help you manage emails, draft replies, and keep track of important messages. What would you like me to help you with today?",
+                timestamp: new Date()
             });
         }
+
+        // Update email task tracker
+        function updateEmailTaskTracker() {
+            // This would typically fetch real data from an API
+            // For now, we'll simulate some dynamic updates
+            setTimeout(() => {
+                // Simulate some changes in email tasks
+                if (Math.random() > 0.7) {
+                    emailTasks.unreadImportant += 1;
+                    updateTaskDisplay();
+                }
+            }, 5000);
+        }
+
+        // Update task display
+        function updateTaskDisplay() {
+            const tracker = document.getElementById('emailTaskTracker');
+            tracker.innerHTML = `
+                <li class="flex items-center justify-between p-3 bg-yellow-50 rounded border-l-4 border-yellow-400">
+                    <span>📌 Drafts needing approval</span>
+                    <span class="font-bold text-yellow-600">${emailTasks.drafts}</span>
+                </li>
+                <li class="flex items-center justify-between p-3 bg-red-50 rounded border-l-4 border-red-400">
+                    <span>⚠️ Unread important</span>
+                    <span class="font-bold text-red-600">${emailTasks.unreadImportant}</span>
+                </li>
+                <li class="flex items-center justify-between p-3 bg-green-50 rounded border-l-4 border-green-400">
+                    <span>✔️ Replied and archived</span>
+                    <span class="font-bold text-green-600">${emailTasks.repliedArchived}</span>
+                </li>
+            `;
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 ${
+                type === 'success' ? 'bg-green-600' : 
+                type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Simulate periodic email updates
+        setInterval(() => {
+            if (Math.random() > 0.8) {
+                // Randomly update task counts to simulate activity
+                if (Math.random() > 0.5) {
+                    emailTasks.repliedArchived += 1;
+                    emailTasks.unreadImportant = Math.max(0, emailTasks.unreadImportant - 1);
+                } else {
+                    emailTasks.unreadImportant += 1;
+                }
+                updateTaskDisplay();
+            }
+        }, 10000); // Update every 10 seconds
     </script>
 </body>
 </html>
