@@ -59,6 +59,20 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+
+
+// Catch-all handler for the SPA
+// app.get('*', (req, res) => {
+//   // If it's an API route that doesn't exist, return 404
+//   if (req.path.startsWith('/api/')) {
+//     return res.status(404).json({ error: 'API endpoint not found' });
+//   }
+//   
+//   // Otherwise serve the main index.html
+//   res.sendFile(path.join(__dirname, 'index.html'));
+// });
+
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Atomic CRM server running on port ${PORT}`);

@@ -6,7 +6,7 @@
  * @param {number} maxResults - Maximum number of emails to retrieve
  * @returns {Promise<Array>} Array of unread email objects
  */
-export async function listUnreadEmails(maxResults = 20) {
+async function listUnreadEmails(maxResults = 20) {
   // This would typically use Google's Gmail API
   // For now, returning mock data that matches expected structure
   try {
@@ -50,7 +50,7 @@ export async function listUnreadEmails(maxResults = 20) {
  * @param {string} body - Email body content
  * @returns {Promise<Object>} Response object with send status
  */
-export async function sendEmail(to, subject, body) {
+async function sendEmail(to, subject, body) {
   try {
     // In a real implementation, this would:
     // 1. Use Google API client with proper authentication
@@ -93,7 +93,7 @@ export async function sendEmail(to, subject, body) {
  * @param {string} timeMin - Minimum time to query from (ISO string)
  * @returns {Promise<Array>} Array of calendar events
  */
-export async function listCalendarEvents(calendarId = 'primary', timeMin = null) {
+async function listCalendarEvents(calendarId = 'primary', timeMin = null) {
   try {
     // In a real implementation, this would:
     // 1. Use Google Calendar API client with proper authentication
@@ -161,7 +161,7 @@ export async function listCalendarEvents(calendarId = 'primary', timeMin = null)
  * @param {Object} event - Event object with required properties
  * @returns {Promise<Object>} Created event object
  */
-export async function createCalendarEvent(event) {
+async function createCalendarEvent(event) {
   try {
     // In a real implementation, this would:
     // 1. Use Google Calendar API client with proper authentication
@@ -200,12 +200,10 @@ export async function createCalendarEvent(event) {
   }
 }
 
-// Export all functions as default object as well for CommonJS compatibility
-const rubeGoogle = {
+// Export all functions as CommonJS exports
+module.exports = {
   listUnreadEmails,
   sendEmail,
   listCalendarEvents,
   createCalendarEvent
 };
-
-export default rubeGoogle;

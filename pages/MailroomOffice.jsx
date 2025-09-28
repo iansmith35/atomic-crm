@@ -1,5 +1,6 @@
 // MailroomOffice.jsx
 import { useState, useEffect } from "react";
+import { getUnreadEmails, sendEmail } from "../modules/emailHelpers.js";
 
 export default function MailroomOffice() {
   const [emails, setEmails] = useState([]);
@@ -7,15 +8,20 @@ export default function MailroomOffice() {
   const [messages, setMessages] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [directives, setDirectives] = useState("");
+  
+  // Email form fields
+  const [toField, setToField] = useState("");
+  const [subjectField, setSubjectField] = useState("");
+  const [bodyField, setBodyField] = useState("");
 
   useEffect(() => {
     fetch("/api/tasks?office=mailroom")
       .then((res) => res.json())
       .then((data) => setTasks(data.tasks || []));
 
-    fetch("/api/emails")
-      .then((res) => res.json())
-      .then((data) => setEmails(data.emails || []));
+    getUnreadEmails()
+      .then(msgs => setEmails(msgs))
+      .catch(err => console.error('Error fetching emails:', err));
 
     fetch("/api/chat?office=mailroom")
       .then((res) => res.json())
@@ -46,6 +52,15 @@ export default function MailroomOffice() {
     });
   };
 
+  function onSendEmail() {
+    sendEmail(toField, subjectField, bodyField)
+      .then(res => {
+        alert('Sent');
+        return getUnreadEmails();
+      })
+      .then(refresh => setEmails(refresh));
+  }
+
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <h1 className="text-3xl font-bold">📨 Admin Mailroom</h1>
@@ -61,6 +76,49 @@ export default function MailroomOffice() {
               <p className="text-sm mt-2">{email.snippet}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-xl font-semibold mb-2">📤 Compose Email</h2>
+        <div className="bg-white p-4 rounded border space-y-3">
+          <div>
+            <label className="block text-sm font-medium mb-1">To:</label>
+            <input
+              type="email"
+              className="w-full border p-2 rounded"
+              placeholder="recipient@example.com"
+              value={toField}
+              onChange={(e) => setToField(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Subject:</label>
+            <input
+              type="text"
+              className="w-full border p-2 rounded"
+              placeholder="Email subject"
+              value={subjectField}
+              onChange={(e) => setSubjectField(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Message:</label>
+            <textarea
+              className="w-full border p-2 rounded"
+              rows="4"
+              placeholder="Email content"
+              value={bodyField}
+              onChange={(e) => setBodyField(e.target.value)}
+            ></textarea>
+          </div>
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            onClick={onSendEmail}
+            disabled={!toField || !subjectField || !bodyField}
+          >
+            Send Email
+          </button>
         </div>
       </section>
 
