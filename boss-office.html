@@ -1442,5 +1442,41 @@
         }
       });
     </script>
+
+<!-- === GOOGLE SIGN-IN + SUPABASE SAVE === -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+  function initClient() {
+    google.accounts.id.initialize({
+      client_id: "624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com",
+      callback: handleCredentialResponse
+    });
+    google.accounts.id.renderButton(
+      document.getElementById("googleSignIn"),
+      { theme: "outline", size: "large" }
+    );
+  }
+  function handleCredentialResponse(response) {
+    fetch("/functions/v1/save-google-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: response.credential })
+    }).then(() => alert("Google linked! Reload page."));
+  }
+  window.onload = initClient;
+</script>
+<div id="googleSignIn"></div>
+
+<!-- === DIRECT OPENAI CHAT WIDGET === -->
+<script src="https://cdn.jsdelivr.net/npm/@openai/chat-widget"></script>
+<script>
+  new OpenAIChatWidget({
+    apiKey: "lUepvP1YcbQtr75QPYZzZrELqqdRnk72KxZ3On5cY_rgeduG7q-m12s74s4vwczZP1HEIoWwW_T3BlbkFJNkpxiHDdAzSZvKitmOPezOvhsFJVzswOZ5jSIL3MeQCxUGdTIwluch6oLbltVO5-nmSJeWnNMA  ",
+    model: "gpt-4o-mini",
+    container: document.body,
+    persona: document.title // uses room name automatically
+  });
+</script>
+
 </body>
 </html>
