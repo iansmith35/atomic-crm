@@ -1,0 +1,31 @@
+{
+  "name": "atomic-crm",
+  "version": "1.0.0",
+  "description": "ISHE Group CRM system with Supabase backend and GitHub integration",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "cron": "node src/jobs/cron.js",
+    "gas-checker": "node -e \"const { runGasChecker } = require('./src/jobs/gasChecker'); runGasChecker().then(result => console.log('Gas Checker Results:', JSON.stringify(result, null, 2)));\"",
+    "test": "npm run gas-checker"
+  },
+  "dependencies": {
+    "node-cron": "^3.0.3",
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.6",
+    "@types/node-cron": "^3.0.11"
+  },
+  "keywords": [
+    "crm",
+    "supabase",
+    "gas-certificates",
+    "cron",
+    "automation"
+  ],
+  "author": "ISHE Group",
+  "license": "MIT"
+}
