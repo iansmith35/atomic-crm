@@ -54,7 +54,7 @@ export default function AccountsOffice() {
       <div className="bg-white border rounded-xl p-6 shadow">
         <h3 className="text-lg font-semibold mb-3">🤖 Chat with Ava – Your Finance AI</h3>
         <script 
-          src="https://rube.app/embed/chat?agent=ava-accounts-ai&apikey=3bNQHCLJ3gnQxhxzdMMmlX5V" 
+          src="https://rube.app/embed/chat?agent=ava-accounts-ai&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM" 
           defer
         ></script>
       </div>
