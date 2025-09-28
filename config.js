@@ -1,8 +1,8 @@
 // Supabase Configuration for Atomic CRM
 const SUPABASE_CONFIG = {
-  url: 'https://mydxasjicsfetnglbppp.supabase.co',
-  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCIrOiJKV1QiLCJ9.uyissso.supabase',
-  functionsUrl: 'https://mydxasjicsfetnglbppp.supabase.co/functions/v1',
+  url: 'https://ishehqihxbhwpwhfrvzo.supabase.co',
+  anonKey: 'YOUR_SUPABASE_ANON_KEY_HERE',
+  functionsUrl: 'https://ishehqihxbhwpwhfrvzo.supabase.co/functions/v1',
   officeEndpoints: {
     itOffice: 'it-office',
     ceoOffice: 'ceo-office',
