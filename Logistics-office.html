@@ -84,18 +84,8 @@
             <!-- Chat with Ellie -->
             <div class="bg-gray-800 rounded-xl p-6">
                 <h2 class="text-xl font-bold mb-4">🧠 Chat with Ellie AI</h2>
-                <div id="chatMessages" class="bg-gray-700 rounded-lg p-4 h-64 overflow-y-auto mb-4">
-                    <div class="text-green-400 mb-2">
-                        <strong>Ellie:</strong> Hello! I'm your logistics AI assistant. I can help with route planning, delivery scheduling, and fleet management. What can I assist you with today?
-                    </div>
-                </div>
-                <div class="flex">
-                    <input type="text" id="chatInput" placeholder="Ask Ellie about logistics..." 
-                           class="flex-1 bg-gray-700 rounded-l-lg px-4 py-2 text-white">
-                    <button onclick="sendMessage()" 
-                            class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-r-lg font-semibold">
-                        Send
-                    </button>
+                <div class="bg-gray-700 rounded-lg p-4 h-64 overflow-y-auto mb-4">
+                    <!-- Rube.app chat embed will appear here -->
                 </div>
             </div>
         </div>
@@ -127,34 +117,6 @@ Update delivery status every 30 minutes during active operations.</textarea>
     </div>
 
     <script>
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const messages = document.getElementById('chatMessages');
-            
-            if (input.value.trim()) {
-                const userMessage = input.value;
-                
-                // Add user message
-                const userMsg = document.createElement('div');
-                userMsg.className = 'text-blue-300 mb-2';
-                userMsg.innerHTML = `<strong>You:</strong> ${userMessage}`;
-                messages.appendChild(userMsg);
-                
-                // Clear input immediately
-                input.value = '';
-                messages.scrollTop = messages.scrollHeight;
-                
-                // Add AI response (simulated)
-                setTimeout(() => {
-                    const aiMsg = document.createElement('div');
-                    aiMsg.className = 'text-green-400 mb-2';
-                    aiMsg.innerHTML = `<strong>Ellie:</strong> I understand you need help with "${userMessage}". Let me analyze the logistics data and provide you with optimized recommendations.`;
-                    messages.appendChild(aiMsg);
-                    messages.scrollTop = messages.scrollHeight;
-                }, 1000);
-            }
-        }
-
         function saveDirectives() {
             const directives = document.getElementById('directivesText').value;
             // Simulate saving
@@ -162,17 +124,11 @@ Update delivery status every 30 minutes during active operations.</textarea>
             console.log('Saved directives:', directives);
         }
 
-        // Allow Enter key to send messages
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
         // Simulate loading tasks
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Logistics Office loaded successfully');
         });
     </script>
+    <script src="https://rube.app/embed/chat?agent=ellie-ai&apikey=3bNQHCLJ3gnQxhxzdMMmlX5V" defer></script>
 </body>
 </html>
