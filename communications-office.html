@@ -10,6 +10,17 @@
     <div class="p-6 max-w-6xl mx-auto">
         <h1 class="text-2xl font-bold mb-4">📨 Admin Mailroom</h1>
 
+        <div id="emailPanel" class="panel mb-6">
+            <h3 class="text-lg font-semibold mb-2">📨 Inbox Overview</h3>
+            <iframe src="https://mail.google.com/mail/u/0/#inbox" width="100%" height="400px" frameborder="0" class="rounded border border-gray-600"></iframe>
+            <p class="text-sm text-gray-400 mt-2"><em>For real-time AI handling, scroll to the chat assistant below or activate mail triggers via Supabase Cron.</em></p>
+        </div>
+
+        <div id="aiChatPanel" class="panel mb-6">
+            <h3 class="text-lg font-semibold mb-2">📡 Talk to Mailroom AI</h3>
+            <script src="https://rube.app/embed/chat?agent=stacy-mail-ai&apikey=3bNQHCLJ3gnQxhxzdMMmlX5V" defer></script>
+        </div>
+
         <section>
             <h2 class="text-lg font-semibold mb-2">Taskbar – Mailing Only</h2>
             <ul class="space-y-3" id="taskList">
