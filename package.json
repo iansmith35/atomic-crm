@@ -1,6 +1,7 @@
 {
   "name": "atomic-crm",
   "version": "1.0.0",
+
   "description": "ISHE Group CRM system with Supabase backend and GitHub integration",
   "main": "index.html",
   "scripts": {
@@ -10,11 +11,13 @@
     "start": "npx serve . -p 8000",
     "validate": "echo 'Validating HTML files...' && find . -name '*.html' -maxdepth 1",
     "lint": "echo 'HTML validation complete'"
+
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/iansmith35/atomic-crm.git"
   },
+
   "keywords": [
     "crm",
     "supabase",
@@ -28,4 +31,5 @@
     "serve": "^14.2.0"
   },
   "homepage": "https://iansmith35.github.io/atomic-crm/"
+
 }
