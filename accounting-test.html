@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounting API Test - Atomic CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-center">📊 Accounting API Test</h1>
+        
+        <!-- Create Customer -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">👤 Create Customer</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <input type="text" id="customerName" placeholder="Customer Name" class="border rounded px-3 py-2">
+                <input type="email" id="customerEmail" placeholder="Email" class="border rounded px-3 py-2">
+                <input type="text" id="customerAddress" placeholder="Address" class="border rounded px-3 py-2">
+            </div>
+            <button onclick="createCustomer()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Create Customer
+            </button>
+            <div id="customerResult" class="mt-4 p-3 bg-gray-50 rounded hidden"></div>
+        </div>
+
+        <!-- Create Invoice -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">🧾 Create Invoice</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <input type="text" id="invoiceCustomerId" placeholder="Customer ID" class="border rounded px-3 py-2">
+                <input type="number" id="invoiceAmount" placeholder="Amount" step="0.01" class="border rounded px-3 py-2">
+                <input type="date" id="invoiceDueDate" class="border rounded px-3 py-2">
+            </div>
+            <button onclick="createInvoice()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                Create Invoice
+            </button>
+            <div id="invoiceResult" class="mt-4 p-3 bg-gray-50 rounded hidden"></div>
+        </div>
+
+        <!-- Record Payment -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">💰 Record Payment</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <input type="text" id="paymentInvoiceId" placeholder="Invoice ID" class="border rounded px-3 py-2">
+                <input type="number" id="paymentAmount" placeholder="Amount" step="0.01" class="border rounded px-3 py-2">
+                <input type="text" id="paymentReference" placeholder="Reference" class="border rounded px-3 py-2">
+            </div>
+            <button onclick="recordPayment()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                Record Payment
+            </button>
+            <div id="paymentResult" class="mt-4 p-3 bg-gray-50 rounded hidden"></div>
+        </div>
+
+        <!-- P&L and VAT Reports -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">📈 P&L Report</h2>
+                <div class="grid grid-cols-1 gap-4 mb-4">
+                    <input type="date" id="pnlStartDate" class="border rounded px-3 py-2">
+                    <input type="date" id="pnlEndDate" class="border rounded px-3 py-2">
+                </div>
+                <button onclick="getPNL()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                    Get P&L Report
+                </button>
+                <div id="pnlResult" class="mt-4 p-3 bg-gray-50 rounded hidden"></div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">🧮 VAT Calculation</h2>
+                <div class="grid grid-cols-1 gap-4 mb-4">
+                    <input type="date" id="vatStartDate" class="border rounded px-3 py-2">
+                    <input type="date" id="vatEndDate" class="border rounded px-3 py-2">
+                </div>
+                <button onclick="getVAT()" class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">
+                    Calculate VAT
+                </button>
+                <div id="vatResult" class="mt-4 p-3 bg-gray-50 rounded hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/accounting';
+
+        function showResult(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.className = `mt-4 p-3 rounded ${isError ? 'bg-red-50 text-red-800' : 'bg-gray-50'}`;
+            element.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            element.classList.remove('hidden');
+        }
+
+        async function createCustomer() {
+            const name = document.getElementById('customerName').value;
+            const email = document.getElementById('customerEmail').value;
+            const address = document.getElementById('customerAddress').value;
+
+            if (!name || !email) {
+                showResult('customerResult', {error: 'Name and email are required'}, true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/customer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, address })
+                });
+                const data = await response.json();
+                showResult('customerResult', data, !response.ok);
+            } catch (error) {
+                showResult('customerResult', {error: error.message}, true);
+            }
+        }
+
+        async function createInvoice() {
+            const customerId = document.getElementById('invoiceCustomerId').value;
+            const amount = parseFloat(document.getElementById('invoiceAmount').value);
+            const dueDate = document.getElementById('invoiceDueDate').value;
+
+            if (!customerId || !amount) {
+                showResult('invoiceResult', {error: 'Customer ID and amount are required'}, true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/invoice`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customerId, amount, dueDate })
+                });
+                const data = await response.json();
+                showResult('invoiceResult', data, !response.ok);
+            } catch (error) {
+                showResult('invoiceResult', {error: error.message}, true);
+            }
+        }
+
+        async function recordPayment() {
+            const invoiceId = document.getElementById('paymentInvoiceId').value;
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+            const reference = document.getElementById('paymentReference').value;
+
+            if (!invoiceId || !amount) {
+                showResult('paymentResult', {error: 'Invoice ID and amount are required'}, true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/payment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ invoiceId, amount, reference })
+                });
+                const data = await response.json();
+                showResult('paymentResult', data, !response.ok);
+            } catch (error) {
+                showResult('paymentResult', {error: error.message}, true);
+            }
+        }
+
+        async function getPNL() {
+            const start = document.getElementById('pnlStartDate').value;
+            const end = document.getElementById('pnlEndDate').value;
+
+            if (!start || !end) {
+                showResult('pnlResult', {error: 'Start and end dates are required'}, true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/pnl?start=${start}&end=${end}`);
+                const data = await response.json();
+                showResult('pnlResult', data, !response.ok);
+            } catch (error) {
+                showResult('pnlResult', {error: error.message}, true);
+            }
+        }
+
+        async function getVAT() {
+            const start = document.getElementById('vatStartDate').value;
+            const end = document.getElementById('vatEndDate').value;
+
+            if (!start || !end) {
+                showResult('vatResult', {error: 'Start and end dates are required'}, true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/vat?start=${start}&end=${end}`);
+                const data = await response.json();
+                showResult('vatResult', data, !response.ok);
+            } catch (error) {
+                showResult('vatResult', {error: error.message}, true);
+            }
+        }
+
+        // Set default dates to current month
+        const now = new Date();
+        const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+        const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        
+        const formatDate = (date) => date.toISOString().split('T')[0];
+        
+        document.getElementById('pnlStartDate').value = formatDate(firstDay);
+        document.getElementById('pnlEndDate').value = formatDate(lastDay);
+        document.getElementById('vatStartDate').value = formatDate(firstDay);
+        document.getElementById('vatEndDate').value = formatDate(lastDay);
+    </script>
+</body>
+</html>

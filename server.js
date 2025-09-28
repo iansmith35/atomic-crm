@@ -22,6 +22,36 @@ app.use(express.static('.'));
 // API Routes
 app.use('/api/accounting', accountingRouter);
 
+// Mock API endpoints for existing frontend compatibility
+app.get('/api/tasks', (req, res) => {
+  const { office } = req.query;
+  
+  // Mock tasks for different offices
+  const mockTasks = {
+    accounts: [
+      {
+        id: 1,
+        title: "Process month-end invoices",
+        status: "In Progress",
+        created_at: "2025-09-01T09:00:00Z",
+        updated_at: "2025-09-28T14:30:00Z"
+      },
+      {
+        id: 2,
+        title: "Reconcile bank statements",
+        status: "Pending",
+        created_at: "2025-09-15T10:00:00Z",
+        updated_at: "2025-09-25T16:20:00Z"
+      }
+    ],
+    logistics: [],
+    it: [],
+    scheduling: []
+  };
+  
+  res.json({ tasks: mockTasks[office] || [] });
+});
+
 // Basic health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
