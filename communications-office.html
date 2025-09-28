@@ -3,28 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Mailroom - Full Email Console</title>
+
+    <title>Admin Mailroom</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .panel {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 1.5rem;
-        }
-        .panel h2, .panel h3 {
-            color: #1f2937;
-            margin-bottom: 1rem;
-        }
-        .panel p, .panel li {
-            color: #4b5563;
-        }
-        body {
-            background: #f3f4f6;
-            color: #1f2937;
-        }
-    </style>
+    <script src="https://rube.app/embed/chat?agent=crm-core-ai&apikey=YOUR_RUBE_API_KEY" defer></script>
+
 </head>
 <body class="min-h-screen">
     <div class="p-6 max-w-6xl mx-auto">
@@ -315,6 +298,25 @@
                 updateTaskDisplay();
             }
         }, 10000); // Update every 10 seconds
+    </script>
+
+    <script>
+      const officeName = document.title || "CEO Office"; // auto-detect or hardcode per room
+      const voiceMap = {
+        "CEO Office": "Brian",
+        "Admin Mailroom": "Stacy",
+        "Logistics Office": "Ellie",
+        "Accounts Office": "Ava",
+        "Virtual Engineer": "Riley",
+        "Therapy Room": "Luna"
+      };
+
+      window.addEventListener("load", () => {
+        const aiAgent = document.querySelector("rube-chat-agent");
+        if (aiAgent && voiceMap[officeName]) {
+          aiAgent.setAttribute("voice", voiceMap[officeName]);
+        }
+      });
     </script>
 </body>
 </html>
