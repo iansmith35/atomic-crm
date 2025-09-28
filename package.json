@@ -2,45 +2,26 @@
   "name": "atomic-crm",
   "version": "1.0.0",
 
-  "description": "ISHE Group CRM system with Supabase backend and GitHub integration",
-  "main": "index.js",
+  "description": "Atomic CRM - Business management system with AI agents",
+  "main": "server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "node src/server.js",
-    "cron": "node src/jobs/cron.js",
-    "gas-checker": "node -e \"const { runGasChecker } = require('./src/jobs/gasChecker'); runGasChecker().then(result => console.log('Gas Checker Results:', JSON.stringify(result, null, 2)));\"",
-    "test": "npm run gas-checker"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "node-cron": "^3.0.3",
-    "@supabase/supabase-js": "^2.39.0"
+    "express": "^4.18.0",
+    "cors": "^2.8.5"
   },
-  "devDependencies": {
-    "typescript": "^5.3.3",
-    "@types/node": "^20.10.6",
-    "@types/node-cron": "^3.0.11"
+  "engines": {
+    "node": ">=14.0.0"
   },
-  "keywords": [
-    "crm",
-    "supabase",
-    "gas-certificates",
-    "cron",
-    "automation"
-  ],
-  "author": "ISHE Group",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iansmith35/atomic-crm.git"
+  },
+  "keywords": ["crm", "business", "ai", "management"],
+  "author": "Ian Smith",
   "license": "MIT"
-
-  "description": "Atomic CRM System",
-  "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch"
-  },
-  "devDependencies": {
-    "typescript": "^5.0.0",
-    "@types/node": "^20.0.0"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.0.0"
-  }
 
 }
