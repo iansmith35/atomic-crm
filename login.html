@@ -7,7 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="config.js"></script>
     <script src="auth.js"></script>
+    <!-- Google OAuth script disabled
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    -->
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
     <div class="max-w-md w-full mx-auto p-6">
@@ -16,26 +18,43 @@
             <!-- Header -->
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-blue-400 mb-2">⚛️ ISHE Group CRM</h1>
-                <p class="text-gray-300">Sign in to access your office network</p>
+                <p class="text-gray-300">Access your office network</p>
             </div>
 
-            <!-- Google Sign-In Button Container -->
+            <!-- Access Information -->
             <div class="space-y-6">
                 <div class="text-center">
-                    <p class="text-gray-400 mb-4">Sign in with your Google account</p>
-                    <div id="googleSignIn" class="flex justify-center"></div>
-                    <!-- Alternative OAuth Login Button -->
-                    <div class="mt-4">
-                        <button id="login-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Sign in with Google
-                        </button>
-                    </div>
+                    <p class="text-gray-300 mb-4">Site access is now open</p>
+                    <button onclick="enterSite()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg w-full">
+                        Enter CRM System
+                    </button>
                 </div>
 
-                <!-- Status Messages -->
+                <!-- OPTIONAL: Static Login (commented out by default) -->
+                <!-- Uncomment the section below to enable static login -->
+                <!--
+                <div class="border-t border-gray-700 pt-6">
+                    <p class="text-gray-400 mb-4 text-center">Or use static login</p>
+                    <form id="staticLoginForm" class="space-y-4">
+                        <div>
+                            <input type="email" id="email" placeholder="Email" 
+                                   class="w-full p-3 bg-gray-700 rounded border-0 text-white" required>
+                        </div>
+                        <div>
+                            <input type="password" id="password" placeholder="Password" 
+                                   class="w-full p-3 bg-gray-700 rounded border-0 text-white" required>
+                        </div>
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded">
+                            Login with Credentials
+                        </button>
+                    </form>
+                </div>
+                -->
+
+                <!-- Status Messages (hidden by default) -->
                 <div id="statusMessage" class="hidden">
                     <div class="bg-blue-600 bg-opacity-20 rounded p-3 text-sm border-l-4 border-blue-500">
-                        <span id="statusText">Authenticating...</span>
+                        <span id="statusText">Processing...</span>
                     </div>
                 </div>
 
@@ -55,6 +74,8 @@
     </div>
 
     <script>
+        // DISABLED: Google OAuth initialization
+        /*
         function initClient() {
             google.accounts.id.initialize({
                 client_id: GOOGLE_CONFIG.clientId, // Use config from config.js
@@ -105,6 +126,38 @@
                 showStatus("Authentication failed. Please try again.", "red");
             });
         }
+        */
+
+        // Simple site entry function
+        function enterSite() {
+            showStatus("Accessing CRM system...", "blue");
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 800);
+        }
+
+        // OPTIONAL: Static login function (commented out)
+        /*
+        document.getElementById('staticLoginForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Static login credentials
+            const WHITELIST_EMAIL = "ian@ishe-ltd.co.uk";
+            const STATIC_PASSWORD = "502914";
+            
+            if (email === WHITELIST_EMAIL && password === STATIC_PASSWORD) {
+                showStatus("Login successful! Redirecting...", "green");
+                auth.setAuthenticated('static-login-token');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                showStatus("Invalid credentials. Access denied.", "red");
+            }
+        });
+        */
 
         function showStatus(message, type) {
             const statusDiv = document.getElementById('statusMessage');
@@ -121,16 +174,17 @@
             }
         }
 
-        // Initialize Google Sign-In when page loads
-        window.onload = initClient;
+        // DISABLED: Google Sign-In initialization
+        // window.onload = initClient;
 
-        // Check if user is already authenticated
-        if (auth.isAuthenticated()) {
-            window.location.href = 'index.html';
-        }
+        // DISABLED: Check if user is already authenticated
+        // if (auth.isAuthenticated()) {
+        //     window.location.href = 'index.html';
+        // }
     </script>
 
-    <!-- Google OAuth Login Handler -->
+    <!-- DISABLED: Google OAuth Login Handler -->
+    <!--
     <script type="module">
       import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
       const supabase = createClient(
@@ -145,5 +199,6 @@
         if (error) console.error('Login error:', error.message)
       })
     </script>
+    -->
 </body>
 </html>
