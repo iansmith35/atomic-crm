@@ -12,7 +12,7 @@
         <div class="bg-gradient-to-r from-emerald-500 to-green-600 rounded-xl p-6 mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold">💰 Accounts Office - Philip</h1>
+                    <h1 class="text-3xl font-bold">💸 Accounts Office - Philip</h1>
                     <p class="text-emerald-100 mt-2">Custom accounting system - Philip manages (Post-QuickBooks)</p>
                 </div>
                 <div class="text-right">
@@ -21,6 +21,17 @@
                 </div>
             </div>
         </div>
+
+        <!-- Taskbar - Accounting Only -->
+        <section class="mb-8">
+            <h2 class="text-lg font-semibold mb-2 text-white">Taskbar – Accounting Only</h2>
+            <ul id="accountingTasks" class="space-y-3">
+                <!-- Tasks will be loaded dynamically -->
+                <li class="p-4 bg-gray-800 border border-gray-600 rounded-xl shadow">
+                    <div class="text-gray-400 text-sm">Loading tasks...</div>
+                </li>
+            </ul>
+        </section>
 
         <div class="grid md:grid-cols-2 gap-6">
             <!-- Financial Overview -->
@@ -215,6 +226,80 @@
         function viewAllTransactions() {
             alert('💳 All Transactions\n\nShowing recent financial activity:\n\n✅ 127 transactions this month\n💰 Total processed: £45,230\n📈 Average transaction: £356.14\n🎯 All reconciled and verified\n\n📊 Full details available in reports section');
         }
+
+        // Task management functionality
+        async function fetchAccountingTasks() {
+            try {
+                const res = await fetch("/api/tasks?office=accounts");
+                const data = await res.json();
+                const tasks = data.tasks || [];
+                renderAccountingTasks(tasks);
+            } catch (error) {
+                console.log('API not available, using mock data:', error);
+                // Fallback to mock data when API is not available
+                const mockTasks = [
+                    {
+                        id: 1,
+                        title: "Process month-end invoices",
+                        status: "In Progress",
+                        created_at: "2025-09-01T09:00:00Z",
+                        updated_at: "2025-09-28T14:30:00Z"
+                    },
+                    {
+                        id: 2,
+                        title: "Reconcile bank statements",
+                        status: "Pending",
+                        created_at: "2025-09-15T10:00:00Z",
+                        updated_at: "2025-09-25T16:20:00Z"
+                    },
+                    {
+                        id: 3,
+                        title: "Prepare quarterly VAT return",
+                        status: "Done",
+                        created_at: "2025-09-10T11:00:00Z",
+                        updated_at: "2025-09-27T12:45:00Z"
+                    }
+                ];
+                renderAccountingTasks(mockTasks);
+            }
+        }
+
+        function renderAccountingTasks(tasks) {
+            const taskList = document.getElementById('accountingTasks');
+            if (!taskList) return;
+
+            if (tasks.length === 0) {
+                taskList.innerHTML = '<li class="p-4 bg-gray-800 border border-gray-600 rounded-xl shadow"><div class="text-gray-400 text-sm">No tasks found</div></li>';
+                return;
+            }
+
+            taskList.innerHTML = tasks.map(task => `
+                <li class="p-4 bg-gray-800 border border-gray-600 rounded-xl shadow">
+                    <div class="font-semibold text-white">${task.title}</div>
+                    <div class="text-sm text-gray-400">Status: ${task.status}</div>
+                    <div class="text-xs text-gray-500">
+                        Created: ${formatDate(task.created_at)} | Updated: ${formatDate(task.updated_at)}
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            } catch (error) {
+                return dateString;
+            }
+        }
+
+        // Initialize taskbar on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAccountingTasks();
+            // Refresh tasks every 30 seconds
+            setInterval(fetchAccountingTasks, 30000);
+        });
     </script>
 </body>
 </html>

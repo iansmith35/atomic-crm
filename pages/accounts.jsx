@@ -1,10 +1,38 @@
 // pages/accounts.jsx
-export default function AccountsOffice() {
-  return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">💼 Accounts Office</h1>
+import { useState, useEffect } from "react";
 
-      <section className="mb-6">
+export default function AccountsOffice() {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    async function fetchTasks() {
+      const res = await fetch("/api/tasks?office=accounts");
+      const data = await res.json();
+      setTasks(data.tasks || []);
+    }
+    fetchTasks();
+  }, []);
+
+  return (
+    <div className="p-6 max-w-6xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">💸 Accounts Office</h1>
+
+      <section>
+        <h2 className="text-lg font-semibold mb-2">Taskbar – Accounting Only</h2>
+        <ul className="space-y-3">
+          {tasks.map((task) => (
+            <li key={task.id} className="p-4 bg-white border rounded-xl shadow">
+              <div className="font-semibold">{task.title}</div>
+              <div className="text-sm text-gray-600">Status: {task.status}</div>
+              <div className="text-xs text-gray-500">
+                Created: {task.created_at} | Updated: {task.updated_at}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mb-6 mt-6">
         <h2 className="text-xl font-semibold mb-2">Upload Invoice / Statement</h2>
         <div className="border-2 border-dashed border-gray-400 rounded-xl p-6 text-center bg-gray-50">
           <p>Drop CSV, PDF, or ZIP files here or</p>
