@@ -1,6 +1,7 @@
 {
   "name": "atomic-crm",
   "version": "1.0.0",
+
   "description": "Atomic CRM - Business management system with AI agents",
   "main": "server.js",
   "scripts": {
@@ -22,4 +23,5 @@
   "keywords": ["crm", "business", "ai", "management"],
   "author": "Ian Smith",
   "license": "MIT"
+
 }
