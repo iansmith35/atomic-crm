@@ -1,4 +1,4 @@
-// pages/accounts.jsx
+//  pages/accounts.jsx
 import { useState, useEffect } from "react";
 
 export default function AccountsOffice() {
@@ -15,71 +15,49 @@ export default function AccountsOffice() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
+      <div className="bg-white border rounded-xl p-6 shadow mb-6">
+        <h2 className="text-2xl font-bold mb-2">📊 Accounts Office — Ava AI</h2>
+        <p className="text-gray-600">All your business finances, tracking, and queries in one place.</p>
+      </div>
 
-      <h1 className="text-2xl font-bold mb-4">💸 Accounts Office</h1>
-
-
-      <section>
-        <h2 className="text-lg font-semibold mb-2">Taskbar – Accounting Only</h2>
-        <ul className="space-y-3">
-          {tasks.map((task) => (
-            <li key={task.id} className="p-4 bg-white border rounded-xl shadow">
-              <div className="font-semibold">{task.title}</div>
-              <div className="text-sm text-gray-600">Status: {task.status}</div>
-              <div className="text-xs text-gray-500">
-                Created: {task.created_at} | Updated: {task.updated_at}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="mb-6 mt-6">
-        <h2 className="text-xl font-semibold mb-2">Upload Invoice / Statement</h2>
-        <div className="border-2 border-dashed border-gray-400 rounded-xl p-6 text-center bg-gray-50">
-          <p>Drop CSV, PDF, or ZIP files here or</p>
-          <input type="file" className="mt-2" />
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="bg-white border rounded-xl p-6 shadow">
+          <h3 className="text-lg font-semibold mb-3">💰 Account Snapshot</h3>
+          <ul className="space-y-2">
+            <li><strong>Bank Balance:</strong> £{'{'}{'{'} BANK_BALANCE {'}'}{'}' }</li>
+            <li><strong>Outstanding Invoices:</strong> £{'{'}{'{'} OUTSTANDING_INVOICES {'}'}{'}' }</li>
+            <li><strong>Expenses This Month:</strong> £{'{'}{'{'} EXPENSES_THIS_MONTH {'}'}{'}' }</li>
+            <li><strong>Net Cash Flow:</strong> £{'{'}{'{'} CASH_FLOW {'}'}{'}' }</li>
+          </ul>
         </div>
-      </section>
 
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Banking Summary</h2>
-        <div className="bg-white border rounded-xl p-4">
-          <p><strong>Total In:</strong> £42,000</p>
-          <p><strong>Total Out:</strong> £26,000</p>
-          <p><strong>Balance:</strong> £16,000</p>
+        <div className="bg-white border rounded-xl p-6 shadow">
+          <h3 className="text-lg font-semibold mb-3">📅 Upcoming Payments</h3>
+          <ul className="space-y-2">
+            <li>VAT Return – Due {'{'}{'{'} VAT_DUE {'}'}{'}' }</li>
+            <li>Payroll – Due {'{'}{'{'} PAYROLL_DATE {'}'}{'}' }</li>
+            <li>Supplier Invoice – £{'{'}{'{'} SUPPLIER_AMOUNT {'}'}{'}' } ({'{'}{'{'} SUPPLIER_NAME {'}'}{'}' })</li>
+          </ul>
         </div>
-      </section>
+      </div>
 
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Recent Transactions</h2>
-        <ul className="space-y-2 text-sm">
-          <li className="flex justify-between border-b py-2">
-            <span>01 Sep 2025 – Client Payment</span>
-            <span>+£3,000</span>
-          </li>
-          <li className="flex justify-between border-b py-2">
-            <span>30 Aug 2025 – Web Hosting</span>
-            <span>-£50</span>
-          </li>
-        </ul>
-      </section>
+      <div className="bg-white border rounded-xl p-6 shadow mb-6">
+        <h3 className="text-lg font-semibold mb-3">🔍 Transactions Feed</h3>
+        <iframe 
+          src={'https://docs.google.com/spreadsheets/d/{{SPREADSHEET_ID}}/edit?usp=sharing'}
+          width="100%" 
+          height="300px"
+          className="border-0"
+        ></iframe>
+      </div>
 
-      <section>
-        <h2 className="text-lg font-semibold mb-2">Taskbar – All Offices</h2>
-        <ul className="space-y-3">
-          {tasks.map((task) => (
-            <li key={task.id} className="p-4 bg-white border rounded-xl shadow">
-              <div className="font-semibold">{task.title}</div>
-              <div className="text-sm text-gray-600">Status: {task.status}</div>
-              <div className="text-xs text-gray-500">
-                Created: {task.created_at} | Updated: {task.updated_at}
-              </div>
-              <div className="text-xs italic text-gray-400">Office: {task.office}</div>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <div className="bg-white border rounded-xl p-6 shadow">
+        <h3 className="text-lg font-semibold mb-3">🤖 Chat with Ava – Your Finance AI</h3>
+        <script 
+          src="https://rube.app/embed/chat?agent=ava-accounts-ai&apikey=3bNQHCLJ3gnQxhxzdMMmlX5V" 
+          defer
+        ></script>
+      </div>
     </div>
   );
 }
