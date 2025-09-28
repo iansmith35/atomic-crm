@@ -14,6 +14,12 @@ const SUPABASE_CONFIG = {
   }
 };
 
+// Google OAuth Configuration
+const GOOGLE_CONFIG = {
+  clientId: 'YOUR_GOOGLE_CLIENT_ID', // Replace with actual Google OAuth client ID
+  scopes: ['email', 'profile']
+};
+
 // Global API Helper
 const api = {
   async call(office, endpoint = '', options = {}) {
