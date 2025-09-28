@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CEO Office - Strategic Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="config.js"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <div class="max-w-6xl mx-auto p-6">
@@ -146,6 +147,14 @@
             </div>
         </div>
 
+        <!-- CEO Task View -->
+        <div class="mt-8 bg-gray-800 rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4">🧠 CEO Task View</h2>
+            <ul id="taskList" class="space-y-3">
+                <!-- Tasks will be loaded dynamically -->
+            </ul>
+        </div>
+
         <!-- Business Metrics -->
         <div class="mt-8 bg-gray-800 rounded-xl p-6">
             <h2 class="text-xl font-bold mb-4">💰 Business Overview</h2>
@@ -211,6 +220,90 @@
                 }
             });
         }, 10000);
+
+        // TaskBar functionality
+        let tasks = [
+            { id: 1, title: "Wire AI Chat to CEO Office", status: "In Progress" },
+            { id: 2, title: "Replicate Gas Checker", status: "Queued" },
+            { id: 3, title: "Mirror QuickBooks", status: "Queued" }
+        ];
+
+        function getStatusClass(status) {
+            switch(status) {
+                case "Done":
+                    return "bg-green-600 bg-opacity-20 text-green-400";
+                case "In Progress":
+                    return "bg-yellow-600 bg-opacity-20 text-yellow-400";
+                default:
+                    return "bg-gray-600 bg-opacity-20 text-gray-300";
+            }
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            if (!taskList) return;
+
+            taskList.innerHTML = tasks.map(task => `
+                <li class="flex justify-between items-center p-3 rounded-xl bg-gray-700 border border-gray-600">
+                    <span class="text-white">${task.title}</span>
+                    <span class="px-2 py-1 text-sm rounded-xl ${getStatusClass(task.status)}">
+                        ${task.status}
+                    </span>
+                </li>
+            `).join('');
+        }
+
+        // Load tasks from backend
+        async function loadTasksFromBackend() {
+            try {
+                const response = await api.call('ceoOffice', '/tasks');
+                if (response.success && response.tasks) {
+                    tasks = response.tasks;
+                    renderTasks();
+                    console.log('Tasks loaded from backend:', response.tasks);
+                } else {
+                    console.log('Using default tasks - backend not available');
+                    renderTasks();
+                }
+            } catch (error) {
+                console.log('Using default tasks - API error:', error);
+                renderTasks();
+            }
+        }
+
+        // Initialize TaskBar when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTasksFromBackend();
+            // Refresh tasks every 30 seconds
+            setInterval(loadTasksFromBackend, 30000);
+            
+            // Simulate task progress updates every 60 seconds for demo
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    simulateTaskProgress();
+                }
+            }, 60000);
+        });
+
+        // Simulate task progress for demonstration
+        function simulateTaskProgress() {
+            const inProgressTasks = tasks.filter(task => task.status === "In Progress");
+            const queuedTasks = tasks.filter(task => task.status === "Queued");
+            
+            if (inProgressTasks.length > 0 && Math.random() > 0.5) {
+                // Complete an in-progress task
+                inProgressTasks[0].status = "Done";
+                console.log(`Task completed: ${inProgressTasks[0].title}`);
+            }
+            
+            if (queuedTasks.length > 0 && Math.random() > 0.5) {
+                // Start a queued task
+                queuedTasks[0].status = "In Progress";
+                console.log(`Task started: ${queuedTasks[0].title}`);
+            }
+            
+            renderTasks();
+        }
     </script>
 </body>
 </html>

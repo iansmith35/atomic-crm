@@ -1,7 +1,7 @@
 // Supabase Configuration for Atomic CRM
 const SUPABASE_CONFIG = {
   url: 'https://mydxasjicsfetnglbppp.supabase.co',
-  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCIrOiJKV1QiLCJ9LnV5aXNzc28uc3VwYWJhc2UiLCJyZWYiOiJteWR4YXNqaWNzZmV0bmdsYnBwUiIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzU4LTc4cjIzNjU0LCJleHAiOjIwNzM4MDIyNTR9L1-VcgDF0BFOWgOWH-MrA2DCqHwbSlTm0LlktjlSihqI'wA6,jwXkroIhY
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCIrOiJKV1QiLCJ9.uyissso.supabase',
   functionsUrl: 'https://mydxasjicsfetnglbppp.supabase.co/functions/v1',
   officeEndpoints: {
     itOffice: 'it-office',
@@ -9,9 +9,7 @@ const SUPABASE_CONFIG = {
     communicationsO: 'communications',
     accounts: 'accounts',
     virtualEngineer: 'virtual-engineer',
-
     coastview: 'coastview'
-
   }
 };
 
