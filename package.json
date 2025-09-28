@@ -1,0 +1,16 @@
+{
+  "name": "atomic-crm",
+  "version": "1.0.0",
+  "description": "Atomic CRM System",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0"
+  }
+}
