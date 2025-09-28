@@ -1,0 +1,93 @@
+# Supabase configuration file for Atomic CRM
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[graphql]
+enabled = true
+port = 54322
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[inbound_email]
+enabled = false
+port = 54325
+max_message_size = 26214400
+
+[storage]
+enabled = true
+port = 54324
+file_size_limit = "52428800"
+uploader = "s3"
+
+[auth]
+enabled = true
+port = 54325
+
+# Configuration for sending emails
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+
+# The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
+# in emails.
+site_url = "https://iansmith35.github.io/atomic-crm/"
+
+# A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
+additional_redirect_urls = ["https://localhost:3000", "http://localhost:8000"]
+
+# A URL to send users to after they are confirmed via email (defaults to site_url)
+# email_confirm_url = ""
+
+# A URL to send users to after they request a password reset via email (defaults to site_url)
+# email_change_confirm_url = ""
+
+# A URL to send users to after they click the confirm link for a password reset request (defaults to site_url)
+# password_reset_confirm_url = ""
+
+[auth.external.google]
+enabled = true
+client_id = "624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com"
+# secret = "env(GOOGLE_CLIENT_SECRET)"
+
+[db]
+port = 54326
+shadow_port = 54327
+major_version = 15
+
+[realtime]
+enabled = true
+port = 54323
+
+[studio]
+enabled = true
+port = 54323
+api_url = "http://127.0.0.1:54321"
+
+# Email template settings
+[auth.email.template.invite]
+subject = "You have been invited"
+content_path = "./supabase/templates/invite.html"
+
+[auth.email.template.confirmation]
+subject = "Confirm your signup"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your password"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.email_change]
+subject = "Confirm your new email"
+content_path = "./supabase/templates/email_change.html"
+
+# Supabase project settings
+[project]
+# Supabase project reference ID
+ref = "mydxasjicsfetnglbppp"

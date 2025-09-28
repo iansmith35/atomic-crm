@@ -140,3 +140,25 @@ vite.config.ts.timestamp-*
 
 # Example files and documentation
 supabase-function-example.js
+
+# Supabase
+.supabase/
+
+# Generated TypeScript types (keep placeholder)
+types/supabase.ts
+
+# Local development
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+build/
+dist/
+*.min.js
+*.min.css
