@@ -15,7 +15,9 @@ const SUPABASE_CONFIG = {
     virtualEngineer: 'virtual-engineer',
     coastview: 'coastview',
     logistics: 'logistics',
-    gasChecker: 'gas-checker'
+
+    googleApi: 'google-api'
+
   }
 };
 
