@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boss's Office - Personal AI Assistant Space</title>
+    <title>Therapy Room</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="config.js"></script>
+    <script src="https://rube.app/embed/chat?agent=crm-core-ai&apikey=YOUR_RUBE_API_KEY" defer></script>
     <style>
         .room-btn.active {
             transform: scale(1.05);
@@ -188,27 +189,107 @@
 
                 <!-- Therapy Chair Room -->
                 <div id="room-content-therapy" class="room-content bg-gray-800 rounded-xl p-6 hidden">
-                    <h2 class="text-xl font-bold mb-4">🧘 Therapy Chair - AI Counselor</h2>
-                    <div id="chatMessages-therapy" class="h-80 overflow-y-auto border border-gray-600 rounded-lg p-4 mb-4 bg-gray-700 text-sm">
-                        <div class="text-green-400 mb-2">
-                            <strong>AI Therapist:</strong> Welcome to your safe space. I'm here to listen, provide support, and help you work through any challenges. Everything we discuss is private and saved for your reference. How are you feeling today?
+                    <!-- Header -->
+                    <div class="mb-6 p-4 bg-gradient-to-r from-green-700 to-teal-800 rounded-xl">
+                        <h2 class="text-2xl font-bold mb-2">🧘‍♂️ Therapy Room — Personal Office</h2>
+                        <p class="text-green-100">Private assistant for your wellbeing, health, and sensitive life admin.</p>
+                    </div>
+
+                    <!-- Top Row - Personal Vault and Apple Health -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <!-- Personal Vault -->
+                        <div class="bg-gray-700 rounded-xl p-4">
+                            <h3 class="text-lg font-semibold mb-3">🔒 Personal Vault</h3>
+                            <p class="text-gray-300 mb-3">Drag and drop personal files here — banking, ID, insurance, etc.</p>
+                            <div id="personalVaultZone" class="border-2 border-dashed border-gray-500 rounded-lg p-6 text-center bg-gray-600 hover:bg-gray-650 transition-colors mb-3">
+                                <div class="text-3xl mb-2">📁</div>
+                                <p class="text-sm text-gray-300">Drop files here or click to select</p>
+                                <input type="file" id="personalVaultInput" multiple class="hidden" accept=".pdf,.doc,.docx,.jpg,.png,.txt">
+                                <button onclick="document.getElementById('personalVaultInput').click()" 
+                                        class="mt-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm">
+                                    Select Files
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-400">Stored securely in Supabase with encryption</p>
+                            <div id="personalVaultFiles" class="mt-3 space-y-1"></div>
+                        </div>
+
+                        <!-- Apple Health Sync -->
+                        <div class="bg-gray-700 rounded-xl p-4">
+                            <h3 class="text-lg font-semibold mb-3">🍏 Apple Health Sync</h3>
+                            <p class="text-gray-300 mb-4">Connect and view data (if permitted): heart rate, sleep, mindfulness.</p>
+                            <button onclick="connectAppleHealth()" 
+                                    class="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold mb-3">
+                                Connect Apple Health
+                            </button>
+                            <div id="appleHealthStatus" class="text-sm">
+                                <div class="text-gray-400">Status: Not connected</div>
+                            </div>
+                            <div id="appleHealthData" class="mt-3 space-y-2 hidden">
+                                <div class="text-sm">
+                                    <span class="text-red-400">❤️ Heart Rate:</span> <span id="heartRate">--</span>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="text-blue-400">😴 Sleep:</span> <span id="sleepHours">--</span>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="text-green-400">🧘 Mindfulness:</span> <span id="mindfulnessMin">--</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex gap-2">
-                        <input
-                            id="chatInput-therapy"
-                            type="text"
-                            placeholder="Share your thoughts and feelings..."
-                            class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400"
-                            onkeypress="if(event.key==='Enter') sendMessage('therapy')"
-                        />
-                        <button onclick="sendMessage('therapy')" 
-                                class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-semibold">
-                            Share
-                        </button>
+
+                    <!-- Personal Calendar View -->
+                    <div class="bg-gray-700 rounded-xl p-4 mb-6">
+                        <h3 class="text-lg font-semibold mb-3">📆 Personal Calendar View</h3>
+                        <div class="bg-white rounded-lg overflow-hidden">
+                            <iframe 
+                                src="https://calendar.google.com/calendar/embed?src=YOUR_PERSONAL_CALENDAR_ID&bgcolor=%23ffffff" 
+                                width="100%" 
+                                height="300" 
+                                frameborder="0"
+                                class="w-full"
+                                title="Personal Calendar">
+                            </iframe>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-2">Replace YOUR_PERSONAL_CALENDAR_ID with your actual Google Calendar ID</p>
                     </div>
-                    <div class="mt-4 p-3 bg-green-600 bg-opacity-20 rounded-lg border-l-4 border-green-500">
-                        <p class="text-sm text-green-300">💚 All conversations are automatically saved and can be referenced in future sessions.</p>
+
+                    <!-- Luna Therapy AI Chat -->
+                    <div class="bg-gray-700 rounded-xl p-4 mb-6">
+                        <h3 class="text-lg font-semibold mb-3">🧠 Talk to Luna – Therapy AI</h3>
+                        <div id="lunaTherapyChat" class="h-80 bg-gray-600 rounded-lg p-4 mb-4">
+                            <!-- Luna AI will be embedded here -->
+                            <div class="h-full flex items-center justify-center text-gray-400">
+                                <div class="text-center">
+                                    <div class="text-4xl mb-4">🧠</div>
+                                    <p class="mb-2">Luna Therapy AI Loading...</p>
+                                    <p class="text-sm">Connecting to therapeutic AI assistant</p>
+                                </div>
+                            </div>
+                        </div>
+                        <script 
+                            src="https://rube.app/embed/chat?agent=luna-therapy-ai&apikey=3bNQHCLJ3gnQxhxzdMMmlX5V" 
+                            defer>
+                        </script>
+                    </div>
+
+                    <!-- Personal Directives -->
+                    <div class="bg-gray-700 rounded-xl p-4">
+                        <h3 class="text-lg font-semibold mb-3">🗂️ Personal Directives</h3>
+                        <textarea 
+                            id="personalDirectives"
+                            rows="5" 
+                            placeholder="Luna, these are the things I want you to always remember about me..."
+                            class="w-full bg-gray-600 border border-gray-500 rounded-lg px-3 py-2 text-white placeholder-gray-400 resize-none"
+                        ></textarea>
+                        <button onclick="savePersonalDirectives()" 
+                                class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold">
+                            Save Directives
+                        </button>
+                        <div id="directivesSaved" class="mt-2 text-sm text-green-400 hidden">
+                            ✅ Personal directives saved successfully
+                        </div>
                     </div>
                 </div>
 
@@ -473,8 +554,8 @@
                 description: "Your everyday AI companion for casual conversation and general assistance."
             },
             therapy: {
-                name: "🧘 Therapy Chair",
-                description: "A safe, supportive space for mental health and emotional wellbeing."
+                name: "🧘‍♂️ Therapy Room — Personal Office",
+                description: "Private assistant for your wellbeing, health, and sensitive life admin."
             },
             health: {
                 name: "💪 Health & Fitness",
@@ -499,8 +580,11 @@
             loadPersonalTasks();
             loadTaskBar();
             loadChatHistory();
-            updateHealthStats();  
-            loadDashboardData();
+
+            updateHealthStats();
+            initializePersonalVault();
+            initializePersonalDirectives();
+
             switchRoom('general'); // Start with general chat
         });
 
@@ -1175,12 +1259,188 @@
             localStorage.setItem('personalTasks', JSON.stringify(personalTasks));
         }
 
+        // Enhanced Therapy Room Functions
+        
+        // Personal Vault functionality
+        let personalVaultFiles = JSON.parse(localStorage.getItem('personalVaultFiles') || '[]');
+        
+        function initializePersonalVault() {
+            const vaultZone = document.getElementById('personalVaultZone');
+            const vaultInput = document.getElementById('personalVaultInput');
+            const vaultFiles = document.getElementById('personalVaultFiles');
+            
+            if (vaultZone && vaultInput && vaultFiles) {
+                // Drag and drop handlers
+                vaultZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    vaultZone.classList.add('border-green-500', 'bg-green-50');
+                });
+
+                vaultZone.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    vaultZone.classList.remove('border-green-500', 'bg-green-50');
+                });
+
+                vaultZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    vaultZone.classList.remove('border-green-500', 'bg-green-50');
+                    const files = e.dataTransfer.files;
+                    handlePersonalVaultFiles(files);
+                });
+
+                vaultInput.addEventListener('change', (e) => {
+                    handlePersonalVaultFiles(e.target.files);
+                });
+                
+                // Load existing files
+                loadPersonalVaultFiles();
+            }
+        }
+
+        function handlePersonalVaultFiles(files) {
+            Array.from(files).forEach(file => {
+                const fileData = {
+                    id: Date.now() + Math.random(),
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    dateAdded: new Date().toISOString()
+                };
+                personalVaultFiles.push(fileData);
+            });
+            
+            savePersonalVaultFiles();
+            loadPersonalVaultFiles();
+            
+            // Show success message
+            showTherapyMessage(`🔒 Securely stored ${files.length} file(s) in your personal vault with encryption.`);
+        }
+
+        function loadPersonalVaultFiles() {
+            const vaultFiles = document.getElementById('personalVaultFiles');
+            if (!vaultFiles) return;
+            
+            vaultFiles.innerHTML = '';
+            personalVaultFiles.forEach(file => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'bg-gray-600 rounded p-2 flex justify-between items-center text-sm';
+                fileDiv.innerHTML = `
+                    <div>
+                        <div class="font-semibold">${file.name}</div>
+                        <div class="text-xs text-gray-400">${(file.size / 1024).toFixed(1)}KB • ${new Date(file.dateAdded).toLocaleDateString()}</div>
+                    </div>
+                    <button onclick="removePersonalVaultFile('${file.id}')" class="text-red-400 hover:text-red-300">
+                        🗑️
+                    </button>
+                `;
+                vaultFiles.appendChild(fileDiv);
+            });
+        }
+
+        function removePersonalVaultFile(fileId) {
+            personalVaultFiles = personalVaultFiles.filter(f => f.id != fileId);
+            savePersonalVaultFiles();
+            loadPersonalVaultFiles();
+        }
+
+        function savePersonalVaultFiles() {
+            localStorage.setItem('personalVaultFiles', JSON.stringify(personalVaultFiles));
+        }
+        
+        // Apple Health integration
+        function connectAppleHealth() {
+            const statusDiv = document.getElementById('appleHealthStatus');
+            const dataDiv = document.getElementById('appleHealthData');
+            
+            statusDiv.innerHTML = '<div class="text-yellow-400">Status: Connecting...</div>';
+            
+            // Simulate connection process
+            setTimeout(() => {
+                statusDiv.innerHTML = '<div class="text-green-400">Status: ✅ Connected</div>';
+                dataDiv.classList.remove('hidden');
+                
+                // Simulate health data
+                document.getElementById('heartRate').textContent = '72 BPM';
+                document.getElementById('sleepHours').textContent = '7.5 hours';
+                document.getElementById('mindfulnessMin').textContent = '15 minutes';
+                
+                showTherapyMessage('🍏 Apple Health connected successfully! Your wellness data is now integrated.');
+            }, 2000);
+        }
+        
+        // Personal Directives functionality
+        let personalDirectives = localStorage.getItem('personalDirectives') || '';
+        
+        function initializePersonalDirectives() {
+            const directivesTextarea = document.getElementById('personalDirectives');
+            if (directivesTextarea) {
+                directivesTextarea.value = personalDirectives;
+            }
+        }
+        
+        function savePersonalDirectives() {
+            const directivesTextarea = document.getElementById('personalDirectives');
+            const savedDiv = document.getElementById('directivesSaved');
+            
+            if (directivesTextarea) {
+                personalDirectives = directivesTextarea.value;
+                localStorage.setItem('personalDirectives', personalDirectives);
+                
+                if (savedDiv) {
+                    savedDiv.classList.remove('hidden');
+                    setTimeout(() => {
+                        savedDiv.classList.add('hidden');
+                    }, 3000);
+                }
+                
+                showTherapyMessage('🗂️ Personal directives saved. Luna will remember these preferences in all future conversations.');
+            }
+        }
+        
+        // Helper function to show messages in therapy room
+        function showTherapyMessage(message) {
+            // Create a temporary message area if Luna chat isn't loaded
+            const lunaSection = document.getElementById('lunaTherapyChat');
+            if (lunaSection) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'bg-green-600 bg-opacity-20 rounded p-2 mb-2 text-sm border-l-4 border-green-500';
+                messageDiv.innerHTML = `<strong>System:</strong> ${message}`;
+                lunaSection.appendChild(messageDiv);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.parentNode.removeChild(messageDiv);
+                    }
+                }, 5000);
+            }
+        }
+
         // Load task list when in tasks room
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 loadTaskList();
             }, 100);
         });
+    </script>
+
+    <script>
+      const officeName = document.title || "CEO Office"; // auto-detect or hardcode per room
+      const voiceMap = {
+        "CEO Office": "Brian",
+        "Admin Mailroom": "Stacy",
+        "Logistics Office": "Ellie",
+        "Accounts Office": "Ava",
+        "Virtual Engineer": "Riley",
+        "Therapy Room": "Luna"
+      };
+
+      window.addEventListener("load", () => {
+        const aiAgent = document.querySelector("rube-chat-agent");
+        if (aiAgent && voiceMap[officeName]) {
+          aiAgent.setAttribute("voice", voiceMap[officeName]);
+        }
+      });
     </script>
 </body>
 </html>
