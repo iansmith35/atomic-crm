@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boss's Office - Executive Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="config.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold flex items-center">
+                        👔 Boss's Office - Executive Suite
+                    </h1>
+                    <p class="text-gray-100 mt-2">Strategic oversight & executive decision making</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold">15</div>
+                    <div class="text-sm text-gray-300">Executive Tasks</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <!-- Executive Dashboard -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Strategic Overview -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4">📊 Strategic Overview</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">Company Performance</h3>
+                            <div class="text-2xl font-bold text-green-400">£245K</div>
+                            <div class="text-sm text-gray-300">Monthly Revenue</div>
+                        </div>
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">Active Projects</h3>
+                            <div class="text-2xl font-bold text-blue-400">12</div>
+                            <div class="text-sm text-gray-300">Across All Offices</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive File Upload -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4">📄 Executive Documents</h2>
+                    <div id="dropZone" class="border-2 border-dashed border-gray-600 rounded-xl p-8 text-center bg-gray-700 hover:bg-gray-650 transition-colors">
+                        <div class="text-4xl mb-4">📁</div>
+                        <p class="text-gray-300 mb-2">Drop executive documents here</p>
+                        <p class="text-sm text-gray-400">Reports, contracts, strategic plans, board documents</p>
+                        <input type="file" id="fileInput" multiple class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                        <button onclick="document.getElementById('fileInput').click()" 
+                                class="mt-4 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg">
+                            Select Files
+                        </button>
+                    </div>
+                    <div id="fileList" class="mt-4 space-y-2"></div>
+                </div>
+
+                <!-- Key Decisions Panel -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4">⚡ Key Decisions</h2>
+                    <div class="space-y-3">
+                        <div class="bg-yellow-600 bg-opacity-20 rounded-lg p-3 border-l-4 border-yellow-500">
+                            <div class="font-semibold">Budget Approval Pending</div>
+                            <div class="text-sm text-gray-300">Q4 Marketing Campaign - £50K</div>
+                        </div>
+                        <div class="bg-red-600 bg-opacity-20 rounded-lg p-3 border-l-4 border-red-500">
+                            <div class="font-semibold">Urgent: Staff Hiring Decision</div>
+                            <div class="text-sm text-gray-300">Senior Developer Position</div>
+                        </div>
+                        <div class="bg-green-600 bg-opacity-20 rounded-lg p-3 border-l-4 border-green-500">
+                            <div class="font-semibold">Strategic Partnership Approved</div>
+                            <div class="text-sm text-gray-300">Tech Integration Complete</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Executive AI Assistant -->
+            <div class="space-y-6">
+                <!-- AI Chat -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="font-bold mb-4 text-gray-100">🤖 Executive AI Assistant</h3>
+                    <div id="chatMessages" class="h-64 overflow-y-auto border border-gray-600 rounded-lg p-3 mb-4 bg-gray-700 text-sm">
+                        <div class="text-blue-400 mb-2">
+                            <strong>Executive AI:</strong> Good day! I'm your executive assistant. I can help with strategic analysis, decision support, and executive reporting. How may I assist you today?
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input
+                            id="chatInput"
+                            type="text"
+                            placeholder="Discuss strategy..."
+                            class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400"
+                            onkeypress="if(event.key==='Enter') sendMessage()"
+                        />
+                        <button onclick="sendMessage()" 
+                                class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold">
+                            Send
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Executive Controls -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="font-semibold mb-3">Executive Controls</h3>
+                    <div class="space-y-3">
+                        <button onclick="generateReport()" 
+                                class="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded text-sm">
+                            📈 Generate Executive Report
+                        </button>
+                        <button onclick="reviewBudgets()" 
+                                class="w-full bg-green-600 hover:bg-green-700 py-2 rounded text-sm">
+                            💰 Review All Budgets
+                        </button>
+                        <button onclick="emergencyMeeting()" 
+                                class="w-full bg-red-600 hover:bg-red-700 py-2 rounded text-sm">
+                            🚨 Call Emergency Meeting
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Office Status -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="font-semibold mb-3">Office Network Status</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>CEO Office</span>
+                            <span class="text-green-400">✅ Active</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>IT Office</span>
+                            <span class="text-green-400">✅ Active</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Accounts</span>
+                            <span class="text-green-400">✅ Active</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Communications</span>
+                            <span class="text-yellow-400">⚠️ Busy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-8 text-center">
+            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
+                ← Back to Office Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // File Upload Handling
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+
+        // Drag and drop functionality
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-blue-500', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'bg-gray-700 rounded p-2 flex justify-between items-center';
+                fileDiv.innerHTML = `
+                    <span class="text-sm">${file.name}</span>
+                    <span class="text-xs text-gray-400">${(file.size / 1024).toFixed(1)}KB</span>
+                `;
+                fileList.appendChild(fileDiv);
+            });
+
+            // Simulate upload
+            const chat = document.getElementById('chatMessages');
+            chat.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> ✅ ${files.length} executive document(s) uploaded successfully.</div>`;
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            
+            if (!input.value.trim()) return;
+            
+            // Add user message
+            messages.innerHTML += `<div class="text-white mb-2"><strong>You:</strong> ${input.value}</div>`;
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const responses = [
+                    "I've analyzed the current market trends and recommend focusing on digital transformation initiatives.",
+                    "Based on the financial data, I suggest optimizing our operational efficiency by 15%.",
+                    "The competitive analysis shows opportunities in emerging markets. Shall I prepare a detailed report?",
+                    "I recommend scheduling a board meeting to discuss the strategic roadmap for next quarter.",
+                    "The risk assessment indicates we should diversify our portfolio. Would you like specific recommendations?"
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                messages.innerHTML += `<div class="text-blue-400 mb-2"><strong>Executive AI:</strong> ${response}</div>`;
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+            
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // Executive action functions
+        function generateReport() {
+            const chat = document.getElementById('chatMessages');
+            chat.innerHTML += `<div class="text-purple-400 mb-2"><strong>System:</strong> 📈 Generating comprehensive executive report across all offices...</div>`;
+            setTimeout(() => {
+                chat.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> ✅ Executive report generated successfully. Performance metrics, KPIs, and strategic recommendations included.</div>`;
+                chat.scrollTop = chat.scrollHeight;
+            }, 2000);
+        }
+
+        function reviewBudgets() {
+            const chat = document.getElementById('chatMessages');
+            chat.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> 💰 Reviewing budgets across all departments...</div>`;
+            setTimeout(() => {
+                chat.innerHTML += `<div class="text-blue-400 mb-2"><strong>Executive AI:</strong> Budget review complete. Overall spending is within 5% of projections. IT and Marketing departments show optimal ROI.</div>`;
+                chat.scrollTop = chat.scrollHeight;
+            }, 1500);
+        }
+
+        function emergencyMeeting() {
+            const chat = document.getElementById('chatMessages');
+            chat.innerHTML += `<div class="text-red-400 mb-2"><strong>System:</strong> 🚨 Initiating emergency meeting protocol...</div>`;
+            setTimeout(() => {
+                chat.innerHTML += `<div class="text-yellow-400 mb-2"><strong>System:</strong> ⚠️ All department heads have been notified. Meeting scheduled for next available slot.</div>`;
+                chat.scrollTop = chat.scrollHeight;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
