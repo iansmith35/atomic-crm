@@ -16,6 +16,7 @@ const SUPABASE_CONFIG = {
 
 // Google OAuth Configuration
 const GOOGLE_CONFIG = {
+
   clientId: '624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com',
   scopes: ['email', 'profile']
 };
@@ -44,6 +45,7 @@ const api = {
     }
   }
 };
+
 
 // Global API Helper
 const api = {
