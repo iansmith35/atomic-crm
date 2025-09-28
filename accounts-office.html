@@ -81,6 +81,74 @@
             </div>
         </div>
 
+        <!-- Upload & Banking Sections -->
+        <div class="mt-8 grid md:grid-cols-2 gap-6">
+            <!-- Upload Invoice / Statement -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">📄 Upload Invoice / Statement</h2>
+                <div class="border-2 border-dashed border-gray-600 rounded-xl p-6 text-center bg-gray-700">
+                    <p class="text-gray-300 mb-2">Drop CSV, PDF, or ZIP files here or</p>
+                    <input type="file" 
+                           accept=".csv,.pdf,.zip" 
+                           multiple
+                           class="w-full mt-2 p-2 bg-gray-600 border border-gray-500 rounded text-white text-sm"
+                           onchange="handleFileUpload(event)" />
+                    <p class="text-xs text-gray-400 mt-2">Supports: CSV, PDF, ZIP files</p>
+                </div>
+            </div>
+
+            <!-- Banking Summary -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">🏦 Banking Summary</h2>
+                <div class="bg-gray-700 border border-gray-600 rounded-xl p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-300">Total In:</span>
+                        <span class="text-green-400 font-bold">£42,000</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-300">Total Out:</span>
+                        <span class="text-red-400 font-bold">£26,000</span>
+                    </div>
+                    <div class="border-t border-gray-600 pt-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-white font-semibold">Balance:</span>
+                            <span class="text-emerald-400 font-bold text-lg">£16,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="mt-8 bg-gray-800 rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4">💳 Recent Transactions</h2>
+            <div class="space-y-2">
+                <div class="flex justify-between items-center border-b border-gray-700 py-3">
+                    <span class="text-gray-300">01 Sep 2025 – Client Payment</span>
+                    <span class="text-green-400 font-semibold">+£3,000</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-700 py-3">
+                    <span class="text-gray-300">30 Aug 2025 – Web Hosting</span>
+                    <span class="text-red-400 font-semibold">-£50</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-700 py-3">
+                    <span class="text-gray-300">29 Aug 2025 – Office Supplies</span>
+                    <span class="text-red-400 font-semibold">-£125</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-700 py-3">
+                    <span class="text-gray-300">28 Aug 2025 – Freelancer Payment</span>
+                    <span class="text-red-400 font-semibold">-£850</span>
+                </div>
+                <div class="flex justify-between items-center py-3">
+                    <span class="text-gray-300">27 Aug 2025 – Property Maintenance</span>
+                    <span class="text-green-400 font-semibold">+£2,200</span>
+                </div>
+            </div>
+            <button onclick="viewAllTransactions()" class="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 py-2 rounded font-semibold">
+                View All Transactions
+            </button>
+        </div>
+
         <!-- Migration Status -->
         <div class="mt-8 bg-gray-800 rounded-xl p-6">
             <h2 class="text-xl font-bold mb-4">🔄 Post-QuickBooks Migration</h2>
@@ -131,6 +199,21 @@
 
         function migrationStatus() {
             alert('🔄 QuickBooks Migration Status\n\n✅ COMPLETE!\n\nMigrated:\n• 3 years historical data\n• All customer records\n• Invoice templates\n• Chart of accounts\n\n🎉 Philip now controls the system!');
+        }
+
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                let fileList = '';
+                for (let i = 0; i < files.length; i++) {
+                    fileList += `• ${files[i].name} (${(files[i].size / 1024).toFixed(1)} KB)\n`;
+                }
+                alert(`📄 Files Selected for Upload\n\n${fileList}\n✅ Files ready for processing by Philip\n📊 Will be integrated into accounting system`);
+            }
+        }
+
+        function viewAllTransactions() {
+            alert('💳 All Transactions\n\nShowing recent financial activity:\n\n✅ 127 transactions this month\n💰 Total processed: £45,230\n📈 Average transaction: £356.14\n🎯 All reconciled and verified\n\n📊 Full details available in reports section');
         }
     </script>
 </body>
