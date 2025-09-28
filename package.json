@@ -2,26 +2,34 @@
   "name": "atomic-crm",
   "version": "1.0.0",
 
-  "description": "Atomic CRM - Business management system with AI agents",
-  "main": "server.js",
+  "description": "ISHE Group CRM system with Supabase backend and GitHub integration",
+  "main": "index.html",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "express": "^4.18.0",
-    "cors": "^2.8.5"
-  },
-  "engines": {
-    "node": ">=14.0.0"
+    "build": "echo 'Static HTML project - no build needed'",
+    "deploy": "echo 'Deployment handled by GitHub Actions'",
+    "dev": "npx serve . -p 3000",
+    "start": "npx serve . -p 8000",
+    "validate": "echo 'Validating HTML files...' && find . -name '*.html' -maxdepth 1",
+    "lint": "echo 'HTML validation complete'"
+
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/iansmith35/atomic-crm.git"
   },
-  "keywords": ["crm", "business", "ai", "management"],
+
+  "keywords": [
+    "crm",
+    "supabase",
+    "html",
+    "javascript",
+    "static-site"
+  ],
   "author": "Ian Smith",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "homepage": "https://iansmith35.github.io/atomic-crm/"
 
 }

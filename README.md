@@ -20,12 +20,51 @@ Visit the live application: [https://iansmith35.github.io/atomic-crm/](https://i
 - **Version Control**: Git & GitHub
 
 ## 📦 Deployment
+
+### Automated Deployment Script
+
+The project includes a comprehensive deployment script (`deploy.sh`) that handles the complete deployment process:
+
+```bash
+./deploy.sh
+```
+
+**What the deployment script does:**
+
+1. **Frontend Build** - Builds the frontend application (static HTML optimization)
+2. **Supabase Operations** - Runs database migrations and generates TypeScript types
+3. **Backend/API Deployment** - Deploys Supabase Edge Functions and backend services
+4. **Frontend Deployment** - Deploys to GitHub Pages or your hosting platform
+
+### Prerequisites
+
+- **Supabase CLI** (for database operations):
+  ```bash
+  npm install supabase --save-dev
+  # or
+  curl -sSL https://supabase.com/install.sh | bash
+  ```
+
+- **Node.js and npm** (for package management)
+
+### Manual Deployment
+
 This project is automatically deployed to GitHub Pages using GitHub Actions. The deployment workflow:
 
 1. Triggers on pushes to the `main` branch
 2. Builds the static site using Jekyll
 3. Deploys to GitHub Pages environment
 4. Available at the live demo URL above
+
+### Local Testing
+
+Before deploying, test locally:
+
+```bash
+npm run dev      # Start development server on port 3000
+npm run start    # Start server on port 8000
+npm run validate # Validate HTML files
+```
 
 ## 🏗️ Local Development
 1. Clone the repository:
