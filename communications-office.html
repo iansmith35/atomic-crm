@@ -3,63 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Mail Room - Stacy</title>
+    <title>Admin Mailroom - Stacy</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <div class="p-6 max-w-6xl mx-auto">
-        <h1 class="text-2xl font-bold mb-4">📬 Admin Mail Room – Gmail</h1>
+        <h1 class="text-2xl font-bold mb-4">📨 Admin Mailroom</h1>
 
-        <!-- Directive Box -->
-        <section class="mb-6">
-            <h2 class="text-lg font-semibold mb-1">AI Directive for Email Replies</h2>
-            <textarea
-                class="w-full border rounded-lg p-3 text-sm bg-yellow-50 text-gray-900"
-                rows="3"
-                id="directiveText"
-                placeholder="Never respond without approval unless explicitly permitted."
-            >Never respond without approval unless explicitly permitted.</textarea>
-            <button
-                onclick="updateDirective()"
-                class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm hover:bg-blue-700"
-            >
-                Save Directive
-            </button>
-        </section>
-
-        <!-- Email List -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="md:col-span-1">
-                <h2 class="text-lg font-semibold mb-2">Inbox</h2>
-                <ul class="space-y-2" id="emailList">
-                    <!-- Sample emails will be populated by JavaScript -->
-                </ul>
-            </div>
-
-            <!-- Email Viewer & AI Response -->
-            <div class="md:col-span-2">
-                <div class="bg-white border rounded-xl p-4 shadow-md text-gray-900" id="emailViewer" style="display: none;">
-                    <h3 class="text-lg font-bold mb-1" id="emailSubject"></h3>
-                    <p class="text-sm text-gray-600 mb-2" id="emailFrom"></p>
-                    <p class="text-sm mb-4" id="emailBody"></p>
-
-                    <button
-                        onclick="generateReply()"
-                        class="mb-3 px-3 py-1 bg-indigo-600 text-white rounded-xl text-sm hover:bg-indigo-700"
-                    >
-                        Suggest Reply
-                    </button>
-
-                    <div class="bg-gray-100 border p-3 rounded-xl" id="aiReplySection" style="display: none;">
-                        <p class="text-sm mb-2 text-gray-700" id="aiReplyText"></p>
-                        <div class="flex gap-2">
-                            <button onclick="approveAndSend()" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700">✅ Approve & Send</button>
-                            <button onclick="editBeforeSend()" class="bg-red-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-700">✏️ Edit Before Send</button>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-gray-500 text-sm" id="selectEmailPrompt">Select an email to view and reply.</p>
-            </div>
+        <section>
+            <h2 class="text-lg font-semibold mb-2">Taskbar – Mailing Only</h2>
+            <ul class="space-y-3" id="taskList">
+                <!-- Tasks will be populated by JavaScript -->
+            </ul>
         </section>
 
         <!-- Back Button -->
@@ -71,112 +26,95 @@
     </div>
 
     <script>
-        // Sample email data
-        let emails = [
+        // Sample task data - simulating API response structure
+        let tasks = [
             {
                 id: 1,
-                subject: "Gas Safety Certificate Query",
-                from: "john@example.com",
-                snippet: "Hi, I need to schedule a gas safety inspection for my property...",
-                body: "Hi there,\n\nI hope this email finds you well. I need to schedule a gas safety inspection for my rental property at 123 Main Street. Could you please let me know your availability for the next two weeks?\n\nBest regards,\nJohn Smith"
+                title: "Process incoming customer inquiries",
+                status: "pending",
+                created_at: "2024-01-15 09:30",
+                updated_at: "2024-01-15 14:22"
             },
             {
                 id: 2,
-                subject: "Property Management Service",
-                from: "sarah@coastview.com",
-                snippet: "Looking for comprehensive property management services...",
-                body: "Dear Team,\n\nI own several properties in the coastal area and I'm looking for comprehensive property management services. Can you provide more information about your services and pricing?\n\nThank you,\nSarah Williams"
+                title: "Send follow-up emails to prospects",
+                status: "in_progress", 
+                created_at: "2024-01-15 08:15",
+                updated_at: "2024-01-15 15:45"
             },
             {
                 id: 3,
-                subject: "Account Statement Request",
-                from: "finance@company.co.uk",
-                snippet: "Could you please send us the latest account statement...",
-                body: "Hello,\n\nCould you please send us the latest account statement for our business account? We need it for our quarterly review.\n\nRegards,\nFinance Department"
+                title: "Update mailing list subscriptions",
+                status: "completed",
+                created_at: "2024-01-14 16:20",
+                updated_at: "2024-01-15 10:30"
+            },
+            {
+                id: 4,
+                title: "Draft newsletter for property updates",
+                status: "pending",
+                created_at: "2024-01-15 11:00",
+                updated_at: "2024-01-15 11:00"
+            },
+            {
+                id: 5,
+                title: "Review automated email campaigns",
+                status: "in_progress",
+                created_at: "2024-01-15 07:45",
+                updated_at: "2024-01-15 13:15"
             }
         ];
 
-        let selectedEmail = null;
-        let directive = "Never respond without approval unless explicitly permitted.";
-
-        // Initialize the email list on page load
+        // Initialize the task list on page load
         document.addEventListener('DOMContentLoaded', function() {
-            populateEmailList();
+            fetchTasks();
         });
 
-        function populateEmailList() {
-            const emailList = document.getElementById('emailList');
-            emailList.innerHTML = '';
-            
-            emails.forEach((email, index) => {
-                const li = document.createElement('li');
-                li.className = 'cursor-pointer border border-gray-600 p-3 rounded-lg hover:bg-gray-700';
-                li.onclick = () => selectEmail(email);
-                li.innerHTML = `
-                    <div class="font-medium text-white">${email.subject}</div>
-                    <div class="text-xs text-gray-400">${email.from}</div>
-                    <div class="text-xs text-gray-500 line-clamp-1">${email.snippet}</div>
-                `;
-                emailList.appendChild(li);
-            });
-        }
-
-        function selectEmail(email) {
-            selectedEmail = email;
-            
-            // Hide the prompt and show the email viewer
-            document.getElementById('selectEmailPrompt').style.display = 'none';
-            document.getElementById('emailViewer').style.display = 'block';
-            
-            // Populate email details
-            document.getElementById('emailSubject').textContent = email.subject;
-            document.getElementById('emailFrom').textContent = `From: ${email.from}`;
-            document.getElementById('emailBody').textContent = email.body;
-            
-            // Hide AI reply section initially
-            document.getElementById('aiReplySection').style.display = 'none';
-        }
-
-        function generateReply() {
-            if (!selectedEmail) return;
-            
-            // Simulate AI reply generation
-            const aiReplies = [
-                "Thank you for your inquiry. I'll be happy to help you with this request. Let me check our availability and get back to you shortly.",
-                "I've received your message and will route this to the appropriate department for immediate attention. You can expect a response within 24 hours.",
-                "Thank you for contacting us. I understand your concern and will personally ensure this matter is resolved promptly. I'll update you soon.",
-                "I appreciate you reaching out to us. Your request has been noted and I'm working on getting you the information you need right away."
-            ];
-            
-            const randomReply = aiReplies[Math.floor(Math.random() * aiReplies.length)];
-            
-            document.getElementById('aiReplyText').textContent = randomReply;
-            document.getElementById('aiReplySection').style.display = 'block';
-        }
-
-        function updateDirective() {
-            directive = document.getElementById('directiveText').value;
-            alert('✅ AI Directive Updated!\n\nNew directive saved successfully. All future AI replies will follow this guidance.');
-        }
-
-        function approveAndSend() {
-            if (!selectedEmail) return;
-            alert(`✅ Email Approved & Sent!\n\nReply sent to: ${selectedEmail.from}\nSubject: Re: ${selectedEmail.subject}\n\nThe AI-generated response has been delivered successfully.`);
-            
-            // Hide the AI reply section after sending
-            document.getElementById('aiReplySection').style.display = 'none';
-        }
-
-        function editBeforeSend() {
-            if (!selectedEmail) return;
-            const currentReply = document.getElementById('aiReplyText').textContent;
-            const editedReply = prompt(`Edit the reply before sending:\n\nTo: ${selectedEmail.from}\nSubject: Re: ${selectedEmail.subject}\n\nEdit your reply:`, currentReply);
-            
-            if (editedReply !== null) {
-                document.getElementById('aiReplyText').textContent = editedReply;
-                alert(`✅ Reply Updated & Sent!\n\nYour edited reply has been sent to: ${selectedEmail.from}`);
-                document.getElementById('aiReplySection').style.display = 'none';
+        // Simulate API call to fetch tasks
+        async function fetchTasks() {
+            try {
+                // Try to fetch from API first
+                const response = await fetch('/api/tasks?office=mailroom');
+                if (response.ok) {
+                    const data = await response.json();
+                    tasks = data.tasks || [];
+                }
+            } catch (error) {
+                // Use sample data if API is not available
+                console.log('Using sample task data - API not available');
             }
+            
+            populateTaskList();
+        }
+
+        function populateTaskList() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            
+            if (tasks.length === 0) {
+                taskList.innerHTML = '<li class="p-4 bg-gray-800 border border-gray-600 rounded-xl"><div class="text-gray-400">No mailing tasks available</div></li>';
+                return;
+            }
+            
+            tasks.forEach((task) => {
+                const li = document.createElement('li');
+                li.className = 'p-4 bg-white border rounded-xl shadow';
+                
+                // Get status color
+                let statusColor = 'text-gray-600';
+                if (task.status === 'completed') statusColor = 'text-green-600';
+                else if (task.status === 'in_progress') statusColor = 'text-blue-600';
+                else if (task.status === 'pending') statusColor = 'text-yellow-600';
+                
+                li.innerHTML = `
+                    <div class="font-semibold text-gray-900">${task.title}</div>
+                    <div class="text-sm ${statusColor}">Status: ${task.status}</div>
+                    <div class="text-xs text-gray-500">
+                        Created: ${task.created_at} | Updated: ${task.updated_at}
+                    </div>
+                `;
+                taskList.appendChild(li);
+            });
         }
     </script>
 </body>
