@@ -3,148 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boss's Office - Executive Suite</title>
+    <title>Boss's Office - Personal AI Assistant Space</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="config.js"></script>
+    <style>
+        .room-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        .room-content {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #taskBar::-webkit-scrollbar {
+            height: 6px;
+        }
+        #taskBar::-webkit-scrollbar-track {
+            background: #374151;
+            border-radius: 3px;
+        }
+        #taskBar::-webkit-scrollbar-thumb {
+            background: #6B7280;
+            border-radius: 3px;
+        }
+        #taskBar::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
-    <div class="max-w-6xl mx-auto p-6">
+    <div class="max-w-7xl mx-auto p-6">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl p-6 mb-8">
+        <div class="bg-gradient-to-r from-purple-700 to-blue-800 rounded-xl p-6 mb-8">
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-bold flex items-center">
-                        👔 Boss's Office - Executive Suite
+                        🏠 Boss's Personal AI Suite
                     </h1>
-                    <p class="text-gray-100 mt-2">Strategic oversight & executive decision making</p>
+                    <p class="text-gray-100 mt-2">Your personal space with AI assistance for every aspect of life</p>
                 </div>
                 <div class="text-right">
-                    <div class="text-2xl font-bold">15</div>
-                    <div class="text-sm text-gray-300">Executive Tasks</div>
+                    <div class="text-2xl font-bold" id="personalTaskCount">12</div>
+                    <div class="text-sm text-purple-200">Personal Tasks</div>
                 </div>
             </div>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-6">
-            <!-- Executive Dashboard -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Strategic Overview -->
-                <div class="bg-gray-800 rounded-xl p-6">
-                    <h2 class="text-xl font-bold mb-4">📊 Strategic Overview</h2>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div class="bg-gray-700 rounded-lg p-4">
-                            <h3 class="font-semibold mb-2">Company Performance</h3>
-                            <div class="text-2xl font-bold text-green-400">£245K</div>
-                            <div class="text-sm text-gray-300">Monthly Revenue</div>
-                        </div>
-                        <div class="bg-gray-700 rounded-lg p-4">
-                            <h3 class="font-semibold mb-2">Active Projects</h3>
-                            <div class="text-2xl font-bold text-blue-400">12</div>
-                            <div class="text-sm text-gray-300">Across All Offices</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Executive File Upload -->
-                <div class="bg-gray-800 rounded-xl p-6">
-                    <h2 class="text-xl font-bold mb-4">📄 Executive Documents</h2>
-                    <div id="dropZone" class="border-2 border-dashed border-gray-600 rounded-xl p-8 text-center bg-gray-700 hover:bg-gray-650 transition-colors">
-                        <div class="text-4xl mb-4">📁</div>
-                        <p class="text-gray-300 mb-2">Drop executive documents here</p>
-                        <p class="text-sm text-gray-400">Reports, contracts, strategic plans, board documents</p>
-                        <input type="file" id="fileInput" multiple class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
-                        <button onclick="document.getElementById('fileInput').click()" 
-                                class="mt-4 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg">
-                            Select Files
-                        </button>
-                    </div>
-                    <div id="fileList" class="mt-4 space-y-2"></div>
-                </div>
-
-                <!-- Key Decisions Panel -->
-                <div class="bg-gray-800 rounded-xl p-6">
-                    <h2 class="text-xl font-bold mb-4">⚡ Key Decisions</h2>
-                    <div class="space-y-3">
-                        <div class="bg-yellow-600 bg-opacity-20 rounded-lg p-3 border-l-4 border-yellow-500">
-                            <div class="font-semibold">Budget Approval Pending</div>
-                            <div class="text-sm text-gray-300">Q4 Marketing Campaign - £50K</div>
-                        </div>
-                        <div class="bg-red-600 bg-opacity-20 rounded-lg p-3 border-l-4 border-red-500">
-                            <div class="font-semibold">Urgent: Staff Hiring Decision</div>
-                            <div class="text-sm text-gray-300">Senior Developer Position</div>
-                        </div>
-                        <div class="bg-green-600 bg-opacity-20 rounded-lg p-3 border-l-4 border-green-500">
-                            <div class="font-semibold">Strategic Partnership Approved</div>
-                            <div class="text-sm text-gray-300">Tech Integration Complete</div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Room/Chair Selection Navigation -->
+        <div class="bg-gray-800 rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">🪑 Choose Your Space</h2>
+            <div class="grid md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <button onclick="switchRoom('general')" id="room-general" class="room-btn active bg-blue-600 hover:bg-blue-700 p-4 rounded-lg text-center transition-colors">
+                    💬<br><span class="text-sm">General Chat</span>
+                </button>
+                <button onclick="switchRoom('therapy')" id="room-therapy" class="room-btn bg-green-600 hover:bg-green-700 p-4 rounded-lg text-center transition-colors">
+                    🧘<br><span class="text-sm">Therapy Chair</span>
+                </button>
+                <button onclick="switchRoom('health')" id="room-health" class="room-btn bg-red-600 hover:bg-red-700 p-4 rounded-lg text-center transition-colors">
+                    💪<br><span class="text-sm">Health & Fitness</span>
+                </button>
+                <button onclick="switchRoom('banking')" id="room-banking" class="room-btn bg-yellow-600 hover:bg-yellow-700 p-4 rounded-lg text-center transition-colors">
+                    💰<br><span class="text-sm">Personal Banking</span>
+                </button>
+                <button onclick="switchRoom('documents')" id="room-documents" class="room-btn bg-purple-600 hover:bg-purple-700 p-4 rounded-lg text-center transition-colors">
+                    📄<br><span class="text-sm">Documents</span>
+                </button>
+                <button onclick="switchRoom('tasks')" id="room-tasks" class="room-btn bg-indigo-600 hover:bg-indigo-700 p-4 rounded-lg text-center transition-colors">
+                    ✅<br><span class="text-sm">Task Center</span>
+                </button>
             </div>
+        </div>
 
-            <!-- Executive AI Assistant -->
-            <div class="space-y-6">
-                <!-- AI Chat -->
-                <div class="bg-gray-800 rounded-xl p-6">
-                    <h3 class="font-bold mb-4 text-gray-100">🤖 Executive AI Assistant</h3>
-                    <div id="chatMessages" class="h-64 overflow-y-auto border border-gray-600 rounded-lg p-3 mb-4 bg-gray-700 text-sm">
+        <!-- Personal Task Bar (Always Visible) -->
+        <div class="bg-gray-800 rounded-xl p-4 mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-semibold">📋 Personal Task Bar</h3>
+                <button onclick="addNewTask()" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">+ Add Task</button>
+            </div>
+            <div id="taskBar" class="flex gap-2 overflow-x-auto pb-2">
+                <!-- Tasks will be populated here -->
+            </div>
+        </div>
+
+        <!-- Room Content Areas -->
+        <div class="grid lg:grid-cols-4 gap-6">
+            <!-- Main Chat/Content Area -->
+            <div class="lg:col-span-3">
+                <!-- General Chat Room -->
+                <div id="room-content-general" class="room-content bg-gray-800 rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4">💬 General Chat - Your Personal AI</h2>
+                    <div id="chatMessages-general" class="h-80 overflow-y-auto border border-gray-600 rounded-lg p-4 mb-4 bg-gray-700 text-sm">
                         <div class="text-blue-400 mb-2">
-                            <strong>Executive AI:</strong> Good day! I'm your executive assistant. I can help with strategic analysis, decision support, and executive reporting. How may I assist you today?
+                            <strong>Personal AI:</strong> Hello! I'm your personal AI assistant. I'm here to chat about anything on your mind, help with daily life, or just be a friendly companion. What would you like to talk about?
                         </div>
                     </div>
                     <div class="flex gap-2">
                         <input
-                            id="chatInput"
+                            id="chatInput-general"
                             type="text"
-                            placeholder="Discuss strategy..."
+                            placeholder="Chat about anything..."
                             class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400"
-                            onkeypress="if(event.key==='Enter') sendMessage()"
+                            onkeypress="if(event.key==='Enter') sendMessage('general')"
                         />
-                        <button onclick="sendMessage()" 
+                        <button onclick="sendMessage('general')" 
                                 class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold">
                             Send
                         </button>
                     </div>
                 </div>
 
-                <!-- Executive Controls -->
-                <div class="bg-gray-800 rounded-xl p-6">
-                    <h3 class="font-semibold mb-3">Executive Controls</h3>
-                    <div class="space-y-3">
-                        <button onclick="generateReport()" 
-                                class="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded text-sm">
-                            📈 Generate Executive Report
+                <!-- Therapy Chair Room -->
+                <div id="room-content-therapy" class="room-content bg-gray-800 rounded-xl p-6 hidden">
+                    <h2 class="text-xl font-bold mb-4">🧘 Therapy Chair - AI Counselor</h2>
+                    <div id="chatMessages-therapy" class="h-80 overflow-y-auto border border-gray-600 rounded-lg p-4 mb-4 bg-gray-700 text-sm">
+                        <div class="text-green-400 mb-2">
+                            <strong>AI Therapist:</strong> Welcome to your safe space. I'm here to listen, provide support, and help you work through any challenges. Everything we discuss is private and saved for your reference. How are you feeling today?
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input
+                            id="chatInput-therapy"
+                            type="text"
+                            placeholder="Share your thoughts and feelings..."
+                            class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400"
+                            onkeypress="if(event.key==='Enter') sendMessage('therapy')"
+                        />
+                        <button onclick="sendMessage('therapy')" 
+                                class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-semibold">
+                            Share
                         </button>
-                        <button onclick="reviewBudgets()" 
-                                class="w-full bg-green-600 hover:bg-green-700 py-2 rounded text-sm">
-                            💰 Review All Budgets
-                        </button>
-                        <button onclick="emergencyMeeting()" 
-                                class="w-full bg-red-600 hover:bg-red-700 py-2 rounded text-sm">
-                            🚨 Call Emergency Meeting
+                    </div>
+                    <div class="mt-4 p-3 bg-green-600 bg-opacity-20 rounded-lg border-l-4 border-green-500">
+                        <p class="text-sm text-green-300">💚 All conversations are automatically saved and can be referenced in future sessions.</p>
+                    </div>
+                </div>
+
+                <!-- Health & Fitness Room -->
+                <div id="room-content-health" class="room-content bg-gray-800 rounded-xl p-6 hidden">
+                    <h2 class="text-xl font-bold mb-4">💪 Health & Fitness Center</h2>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">📊 Today's Stats</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span>Steps:</span>
+                                    <span id="steps-count" class="text-blue-400">8,247</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Weight:</span>
+                                    <span id="weight-current" class="text-green-400">75.2 kg</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Goal Progress:</span>
+                                    <span class="text-yellow-400">82%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">🎯 Quick Actions</h3>
+                            <div class="space-y-2">
+                                <button onclick="logWeight()" class="w-full bg-blue-600 hover:bg-blue-700 py-1 rounded text-sm">Log Weight</button>
+                                <button onclick="syncHealthData()" class="w-full bg-green-600 hover:bg-green-700 py-1 rounded text-sm">Sync Apple Health</button>
+                                <button onclick="setFitnessGoal()" class="w-full bg-purple-600 hover:bg-purple-700 py-1 rounded text-sm">Set New Goal</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="chatMessages-health" class="h-64 overflow-y-auto border border-gray-600 rounded-lg p-4 mb-4 bg-gray-700 text-sm">
+                        <div class="text-red-400 mb-2">
+                            <strong>Health AI:</strong> I'm your personal health and fitness coach! I can help with workout plans, diet advice, weight management, and connecting with your Apple Health data. How can I support your wellness journey?
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input
+                            id="chatInput-health"
+                            type="text"
+                            placeholder="Ask about health, fitness, or diet..."
+                            class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400"
+                            onkeypress="if(event.key==='Enter') sendMessage('health')"
+                        />
+                        <button onclick="sendMessage('health')" 
+                                class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-semibold">
+                            Ask
                         </button>
                     </div>
                 </div>
 
-                <!-- Office Status -->
+                <!-- Personal Banking Room -->
+                <div id="room-content-banking" class="room-content bg-gray-800 rounded-xl p-6 hidden">
+                    <h2 class="text-xl font-bold mb-4">💰 Personal Banking Office</h2>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">💳 Account Summary</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span>Main Account:</span>
+                                    <span class="text-green-400">£2,847.32</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Savings:</span>
+                                    <span class="text-blue-400">£15,230.00</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Credit Available:</span>
+                                    <span class="text-yellow-400">£5,000.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">⏰ Upcoming</h3>
+                            <div class="space-y-1 text-sm">
+                                <div class="text-yellow-400">Insurance payment - 3 days</div>
+                                <div class="text-blue-400">Mortgage - 12 days</div>
+                                <div class="text-green-400">Salary - 5 days</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="chatMessages-banking" class="h-64 overflow-y-auto border border-gray-600 rounded-lg p-4 mb-4 bg-gray-700 text-sm">
+                        <div class="text-yellow-400 mb-2">
+                            <strong>Banking AI:</strong> I'm your personal financial assistant. I can help manage your accounts, set up reminders for payments, track expenses, and provide financial advice. What would you like to work on today?
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input
+                            id="chatInput-banking"
+                            type="text"
+                            placeholder="Ask about finances, budgets, or investments..."
+                            class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400"
+                            onkeypress="if(event.key==='Enter') sendMessage('banking')"
+                        />
+                        <button onclick="sendMessage('banking')" 
+                                class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded-lg font-semibold">
+                            Ask
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Document Management Room -->
+                <div id="room-content-documents" class="room-content bg-gray-800 rounded-xl p-6 hidden">
+                    <h2 class="text-xl font-bold mb-4">📄 Document Management Center</h2>
+                    <div id="dropZone" class="border-2 border-dashed border-gray-600 rounded-xl p-8 text-center bg-gray-700 hover:bg-gray-650 transition-colors mb-6">
+                        <div class="text-4xl mb-4">📁</div>
+                        <p class="text-gray-300 mb-2">Drop personal documents here</p>
+                        <p class="text-sm text-gray-400">Insurance, contracts, medical records, important papers</p>
+                        <input type="file" id="fileInput" multiple class="hidden" accept=".pdf,.doc,.docx,.jpg,.png">
+                        <button onclick="document.getElementById('fileInput').click()" 
+                                class="mt-4 bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-lg">
+                            Select Files
+                        </button>
+                    </div>
+                    <div id="fileList" class="mb-4 space-y-2"></div>
+                    <div id="chatMessages-documents" class="h-48 overflow-y-auto border border-gray-600 rounded-lg p-4 mb-4 bg-gray-700 text-sm">
+                        <div class="text-purple-400 mb-2">
+                            <strong>Document AI:</strong> I'll help you organize and manage your personal documents. I can set reminders for renewals, categorize files, and help you find what you need quickly. Upload your documents to get started!
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input
+                            id="chatInput-documents"
+                            type="text"
+                            placeholder="Ask about documents or set reminders..."
+                            class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400"
+                            onkeypress="if(event.key==='Enter') sendMessage('documents')"
+                        />
+                        <button onclick="sendMessage('documents')" 
+                                class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg font-semibold">
+                            Ask
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task Management Room -->
+                <div id="room-content-tasks" class="room-content bg-gray-800 rounded-xl p-6 hidden">
+                    <h2 class="text-xl font-bold mb-4">✅ Personal Task Management Center</h2>
+                    <div class="mb-6">
+                        <div class="flex gap-2 mb-4">
+                            <input
+                                id="newTaskInput"
+                                type="text"
+                                placeholder="Add a new personal task..."
+                                class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400"
+                                onkeypress="if(event.key==='Enter') addTaskFromInput()"
+                            />
+                            <button onclick="addTaskFromInput()" 
+                                    class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg font-semibold">
+                                Add Task
+                            </button>
+                        </div>
+                        <div id="taskList" class="space-y-2 max-h-64 overflow-y-auto">
+                            <!-- Tasks will be populated here -->
+                        </div>
+                    </div>
+                    <div id="chatMessages-tasks" class="h-48 overflow-y-auto border border-gray-600 rounded-lg p-4 mb-4 bg-gray-700 text-sm">
+                        <div class="text-indigo-400 mb-2">
+                            <strong>Task AI:</strong> I'm your personal task manager! I can help you organize your to-do list, set priorities, create reminders, and suggest new tasks based on your goals. What would you like to accomplish?
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input
+                            id="chatInput-tasks"
+                            type="text"
+                            placeholder="Ask about task management or productivity..."
+                            class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400"
+                            onkeypress="if(event.key==='Enter') sendMessage('tasks')"
+                        />
+                        <button onclick="sendMessage('tasks')" 
+                                class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg font-semibold">
+                            Ask
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Panel - Context & Tools -->
+            <div class="space-y-6">
+                <!-- Current Room Info -->
                 <div class="bg-gray-800 rounded-xl p-6">
-                    <h3 class="font-semibold mb-3">Office Network Status</h3>
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <span>CEO Office</span>
-                            <span class="text-green-400">✅ Active</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>IT Office</span>
-                            <span class="text-green-400">✅ Active</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Accounts</span>
-                            <span class="text-green-400">✅ Active</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Communications</span>
-                            <span class="text-yellow-400">⚠️ Busy</span>
-                        </div>
+                    <h3 class="font-semibold mb-3">📍 Current Space</h3>
+                    <div id="currentRoomInfo">
+                        <div class="text-blue-400 font-semibold">💬 General Chat</div>
+                        <p class="text-sm text-gray-300">Your everyday AI companion for casual conversation and general assistance.</p>
+                    </div>
+                </div>
+
+                <!-- Chat History -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="font-semibold mb-3">💾 Recent Conversations</h3>
+                    <div id="chatHistory" class="space-y-2 text-sm max-h-48 overflow-y-auto">
+                        <!-- History will be populated here -->
+                    </div>
+                    <button onclick="clearHistory()" class="w-full mt-3 bg-red-600 hover:bg-red-700 py-1 rounded text-sm">
+                        Clear History
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="font-semibold mb-3">⚡ Quick Actions</h3>
+                    <div class="space-y-2">
+                        <button onclick="exportConversations()" 
+                                class="w-full bg-green-600 hover:bg-green-700 py-2 rounded text-sm">
+                            📤 Export Conversations
+                        </button>
+                        <button onclick="syncAllData()" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-sm">
+                            🔄 Sync All Data
+                        </button>
+                        <button onclick="backupPersonalData()" 
+                                class="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded text-sm">
+                            💾 Backup Personal Data
+                        </button>
                     </div>
                 </div>
             </div>
@@ -159,105 +369,573 @@
     </div>
 
     <script>
-        // File Upload Handling
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-        const fileList = document.getElementById('fileList');
+        // Personal AI Suite JavaScript
+        let currentRoom = 'general';
+        let conversationHistory = JSON.parse(localStorage.getItem('bossOfficeConversations') || '{}');
+        let personalTasks = JSON.parse(localStorage.getItem('personalTasks') || '[]');
+        let healthData = JSON.parse(localStorage.getItem('healthData') || '{"weight": 75.2, "steps": 8247}');
 
-        // Drag and drop functionality
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('border-blue-500', 'bg-blue-50');
+        // Initialize default tasks
+        if (personalTasks.length === 0) {
+            personalTasks = [
+                { id: 1, text: "Review insurance policies", completed: false, category: "documents" },
+                { id: 2, text: "Schedule annual health checkup", completed: false, category: "health" },
+                { id: 3, text: "Update budget spreadsheet", completed: false, category: "banking" },
+                { id: 4, text: "Organize home office", completed: false, category: "general" },
+                { id: 5, text: "Plan weekend workout", completed: false, category: "health" }
+            ];
+            savePersonalTasks();
+        }
+
+        // Initialize conversation history for each room
+        const rooms = ['general', 'therapy', 'health', 'banking', 'documents', 'tasks'];
+        rooms.forEach(room => {
+            if (!conversationHistory[room]) {
+                conversationHistory[room] = [];
+            }
         });
 
-        dropZone.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+        // Room information
+        const roomInfo = {
+            general: {
+                name: "💬 General Chat",
+                description: "Your everyday AI companion for casual conversation and general assistance."
+            },
+            therapy: {
+                name: "🧘 Therapy Chair",
+                description: "A safe, supportive space for mental health and emotional wellbeing."
+            },
+            health: {
+                name: "💪 Health & Fitness",
+                description: "Your personal trainer and health coach for wellness goals."
+            },
+            banking: {
+                name: "💰 Personal Banking",
+                description: "Financial management, budgeting, and investment guidance."
+            },
+            documents: {
+                name: "📄 Document Center",
+                description: "Organize and manage your personal documents and files."
+            },
+            tasks: {
+                name: "✅ Task Management",
+                description: "Your personal productivity and task organization hub."
+            }
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPersonalTasks();
+            loadTaskBar();
+            loadChatHistory();
+            updateHealthStats();
+            switchRoom('general'); // Start with general chat
         });
 
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('border-blue-500', 'bg-blue-50');
-            const files = e.dataTransfer.files;
-            handleFiles(files);
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-        });
-
-        function handleFiles(files) {
-            Array.from(files).forEach(file => {
-                const fileDiv = document.createElement('div');
-                fileDiv.className = 'bg-gray-700 rounded p-2 flex justify-between items-center';
-                fileDiv.innerHTML = `
-                    <span class="text-sm">${file.name}</span>
-                    <span class="text-xs text-gray-400">${(file.size / 1024).toFixed(1)}KB</span>
-                `;
-                fileList.appendChild(fileDiv);
+        // Room switching functionality
+        function switchRoom(roomId) {
+            // Hide all room content
+            document.querySelectorAll('.room-content').forEach(content => {
+                content.classList.add('hidden');
             });
+            
+            // Remove active class from all room buttons
+            document.querySelectorAll('.room-btn').forEach(btn => {
+                btn.classList.remove('active');
+                // Reset all buttons to their original colors
+                if (btn.id === 'room-general') btn.className = 'room-btn bg-blue-600 hover:bg-blue-700 p-4 rounded-lg text-center transition-colors';
+                else if (btn.id === 'room-therapy') btn.className = 'room-btn bg-green-600 hover:bg-green-700 p-4 rounded-lg text-center transition-colors';
+                else if (btn.id === 'room-health') btn.className = 'room-btn bg-red-600 hover:bg-red-700 p-4 rounded-lg text-center transition-colors';
+                else if (btn.id === 'room-banking') btn.className = 'room-btn bg-yellow-600 hover:bg-yellow-700 p-4 rounded-lg text-center transition-colors';
+                else if (btn.id === 'room-documents') btn.className = 'room-btn bg-purple-600 hover:bg-purple-700 p-4 rounded-lg text-center transition-colors';
+                else if (btn.id === 'room-tasks') btn.className = 'room-btn bg-indigo-600 hover:bg-indigo-700 p-4 rounded-lg text-center transition-colors';
+            });
+            
+            // Show selected room content
+            document.getElementById(`room-content-${roomId}`).classList.remove('hidden');
+            
+            // Activate selected room button
+            const activeBtn = document.getElementById(`room-${roomId}`);
+            activeBtn.classList.add('active');
+            
+            // Update current room info
+            currentRoom = roomId;
+            updateCurrentRoomInfo();
+            
+            // Load conversation history for this room
+            loadRoomMessages(roomId);
+        }
 
-            // Simulate upload
-            const chat = document.getElementById('chatMessages');
-            chat.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> ✅ ${files.length} executive document(s) uploaded successfully.</div>`;
-            chat.scrollTop = chat.scrollHeight;
+        function updateCurrentRoomInfo() {
+            const info = roomInfo[currentRoom];
+            document.getElementById('currentRoomInfo').innerHTML = `
+                <div class="text-blue-400 font-semibold">${info.name}</div>
+                <p class="text-sm text-gray-300">${info.description}</p>
+            `;
         }
 
         // Chat functionality
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const messages = document.getElementById('chatMessages');
+        function sendMessage(roomId) {
+            const input = document.getElementById(`chatInput-${roomId}`);
+            const messages = document.getElementById(`chatMessages-${roomId}`);
             
             if (!input.value.trim()) return;
             
-            // Add user message
-            messages.innerHTML += `<div class="text-white mb-2"><strong>You:</strong> ${input.value}</div>`;
+            const userMessage = input.value.trim();
+            const timestamp = new Date().toISOString();
             
-            // Simulate AI response
+            // Add user message to conversation
+            const conversation = {
+                timestamp: timestamp,
+                type: 'user',
+                message: userMessage,
+                room: roomId
+            };
+            
+            if (!conversationHistory[roomId]) {
+                conversationHistory[roomId] = [];
+            }
+            conversationHistory[roomId].push(conversation);
+            
+            // Display user message
+            messages.innerHTML += `<div class="text-white mb-2"><strong>You:</strong> ${userMessage}</div>`;
+            
+            // Generate AI response based on room type
             setTimeout(() => {
-                const responses = [
-                    "I've analyzed the current market trends and recommend focusing on digital transformation initiatives.",
-                    "Based on the financial data, I suggest optimizing our operational efficiency by 15%.",
-                    "The competitive analysis shows opportunities in emerging markets. Shall I prepare a detailed report?",
-                    "I recommend scheduling a board meeting to discuss the strategic roadmap for next quarter.",
-                    "The risk assessment indicates we should diversify our portfolio. Would you like specific recommendations?"
-                ];
-                const response = responses[Math.floor(Math.random() * responses.length)];
-                messages.innerHTML += `<div class="text-blue-400 mb-2"><strong>Executive AI:</strong> ${response}</div>`;
+                const aiResponse = generateAIResponse(roomId, userMessage);
+                const aiConversation = {
+                    timestamp: new Date().toISOString(),
+                    type: 'ai',
+                    message: aiResponse,
+                    room: roomId
+                };
+                
+                conversationHistory[roomId].push(aiConversation);
+                
+                // Display AI response with room-specific styling
+                const aiColor = getRoomColor(roomId);
+                messages.innerHTML += `<div class="text-${aiColor}-400 mb-2"><strong>${getRoomAIName(roomId)}:</strong> ${aiResponse}</div>`;
                 messages.scrollTop = messages.scrollHeight;
+                
+                // Save conversation history
+                saveConversationHistory();
+                loadChatHistory();
             }, 1000);
             
             input.value = '';
             messages.scrollTop = messages.scrollHeight;
         }
 
-        // Executive action functions
-        function generateReport() {
-            const chat = document.getElementById('chatMessages');
-            chat.innerHTML += `<div class="text-purple-400 mb-2"><strong>System:</strong> 📈 Generating comprehensive executive report across all offices...</div>`;
-            setTimeout(() => {
-                chat.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> ✅ Executive report generated successfully. Performance metrics, KPIs, and strategic recommendations included.</div>`;
+        function generateAIResponse(roomId, userMessage) {
+            const responses = {
+                general: [
+                    "That's interesting! Tell me more about what you're thinking.",
+                    "I understand. How has your day been going so far?",
+                    "That sounds like something worth exploring. What's your take on it?",
+                    "I'm here to chat about whatever's on your mind. What else would you like to discuss?",
+                    "That's a great point. I enjoy our conversations - they help me understand you better."
+                ],
+                therapy: [
+                    "Thank you for sharing that with me. How did that make you feel?",
+                    "It's completely normal to feel that way. What do you think might help you process these emotions?",
+                    "You're being very brave by talking about this. What support do you feel you need right now?",
+                    "I hear you, and your feelings are valid. Have you experienced something similar before?",
+                    "Taking time to reflect on this shows great self-awareness. What insights are you gaining?"
+                ],
+                health: [
+                    "Great question! Based on your current fitness level, I'd recommend starting with moderate exercises.",
+                    "Your health journey is important. Have you considered tracking your progress with specific metrics?",
+                    "Nutrition plays a huge role in fitness. What's your current diet like?",
+                    "Remember, consistency is key! Even small daily improvements add up over time.",
+                    "Your Apple Health data shows good progress. Let's build on that momentum!"
+                ],
+                banking: [
+                    "Let me help you analyze your financial situation. What specific area would you like to focus on?",
+                    "Based on your spending patterns, I can suggest some optimization strategies.",
+                    "That's a smart financial question. Have you considered the long-term implications?",
+                    "I can help you set up automatic reminders for important financial deadlines.",
+                    "Your financial health is looking good. Let's work on maximizing your savings potential."
+                ],
+                documents: [
+                    "I can help you organize that document. What category should we file it under?",
+                    "That's an important document to keep track of. Should I set up a renewal reminder for you?",
+                    "I've noted that document in your personal files. Is there anything specific you need to remember about it?",
+                    "Great organization! Having your documents well-managed will save you time later.",
+                    "I can help you create a comprehensive filing system for all your important papers."
+                ],
+                tasks: [
+                    "That's a great task to add to your list! What priority level should we assign it?",
+                    "I can help you break that larger task into smaller, manageable steps.",
+                    "You're making good progress on your tasks. Which one would you like to focus on next?",
+                    "That task relates to some of your other goals. Should we create a task chain?",
+                    "Excellent productivity mindset! Consistency in task management leads to great results."
+                ]
+            };
+            
+            const roomResponses = responses[roomId] || responses.general;
+            return roomResponses[Math.floor(Math.random() * roomResponses.length)];
+        }
+
+        function getRoomColor(roomId) {
+            const colors = {
+                general: 'blue',
+                therapy: 'green',
+                health: 'red',
+                banking: 'yellow',
+                documents: 'purple',
+                tasks: 'indigo'
+            };
+            return colors[roomId] || 'blue';
+        }
+
+        function getRoomAIName(roomId) {
+            const names = {
+                general: 'Personal AI',
+                therapy: 'AI Therapist',
+                health: 'Health AI',
+                banking: 'Banking AI',
+                documents: 'Document AI',
+                tasks: 'Task AI'
+            };
+            return names[roomId] || 'AI Assistant';
+        }
+
+        // Task management
+        function loadPersonalTasks() {
+            updateTaskCount();
+        }
+
+        function loadTaskBar() {
+            const taskBar = document.getElementById('taskBar');
+            taskBar.innerHTML = '';
+            
+            personalTasks.slice(0, 10).forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = `flex-shrink-0 bg-gray-700 rounded-lg p-2 min-w-48 ${task.completed ? 'opacity-50' : ''}`;
+                taskElement.innerHTML = `
+                    <div class="text-sm font-semibold ${task.completed ? 'line-through' : ''}">${task.text}</div>
+                    <div class="text-xs text-gray-400">${task.category}</div>
+                    <button onclick="toggleTask(${task.id})" class="text-xs mt-1 ${task.completed ? 'text-green-400' : 'text-blue-400'}">
+                        ${task.completed ? '✅ Done' : '⭕ Mark Done'}
+                    </button>
+                `;
+                taskBar.appendChild(taskElement);
+            });
+        }
+
+        function addNewTask() {
+            const taskText = prompt("Enter a new personal task:");
+            if (taskText) {
+                const newTask = {
+                    id: Date.now(),
+                    text: taskText,
+                    completed: false,
+                    category: currentRoom
+                };
+                personalTasks.push(newTask);
+                savePersonalTasks();
+                loadTaskBar();
+                updateTaskCount();
+            }
+        }
+
+        function addTaskFromInput() {
+            const input = document.getElementById('newTaskInput');
+            if (input.value.trim()) {
+                const newTask = {
+                    id: Date.now(),
+                    text: input.value.trim(),
+                    completed: false,
+                    category: 'manual'
+                };
+                personalTasks.push(newTask);
+                input.value = '';
+                savePersonalTasks();
+                loadTaskBar();
+                loadTaskList();
+                updateTaskCount();
+            }
+        }
+
+        function loadTaskList() {
+            const taskList = document.getElementById('taskList');
+            if (!taskList) return;
+            
+            taskList.innerHTML = '';
+            personalTasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = `bg-gray-700 rounded-lg p-3 flex items-center justify-between ${task.completed ? 'opacity-50' : ''}`;
+                taskElement.innerHTML = `
+                    <div>
+                        <div class="font-semibold ${task.completed ? 'line-through' : ''}">${task.text}</div>
+                        <div class="text-sm text-gray-400">${task.category}</div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="toggleTask(${task.id})" class="text-sm px-2 py-1 rounded ${task.completed ? 'bg-green-600' : 'bg-blue-600'}">
+                            ${task.completed ? '✅' : '⭕'}
+                        </button>
+                        <button onclick="deleteTask(${task.id})" class="text-sm px-2 py-1 rounded bg-red-600">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+                taskList.appendChild(taskElement);
+            });
+        }
+
+        function toggleTask(taskId) {
+            const task = personalTasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed;
+                savePersonalTasks();
+                loadTaskBar();
+                loadTaskList();
+                updateTaskCount();
+            }
+        }
+
+        function deleteTask(taskId) {
+            personalTasks = personalTasks.filter(t => t.id !== taskId);
+            savePersonalTasks();
+            loadTaskBar();
+            loadTaskList();
+            updateTaskCount();
+        }
+
+        function updateTaskCount() {
+            const incompleteCount = personalTasks.filter(t => !t.completed).length;
+            document.getElementById('personalTaskCount').textContent = incompleteCount;
+        }
+
+        // Health functions
+        function updateHealthStats() {
+            document.getElementById('steps-count').textContent = healthData.steps.toLocaleString();
+            document.getElementById('weight-current').textContent = `${healthData.weight} kg`;
+        }
+
+        function logWeight() {
+            const weight = prompt("Enter your current weight (kg):");
+            if (weight && !isNaN(weight)) {
+                healthData.weight = parseFloat(weight);
+                localStorage.setItem('healthData', JSON.stringify(healthData));
+                updateHealthStats();
+                
+                // Add to health chat
+                const messages = document.getElementById('chatMessages-health');
+                if (messages) {
+                    messages.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> ✅ Weight logged: ${weight} kg</div>`;
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+        }
+
+        function syncHealthData() {
+            // Simulate Apple Health sync
+            const messages = document.getElementById('chatMessages-health');
+            if (messages) {
+                messages.innerHTML += `<div class="text-blue-400 mb-2"><strong>System:</strong> 🔄 Syncing with Apple Health...</div>`;
+                setTimeout(() => {
+                    messages.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> ✅ Apple Health data synchronized successfully!</div>`;
+                    messages.scrollTop = messages.scrollHeight;
+                }, 2000);
+            }
+        }
+
+        function setFitnessGoal() {
+            const goal = prompt("Set your daily step goal:");
+            if (goal && !isNaN(goal)) {
+                const messages = document.getElementById('chatMessages-health');
+                if (messages) {
+                    messages.innerHTML += `<div class="text-purple-400 mb-2"><strong>Health AI:</strong> 🎯 Great! I've set your daily step goal to ${parseInt(goal).toLocaleString()} steps. I'll help you track your progress!</div>`;
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+        }
+
+        // File handling
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+
+        if (dropZone && fileInput && fileList) {
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-purple-500', 'bg-purple-50');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-purple-500', 'bg-purple-50');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-purple-500', 'bg-purple-50');
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+        }
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'bg-gray-700 rounded p-3 flex justify-between items-center';
+                fileDiv.innerHTML = `
+                    <div>
+                        <div class="font-semibold">${file.name}</div>
+                        <div class="text-sm text-gray-400">${(file.size / 1024).toFixed(1)}KB • ${file.type}</div>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-300">
+                        🗑️
+                    </button>
+                `;
+                fileList.appendChild(fileDiv);
+            });
+
+            // Add to documents chat
+            const chat = document.getElementById('chatMessages-documents');
+            if (chat) {
+                chat.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> ✅ ${files.length} document(s) uploaded successfully. I can help you organize and set reminders for these files.</div>`;
                 chat.scrollTop = chat.scrollHeight;
+            }
+        }
+
+        // Conversation history management
+        function loadRoomMessages(roomId) {
+            const messages = document.getElementById(`chatMessages-${roomId}`);
+            if (!messages || !conversationHistory[roomId]) return;
+            
+            // Keep the initial AI greeting and add conversation history
+            const history = conversationHistory[roomId];
+            if (history.length > 0) {
+                history.forEach(conv => {
+                    const color = conv.type === 'user' ? 'white' : `${getRoomColor(roomId)}-400`;
+                    const name = conv.type === 'user' ? 'You' : getRoomAIName(roomId);
+                    messages.innerHTML += `<div class="text-${color} mb-2"><strong>${name}:</strong> ${conv.message}</div>`;
+                });
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+
+        function loadChatHistory() {
+            const historyDiv = document.getElementById('chatHistory');
+            if (!historyDiv) return;
+            
+            historyDiv.innerHTML = '';
+            
+            // Get recent conversations from all rooms
+            const allConversations = [];
+            Object.keys(conversationHistory).forEach(room => {
+                conversationHistory[room].forEach(conv => {
+                    allConversations.push({...conv, room});
+                });
+            });
+            
+            // Sort by timestamp and take last 10
+            allConversations.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            allConversations.slice(0, 10).forEach(conv => {
+                const time = new Date(conv.timestamp).toLocaleTimeString();
+                const roomEmoji = {
+                    general: '💬', therapy: '🧘', health: '💪', 
+                    banking: '💰', documents: '📄', tasks: '✅'
+                }[conv.room] || '💬';
+                
+                const historyItem = document.createElement('div');
+                historyItem.className = 'p-2 bg-gray-700 rounded cursor-pointer hover:bg-gray-600';
+                historyItem.innerHTML = `
+                    <div class="text-xs text-gray-400">${roomEmoji} ${time}</div>
+                    <div class="text-sm truncate">${conv.message}</div>
+                `;
+                historyItem.onclick = () => switchRoom(conv.room);
+                historyDiv.appendChild(historyItem);
+            });
+        }
+
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear all conversation history?')) {
+                conversationHistory = {};
+                rooms.forEach(room => {
+                    conversationHistory[room] = [];
+                });
+                saveConversationHistory();
+                loadChatHistory();
+                
+                // Clear current room messages (keep initial greeting)
+                rooms.forEach(room => {
+                    const messages = document.getElementById(`chatMessages-${room}`);
+                    if (messages) {
+                        // Reset to initial greeting only
+                        const initialGreeting = messages.querySelector('div');
+                        if (initialGreeting) {
+                            messages.innerHTML = initialGreeting.outerHTML;
+                        }
+                    }
+                });
+            }
+        }
+
+        // Quick actions
+        function exportConversations() {
+            const data = {
+                conversations: conversationHistory,
+                tasks: personalTasks,
+                healthData: healthData,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `boss-office-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function syncAllData() {
+            // Simulate syncing to Supabase
+            const allRooms = document.querySelectorAll('[id^="chatMessages-"]');
+            allRooms.forEach(room => {
+                room.innerHTML += `<div class="text-blue-400 mb-2"><strong>System:</strong> 🔄 Syncing data to Supabase...</div>`;
+            });
+            
+            setTimeout(() => {
+                allRooms.forEach(room => {
+                    room.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> ✅ All personal data synchronized with backend successfully!</div>`;
+                    room.scrollTop = room.scrollHeight;
+                });
             }, 2000);
         }
 
-        function reviewBudgets() {
-            const chat = document.getElementById('chatMessages');
-            chat.innerHTML += `<div class="text-green-400 mb-2"><strong>System:</strong> 💰 Reviewing budgets across all departments...</div>`;
-            setTimeout(() => {
-                chat.innerHTML += `<div class="text-blue-400 mb-2"><strong>Executive AI:</strong> Budget review complete. Overall spending is within 5% of projections. IT and Marketing departments show optimal ROI.</div>`;
-                chat.scrollTop = chat.scrollHeight;
-            }, 1500);
+        function backupPersonalData() {
+            exportConversations(); // Use the same export functionality
+            
+            const currentMessages = document.getElementById(`chatMessages-${currentRoom}`);
+            if (currentMessages) {
+                currentMessages.innerHTML += `<div class="text-purple-400 mb-2"><strong>System:</strong> 💾 Personal data backup created and downloaded successfully!</div>`;
+                currentMessages.scrollTop = currentMessages.scrollHeight;
+            }
         }
 
-        function emergencyMeeting() {
-            const chat = document.getElementById('chatMessages');
-            chat.innerHTML += `<div class="text-red-400 mb-2"><strong>System:</strong> 🚨 Initiating emergency meeting protocol...</div>`;
-            setTimeout(() => {
-                chat.innerHTML += `<div class="text-yellow-400 mb-2"><strong>System:</strong> ⚠️ All department heads have been notified. Meeting scheduled for next available slot.</div>`;
-                chat.scrollTop = chat.scrollHeight;
-            }, 1000);
+        // Storage functions
+        function saveConversationHistory() {
+            localStorage.setItem('bossOfficeConversations', JSON.stringify(conversationHistory));
         }
+
+        function savePersonalTasks() {
+            localStorage.setItem('personalTasks', JSON.stringify(personalTasks));
+        }
+
+        // Load task list when in tasks room
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                loadTaskList();
+            }, 100);
+        });
     </script>
 </body>
 </html>
