@@ -1,6 +1,7 @@
 {
   "name": "atomic-crm",
   "version": "1.0.0",
+
   "description": "ISHE Group CRM system with Supabase backend and GitHub integration",
   "main": "index.js",
   "scripts": {
@@ -28,4 +29,18 @@
   ],
   "author": "ISHE Group",
   "license": "MIT"
+
+  "description": "Atomic CRM System",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0"
+  }
+
 }
