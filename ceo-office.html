@@ -150,9 +150,42 @@
         <!-- CEO Task View -->
         <div class="mt-8 bg-gray-800 rounded-xl p-6">
             <h2 class="text-xl font-bold mb-4">🧠 CEO Task View</h2>
-            <ul id="taskList" class="space-y-3">
-                <!-- Tasks will be loaded dynamically -->
-            </ul>
+            <div class="max-h-48 overflow-y-auto border border-gray-600 rounded-lg p-2 bg-gray-700">
+                <ul id="taskList" class="space-y-3">
+                    <!-- Tasks will be loaded dynamically -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- Rebecca AI Chat -->
+        <div class="fixed bottom-4 right-4 w-full max-w-sm bg-white shadow-xl rounded-2xl p-4 border border-gray-200">
+            <h3 class="font-bold mb-2 text-gray-800">💬 Chat with Rebecca</h3>
+            <div id="chatMessages" class="h-48 overflow-y-auto border rounded-lg p-2 mb-2 bg-gray-50 text-sm">
+                <div class="text-left text-blue-700 mb-2">
+                    <span>Hello! I'm Rebecca, your AI assistant. How can I help you today?</span>
+                </div>
+            </div>
+            <div class="flex gap-2 mb-2">
+                <input
+                    id="chatInput"
+                    class="flex-1 border rounded-xl px-3 py-2 text-sm text-gray-800"
+                    placeholder="Ask me anything..."
+                />
+                <button id="voiceButton" class="bg-green-600 text-white px-3 py-2 rounded-xl text-sm hover:bg-green-700">
+                    🎤
+                </button>
+                <button id="sendButton" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-blue-700">
+                    Send
+                </button>
+            </div>
+            <div class="flex gap-2">
+                <button id="speakButton" class="bg-purple-600 text-white px-3 py-2 rounded-xl text-xs hover:bg-purple-700">
+                    🔊 Speak Last
+                </button>
+                <button id="toggleSpeechButton" class="bg-gray-600 text-white px-3 py-2 rounded-xl text-xs hover:bg-gray-700">
+                    🔇 Auto-speak: OFF
+                </button>
+            </div>
         </div>
 
         <!-- Business Metrics -->
@@ -225,7 +258,14 @@
         let tasks = [
             { id: 1, title: "Wire AI Chat to CEO Office", status: "In Progress" },
             { id: 2, title: "Replicate Gas Checker", status: "Queued" },
-            { id: 3, title: "Mirror QuickBooks", status: "Queued" }
+            { id: 3, title: "Mirror QuickBooks", status: "Queued" },
+            { id: 4, title: "Implement Speech Recognition", status: "In Progress" },
+            { id: 5, title: "Setup Voice Synthesis", status: "Done" },
+            { id: 6, title: "Optimize Database Queries", status: "Queued" },
+            { id: 7, title: "Update Security Protocols", status: "In Progress" },
+            { id: 8, title: "Migrate Legacy Systems", status: "Queued" },
+            { id: 9, title: "Deploy Mobile Interface", status: "Done" },
+            { id: 10, title: "Enhance AI Capabilities", status: "In Progress" }
         ];
 
         function getStatusClass(status) {
@@ -304,6 +344,205 @@
             
             renderTasks();
         }
+
+        // Rebecca AI Chat functionality
+        let messages = [];
+        let lastAssistantMessage = '';
+        let autoSpeak = false;
+        let recognition = null;
+        let isListening = false;
+
+        // Initialize speech recognition if available
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = function() {
+                isListening = true;
+                document.getElementById('voiceButton').textContent = '🔴';
+                document.getElementById('voiceButton').classList.add('bg-red-600');
+                document.getElementById('voiceButton').classList.remove('bg-green-600');
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('chatInput').value = transcript;
+                sendMessage();
+            };
+
+            recognition.onend = function() {
+                isListening = false;
+                document.getElementById('voiceButton').textContent = '🎤';
+                document.getElementById('voiceButton').classList.remove('bg-red-600');
+                document.getElementById('voiceButton').classList.add('bg-green-600');
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                isListening = false;
+                document.getElementById('voiceButton').textContent = '🎤';
+                document.getElementById('voiceButton').classList.remove('bg-red-600');
+                document.getElementById('voiceButton').classList.add('bg-green-600');
+            };
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            if (!input.value.trim()) return;
+
+            const userMessage = input.value.trim();
+            
+            // Add user message to chat
+            const userDiv = document.createElement('div');
+            userDiv.className = 'mb-1 text-right';
+            userDiv.innerHTML = `<span class="text-gray-800">${userMessage}</span>`;
+            chatMessages.appendChild(userDiv);
+
+            // Simulate API call to Rebecca
+            try {
+                const response = await simulateRebeccaResponse(userMessage);
+                
+                // Add Rebecca's response
+                const assistantDiv = document.createElement('div');
+                assistantDiv.className = 'mb-1 text-left text-blue-700';
+                assistantDiv.innerHTML = `<span>${response}</span>`;
+                chatMessages.appendChild(assistantDiv);
+                
+                lastAssistantMessage = response;
+                
+                // Auto-scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Speak response if auto-speak is enabled
+                if (autoSpeak) {
+                    speakText(response);
+                }
+                
+            } catch (error) {
+                console.error('Chat error:', error);
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'mb-1 text-left text-red-600';
+                errorDiv.innerHTML = `<span>Sorry, I'm having trouble responding right now.</span>`;
+                chatMessages.appendChild(errorDiv);
+            }
+            
+            input.value = '';
+        }
+
+        async function simulateRebeccaResponse(message) {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            const responses = [
+                "I've analyzed the current business metrics and everything looks good. Revenue is up 12% this month.",
+                "I can help you prioritize those tasks. The gas checker replication seems most urgent.",
+                "Based on the office performance data, Communications is running at 92% efficiency - excellent work by Stacy.",
+                "I notice there are some pending tasks in the system. Would you like me to escalate them?",
+                "The migration from QuickBooks is proceeding well. Philip has everything under control.",
+                "Our AI systems are performing optimally across all offices. No issues detected.",
+                "I can schedule a meeting with any of the office managers if needed.",
+                "The security protocols are all up to date. All API keys are properly managed.",
+                "Revenue projections look strong for next quarter based on current trends.",
+                "I'm monitoring all office activities. Everything is running smoothly."
+            ];
+            
+            // Simple keyword-based responses
+            const lowerMessage = message.toLowerCase();
+            if (lowerMessage.includes('task') || lowerMessage.includes('todo')) {
+                return "I see you have several tasks in progress. The AI chat integration and speech recognition are moving along well. Would you like me to check on any specific task status?";
+            } else if (lowerMessage.includes('revenue') || lowerMessage.includes('money') || lowerMessage.includes('finance')) {
+                return "Current revenue is £4,230 MTD, which is 8% above target. Philip in Accounts has all the detailed financial reports ready for your review.";
+            } else if (lowerMessage.includes('office') || lowerMessage.includes('performance')) {
+                return "All offices are performing well. Communications leads at 92%, Virtual Engineer at 88%, IT at 85%, and Accounts at 78%. Would you like detailed metrics for any specific office?";
+            } else if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent')) {
+                return "I don't see any urgent issues right now. All systems are green and operating normally. I'll alert you immediately if anything changes.";
+            }
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.8;
+                utterance.pitch = 1;
+                utterance.volume = 0.8;
+                
+                // Try to use a female voice for Rebecca
+                const voices = speechSynthesis.getVoices();
+                const femaleVoice = voices.find(voice => 
+                    voice.name.toLowerCase().includes('female') || 
+                    voice.name.toLowerCase().includes('woman') ||
+                    voice.name.toLowerCase().includes('zira') ||
+                    voice.name.toLowerCase().includes('susan')
+                );
+                
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
+                
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleSpeech() {
+            autoSpeak = !autoSpeak;
+            const button = document.getElementById('toggleSpeechButton');
+            if (autoSpeak) {
+                button.textContent = '🔊 Auto-speak: ON';
+                button.classList.remove('bg-gray-600', 'hover:bg-gray-700');
+                button.classList.add('bg-green-600', 'hover:bg-green-700');
+            } else {
+                button.textContent = '🔇 Auto-speak: OFF';
+                button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                button.classList.add('bg-gray-600', 'hover:bg-gray-700');
+            }
+        }
+
+        function startVoiceInput() {
+            if (recognition && !isListening) {
+                recognition.start();
+            } else if (!recognition) {
+                alert('Speech recognition is not supported in your browser. Please use Chrome or Edge for voice input.');
+            }
+        }
+
+        // Initialize TaskBar and Chat when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTasksFromBackend();
+            // Refresh tasks every 30 seconds
+            setInterval(loadTasksFromBackend, 30000);
+            
+            // Simulate task progress updates every 60 seconds for demo
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    simulateTaskProgress();
+                }
+            }, 60000);
+
+            // Chat event listeners
+            document.getElementById('sendButton').addEventListener('click', sendMessage);
+            document.getElementById('chatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            document.getElementById('voiceButton').addEventListener('click', startVoiceInput);
+            document.getElementById('speakButton').addEventListener('click', () => {
+                if (lastAssistantMessage) {
+                    speakText(lastAssistantMessage);
+                }
+            });
+            document.getElementById('toggleSpeechButton').addEventListener('click', toggleSpeech);
+        });
     </script>
 </body>
 </html>
