@@ -14,7 +14,8 @@ const SUPABASE_CONFIG = {
     accounts: 'accounts',
     virtualEngineer: 'virtual-engineer',
     coastview: 'coastview',
-    logistics: 'logistics'
+    logistics: 'logistics',
+    gasChecker: 'gas-checker'
   }
 };
 
