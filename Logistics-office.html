@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logistics Office - Ellie AI</title>
+    <title>Logistics Office</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://rube.app/embed/chat?agent=crm-core-ai&apikey=YOUR_RUBE_API_KEY" defer></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <div class="max-w-6xl mx-auto p-6">
@@ -129,6 +130,28 @@ Update delivery status every 30 minutes during active operations.</textarea>
             console.log('Logistics Office loaded successfully');
         });
     </script>
-    <script src="https://rube.app/embed/chat?agent=ellie-ai&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM" defer></script>
+
+
+
+    <script>
+      const officeName = document.title || "CEO Office"; // auto-detect or hardcode per room
+      const voiceMap = {
+        "CEO Office": "Brian",
+        "Admin Mailroom": "Stacy",
+        "Logistics Office": "Ellie",
+        "Accounts Office": "Ava",
+        "Virtual Engineer": "Riley",
+        "Therapy Room": "Luna"
+      };
+
+      window.addEventListener("load", () => {
+        const aiAgent = document.querySelector("rube-chat-agent");
+        if (aiAgent && voiceMap[officeName]) {
+          aiAgent.setAttribute("voice", voiceMap[officeName]);
+        }
+      });
+    </script>
+
+
 </body>
 </html>
