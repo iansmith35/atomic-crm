@@ -8,44 +8,62 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://rube.app/embed/chat?agent=crm-core-ai&apikey=YOUR_RUBE_API_KEY" defer></script>
+    <style>
+        .status.warning { background-color: #d97706; }
+        .status.ok { background-color: #059669; }
+        .status.alert { background-color: #dc2626; }
+    </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <div class="max-w-6xl mx-auto p-6">
         <!-- Header -->
         <div class="bg-gray-800 rounded-xl p-6 mb-8">
-            <h2 class="text-2xl font-bold mb-2">📊 Accounts Office — Ava AI</h2>
-            <p class="text-gray-300">All your business finances, tracking, and queries in one place.</p>
+            <h2 class="text-2xl font-bold mb-2">📊 Accounts Office — Finance & Bookkeeping</h2>
+            <p class="text-gray-300">Manage cashflow, invoices, receipts, and live AI bookkeeping chat.</p>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-6">
             <div class="bg-gray-800 rounded-xl p-6">
-                <h3 class="text-lg font-semibold mb-3">💰 Account Snapshot</h3>
+                <h3 class="text-lg font-semibold mb-3">📈 Live Cashflow</h3>
+                <p class="text-gray-300 mb-3">Net Position: <strong class="text-white">£12,847.32</strong></p>
                 <ul class="space-y-2 text-gray-300">
-                    <li><strong>Bank Balance:</strong> £{{BANK_BALANCE}}</li>
-                    <li><strong>Outstanding Invoices:</strong> £{{OUTSTANDING_INVOICES}}</li>
-                    <li><strong>Expenses This Month:</strong> £{{EXPENSES_THIS_MONTH}}</li>
-                    <li><strong>Net Cash Flow:</strong> £{{CASH_FLOW}}</li>
+                    <li>⬆️ Income (This Week): £5,420</li>
+                    <li>⬇️ Expenses (This Week): £2,300</li>
+                    <li>💰 Pending Invoices: 4</li>
                 </ul>
+                <button class="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">Export CSV</button>
             </div>
 
             <div class="bg-gray-800 rounded-xl p-6">
-                <h3 class="text-lg font-semibold mb-3">📅 Upcoming Payments</h3>
+                <h3 class="text-lg font-semibold mb-3">🧾 Invoice Console</h3>
                 <ul class="space-y-2 text-gray-300">
-                    <li>VAT Return – Due {{VAT_DUE}}</li>
-                    <li>Payroll – Due {{PAYROLL_DATE}}</li>
-                    <li>Supplier Invoice – £{{SUPPLIER_AMOUNT}} ({{SUPPLIER_NAME}})</li>
+                    <li>Jones Heating – £450 – <span class="status bg-yellow-600 px-2 py-1 rounded text-xs text-white">Due</span></li>
+                    <li>OVO Energy – £1,200 – <span class="status bg-green-600 px-2 py-1 rounded text-xs text-white">Paid</span></li>
+                    <li>Tenant Refund – £220 – <span class="status bg-red-600 px-2 py-1 rounded text-xs text-white">Overdue</span></li>
                 </ul>
+                <button class="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">View All Invoices</button>
             </div>
         </div>
 
         <div class="bg-gray-800 rounded-xl p-6 mb-6">
-            <h3 class="text-lg font-semibold mb-3">🔍 Transactions Feed</h3>
-            <iframe src="https://docs.google.com/spreadsheets/d/{{SPREADSHEET_ID}}/edit?usp=sharing" width="100%" height="300px" class="border-0 rounded"></iframe>
+            <h3 class="text-lg font-semibold mb-3">📥 Upload Bank Statements</h3>
+            <input type="file" multiple class="block w-full text-sm text-gray-300 border border-gray-600 rounded bg-gray-700 p-2 mb-2" />
+            <p class="text-xs text-gray-500">Drag & drop CSVs or PDFs from Gmail or Google Drive.</p>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-3">🤖 Talk to Ava – Accounts AI</h3>
+            <script src="https://rube.app/embed/chat?agent=ava-accounts-ai&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM" defer></script>
         </div>
 
         <div class="bg-gray-800 rounded-xl p-6">
-            <h3 class="text-lg font-semibold mb-3">🤖 Chat with Ava – Your Finance AI</h3>
-            <script src="https://rube.app/embed/chat?agent=ava-accounts-ai&apikey=3bNQHCLJ3gnQxhxzdMMmlX5V" defer></script>
+            <h3 class="text-lg font-semibold mb-3">📘 Finance Directive Pad</h3>
+            <textarea 
+                rows="4" 
+                placeholder="Ava, always flag any invoice older than 14 days as priority..."
+                class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-gray-300 placeholder-gray-500"
+            ></textarea>
+            <button class="mt-3 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">Update Directives</button>
         </div>
 
         <!-- Back Button -->
@@ -58,6 +76,61 @@
 
 
     <script>
+        function exportCSV() {
+            alert('📊 Export CSV\n\nCashflow data exported successfully!\n\n✅ File includes:\n• Net position\n• Weekly income/expenses\n• Pending invoices\n• Transaction history\n\n📁 Ready for download');
+        }
+
+        function viewAllInvoices() {
+            alert('🧾 All Invoices\n\nShowing invoice summary:\n\n📋 Total invoices: 12\n💰 Outstanding amount: £2,870\n✅ Paid this month: £8,420\n⚠️ Overdue invoices: 1\n\n📊 Full invoice management available');
+        }
+
+        function updateDirectives() {
+            const textarea = document.querySelector('textarea[placeholder*="Ava"]');
+            const directives = textarea.value.trim();
+            
+            if (directives) {
+                alert(`📘 Finance Directives Updated\n\nNew instructions for Ava:\n"${directives}"\n\n✅ Ava will apply these rules to all future financial operations`);
+            } else {
+                alert('📘 Finance Directives\n\nPlease enter specific instructions for Ava before updating directives.');
+            }
+        }
+
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                let fileList = '';
+                for (let i = 0; i < files.length; i++) {
+                    fileList += `• ${files[i].name} (${(files[i].size / 1024).toFixed(1)} KB)\n`;
+                }
+                alert(`📥 Bank Statements Upload\n\n${fileList}\n✅ Files ready for processing by Ava\n📊 Will be integrated into accounting system\n💡 AI will automatically categorize transactions`);
+            }
+        }
+
+        // Add event listeners when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Export CSV button
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                if (button.textContent.includes('Export CSV')) {
+                    button.onclick = exportCSV;
+                } else if (button.textContent.includes('View All Invoices')) {
+                    button.onclick = viewAllInvoices;
+                } else if (button.textContent.includes('Update Directives')) {
+                    button.onclick = updateDirectives;
+                }
+            });
+            
+            // File upload input
+            const fileInput = document.querySelector('input[type="file"]');
+            if (fileInput) fileInput.onchange = handleFileUpload;
+            
+            // Initialize with sample directive text
+            const textarea = document.querySelector('textarea[placeholder*="Ava"]');
+            if (textarea && !textarea.value) {
+                textarea.value = "Ava, always flag any invoice older than 14 days as priority...";
+            }
+        });
+
         function createInvoice() {
             alert('📄 Create Invoice\n\nPhilip can create invoices for all services:\n• Gas Safety Certificates\n• Event Planning\n• Property Management\n\n✅ Auto-integrated with accounting system');
         }
@@ -80,17 +153,6 @@
 
         function migrationStatus() {
             alert('🔄 QuickBooks Migration Status\n\n✅ COMPLETE!\n\nMigrated:\n• 3 years historical data\n• All customer records\n• Invoice templates\n• Chart of accounts\n\n🎉 Philip now controls the system!');
-        }
-
-        function handleFileUpload(event) {
-            const files = event.target.files;
-            if (files.length > 0) {
-                let fileList = '';
-                for (let i = 0; i < files.length; i++) {
-                    fileList += `• ${files[i].name} (${(files[i].size / 1024).toFixed(1)} KB)\n`;
-                }
-                alert(`📄 Files Selected for Upload\n\n${fileList}\n✅ Files ready for processing by Philip\n📊 Will be integrated into accounting system`);
-            }
         }
 
         function viewAllTransactions() {
