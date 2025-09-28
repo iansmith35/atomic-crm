@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Mailroom - Stacy</title>
+    <title>Admin Mailroom</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://rube.app/embed/chat?agent=crm-core-ai&apikey=YOUR_RUBE_API_KEY" defer></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <div class="p-6 max-w-6xl mx-auto">
@@ -116,6 +117,25 @@
                 taskList.appendChild(li);
             });
         }
+    </script>
+
+    <script>
+      const officeName = document.title || "CEO Office"; // auto-detect or hardcode per room
+      const voiceMap = {
+        "CEO Office": "Brian",
+        "Admin Mailroom": "Stacy",
+        "Logistics Office": "Ellie",
+        "Accounts Office": "Ava",
+        "Virtual Engineer": "Riley",
+        "Therapy Room": "Luna"
+      };
+
+      window.addEventListener("load", () => {
+        const aiAgent = document.querySelector("rube-chat-agent");
+        if (aiAgent && voiceMap[officeName]) {
+          aiAgent.setAttribute("voice", voiceMap[officeName]);
+        }
+      });
     </script>
 </body>
 </html>
