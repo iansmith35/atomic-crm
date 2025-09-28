@@ -133,129 +133,79 @@ Update delivery status every 30 minutes during active operations.</textarea>
 
 
 
-<!-- GLOBAL CRM SYNC DROP -->
-<!-- Place this into Copilot, it will auto-insert across all HTML CRM rooms -->
+<!-- GLOBAL CRM SETUP PAYLOAD FOR COPILOT DEPLOYMENT -->
+<!-- DROP THIS INTO COPILOT AND DEPLOY ACROSS ALL HTML FILES -->
+<!-- REPLACES GOOGLE AUTH, SUPERBASE CONNECTION, AND BACKEND SYNC -->
 
-<!-- STEP 1: Inject Google Auth & Supabase Setup -->
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
-
-  const SUPABASE_URL = 'https://ishehqihxbhwpwhfrvzo.supabase.co';
-  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
-  const GOOGLE_CLIENT_ID = '624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com';
-  const ALLOWED_EMAIL = 'ian@ishe-ltd.co.uk';
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // Inject Google Auth Button
-  const loginContainer = document.querySelector('#login-section') || document.body;
-  const loginButton = document.createElement('button');
-  loginButton.innerText = 'Sign in with Google';
-  loginButton.style = 'padding: 10px 20px; margin: 20px auto; display: block; background: #5c6bc0; color: white; border: none; border-radius: 5px; font-size: 16px;';
-  loginContainer.appendChild(loginButton);
-
-  loginButton.addEventListener('click', async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.href,
-      },
-    });
-    if (error) alert('Login failed: ' + error.message);
+<!-- 🧠 LOAD RUBE CHATBOT WITH VOICE MAPPING -->
+<script src="https://rube.app/embed/chat?agent=ellie-ai&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM"></script>
+<script>
+  const officeName = document.title || "CEO Office";
+  const voiceMap = {
+    "CEO Office": "Brian",
+    "Admin Mailroom": "Stacy",
+    "Logistics Office": "Ellie",
+    "Accounts Office": "Ava",
+    "Virtual Engineer": "Riley",
+    "Therapy Room": "Luna"
+  };
+  window.addEventListener("load", () => {
+    const aiAgent = document.querySelector("[rube-chat-agent]");
+    if (aiAgent && voiceMap[officeName]) {
+      aiAgent.setAttribute("voice", voiceMap[officeName]);
+    }
   });
-
-  const { data: { session } } = await supabase.auth.getSession();
-  const user = session?.user;
-
-
-<!-- GLOBAL CRM SYNC DROP -->
-<!-- Place this into Copilot, it will auto-insert across all HTML CRM rooms -->
-
-<!-- STEP 1: Inject Google Auth & Supabase Setup -->
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
-
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE";
-  const SUPABASE_URL = 'https://mydxasjicsfetnglbppp.supabase.co';
-  const GOOGLE_CLIENT_ID = '624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com';
-  const ALLOWED_EMAIL = 'ian@ishe-ltd.co.uk';
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // Inject Google Auth Button
-  const loginContainer = document.querySelector('#login-section') || document.body;
-  const loginButton = document.createElement('button');
-  loginButton.innerText = 'Sign in with Google';
-  loginButton.style = 'padding: 10px 20px; margin: 20px auto; display: block; background: #5c6bc0; color: white; border: none; border-radius: 5px; font-size: 16px;';
-  loginContainer.appendChild(loginButton);
-
-  loginButton.addEventListener('click', async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.href,
-      },
-    });
-    if (error) alert('Login failed: ' + error.message);
-  });
-
-  const { data: { session } } = await supabase.auth.getSession();
-  const user = session?.user;
-
-
-  if (!user || user.email !== ALLOWED_EMAIL) {
-    document.body.innerHTML = '<h2 style="color:white;text-align:center;margin-top:20vh">Access Denied. Private System.</h2>';
-  } else {
-    console.log('✅ Authenticated:', user.email);
-
-  }
 </script>
 
-<!-- === GOOGLE SIGN-IN + SUPABASE SAVE === -->
+<!-- 🔑 SUPERBASE GLOBAL CONNECTION -->
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  window.supabase = createClient(
+    'https://mydxasjicsfetnglbppp.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE'
+  );
+</script>
+
+<!-- ✅ GOOGLE SIGN-IN SYSTEM -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
-  function initClient() {
+  window.onload = () => {
     google.accounts.id.initialize({
       client_id: "624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com",
       callback: handleCredentialResponse
     });
     google.accounts.id.renderButton(
-      document.getElementById("googleSignIn"),
+      document.getElementById("gSignIn"),
       { theme: "outline", size: "large" }
     );
+    google.accounts.id.prompt();
+  };
 
+  async function handleCredentialResponse(response) {
+    const userData = parseJwt(response.credential);
+    if (userData.email === "ian@ishe-ltd.co.uk") {
+      localStorage.setItem("user", JSON.stringify(userData));
+      window.location.href = "boss-office.html";
+    } else {
+      alert("Access Denied: Not authorised");
+    }
+  }
+
+  function parseJwt(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
   }
 </script>
 
-<!-- STEP 2: Inject Dynamic AI Voice & Bot Linking -->
-<script>
-  const officeMap = {
-    'CEO Office': 'Brian',
-    'Admin Mailroom': 'Stacy',
-    'Logistics Office': 'Ellie',
-    'Accounts Office': 'Ava',
-    'Virtual Engineer': 'Riley',
-    'Therapy Room': 'Luna',
-    'Health & Fitness': 'Max',
-    'Personal Banking': 'Kate',
-    'Documents': 'Clerk',
-    'Task Center': 'Tina',
-  };
-
-  const currentTitle = document.title.trim();
-  const voice = officeMap[currentTitle] || 'Brian';
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const aiAgent = document.querySelector('rube-chat-agent');
-    if (aiAgent) {
-      aiAgent.setAttribute('voice', voice);
-      console.log(`🎤 Assigned AI voice for ${currentTitle}: ${voice}`);
-    }
-  });
-</script>
-
-<!-- STEP 3: Drop Root Agent if Absent -->
-<script src="https://rube.app/embed/chat?agent=core&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM"></script>
+<!-- 🔐 LOGIN.HTML PLACEHOLDER -->
+<div id="gSignIn" class="flex justify-center mt-8"></div>
 
 </body>
 </html>
