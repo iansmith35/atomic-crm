@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Office - Ellie AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold flex items-center">
+                        🚚 Logistics Office - Ellie AI
+                    </h1>
+                    <p class="text-indigo-100 mt-2">Route planning, calendar management & logistics coordination</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold" id="activeTasksCount">7</div>
+                    <div class="text-sm text-indigo-200">Active Tasks</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar and Route Planner Grid -->
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <!-- Calendar View -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">📅 Calendar View</h2>
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <iframe
+                        src="https://calendar.google.com/calendar/embed?src=your_calendar_id&ctz=Europe%2FLondon"
+                        style="border: 0; background: white; border-radius: 8px;"
+                        width="100%"
+                        height="400"
+                        frameBorder="0"
+                        scrolling="no">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Route Planner -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">🗺️ Route Planner</h2>
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <iframe
+                        width="100%"
+                        height="400"
+                        style="border: 0; border-radius: 8px;"
+                        loading="lazy"
+                        allowFullScreen
+                        src="https://www.google.com/maps/embed/v1/view?key=YOUR_API_KEY&center=51.5074,-0.1278&zoom=10">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks and AI Assistant Grid -->
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <!-- Tasks -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">📋 Logistics Tasks</h2>
+                <div id="tasksList" class="space-y-3">
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <div class="font-semibold text-yellow-400">📦 Delivery Route Optimization</div>
+                        <div class="text-sm text-gray-300 mt-1">Status: In Progress</div>
+                        <div class="text-xs text-gray-400 mt-1">Created: 2025-01-02 | Updated: 2025-01-02</div>
+                    </div>
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <div class="font-semibold text-green-400">🚛 Fleet Management Review</div>
+                        <div class="text-sm text-gray-300 mt-1">Status: Completed</div>
+                        <div class="text-xs text-gray-400 mt-1">Created: 2025-01-01 | Updated: 2025-01-02</div>
+                    </div>
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <div class="font-semibold text-blue-400">📊 Weekly Logistics Report</div>
+                        <div class="text-sm text-gray-300 mt-1">Status: Pending</div>
+                        <div class="text-xs text-gray-400 mt-1">Created: 2025-01-02 | Updated: 2025-01-02</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat with Ellie -->
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">🧠 Chat with Ellie AI</h2>
+                <div id="chatMessages" class="bg-gray-700 rounded-lg p-4 h-64 overflow-y-auto mb-4">
+                    <div class="text-green-400 mb-2">
+                        <strong>Ellie:</strong> Hello! I'm your logistics AI assistant. I can help with route planning, delivery scheduling, and fleet management. What can I assist you with today?
+                    </div>
+                </div>
+                <div class="flex">
+                    <input type="text" id="chatInput" placeholder="Ask Ellie about logistics..." 
+                           class="flex-1 bg-gray-700 rounded-l-lg px-4 py-2 text-white">
+                    <button onclick="sendMessage()" 
+                            class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-r-lg font-semibold">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Directive Configuration -->
+        <div class="bg-gray-800 rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4">📝 Directive Configuration</h2>
+            <textarea 
+                id="directivesText" 
+                class="w-full bg-gray-700 text-white p-4 rounded-lg border border-gray-600 mb-4" 
+                rows="6" 
+                placeholder="Enter logistics directives and operational instructions...">Optimize all delivery routes for fuel efficiency and time.
+Prioritize customer satisfaction in scheduling decisions.
+Maintain real-time communication with all fleet vehicles.
+Update delivery status every 30 minutes during active operations.</textarea>
+            <button onclick="saveDirectives()" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">
+                Save Directives
+            </button>
+        </div>
+
+        <!-- Back to Dashboard -->
+        <div class="mt-8 text-center">
+            <button onclick="window.location.href='index.html'" 
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold">
+                ← Back to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            
+            if (input.value.trim()) {
+                const userMessage = input.value;
+                
+                // Add user message
+                const userMsg = document.createElement('div');
+                userMsg.className = 'text-blue-300 mb-2';
+                userMsg.innerHTML = `<strong>You:</strong> ${userMessage}`;
+                messages.appendChild(userMsg);
+                
+                // Clear input immediately
+                input.value = '';
+                messages.scrollTop = messages.scrollHeight;
+                
+                // Add AI response (simulated)
+                setTimeout(() => {
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'text-green-400 mb-2';
+                    aiMsg.innerHTML = `<strong>Ellie:</strong> I understand you need help with "${userMessage}". Let me analyze the logistics data and provide you with optimized recommendations.`;
+                    messages.appendChild(aiMsg);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function saveDirectives() {
+            const directives = document.getElementById('directivesText').value;
+            // Simulate saving
+            alert('Logistics directives saved successfully!');
+            console.log('Saved directives:', directives);
+        }
+
+        // Allow Enter key to send messages
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Simulate loading tasks
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Logistics Office loaded successfully');
+        });
+    </script>
+</body>
+</html>

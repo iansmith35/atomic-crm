@@ -9,7 +9,8 @@ const SUPABASE_CONFIG = {
     communicationsO: 'communications',
     accounts: 'accounts',
     virtualEngineer: 'virtual-engineer',
-    coastview: 'coastview'
+    coastview: 'coastview',
+    logistics: 'logistics'
   }
 };
 
