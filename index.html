@@ -178,8 +178,8 @@
         </footer>
     </div>
 
-<!-- 🔐 LOGIN.HTML PLACEHOLDER -->
-<div id="gSignIn" class="flex justify-center mt-8"></div>
+<!-- 🔐 LOGIN.HTML PLACEHOLDER (DISABLED) -->
+<!-- <div id="gSignIn" class="flex justify-center mt-8"></div> -->
 
 <!-- GLOBAL CRM SETUP PAYLOAD FOR COPILOT DEPLOYMENT -->
 <!-- DROP THIS INTO COPILOT AND DEPLOY ACROSS ALL HTML FILES -->
@@ -214,7 +214,8 @@
   );
 </script>
 
-<!-- ✅ GOOGLE SIGN-IN SYSTEM -->
+<!-- ✅ GOOGLE SIGN-IN SYSTEM (DISABLED) -->
+<!--
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
   window.onload = () => {
@@ -251,8 +252,10 @@
     return JSON.parse(jsonPayload);
   }
 </script>
+-->
 
-<!-- Google OAuth Login Handler -->
+<!-- Google OAuth Login Handler (DISABLED) -->
+<!--
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
   const supabase = createClient(
@@ -267,6 +270,7 @@
     if (error) console.error('Login error:', error.message)
   })
 </script>
+-->
 
 </body>
 </html>

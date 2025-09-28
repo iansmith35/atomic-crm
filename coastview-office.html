@@ -397,8 +397,9 @@
   );
 </script>
 
+<!-- DISABLED: Google OAuth Block
 <!-- ✅ GOOGLE SIGN-IN SYSTEM -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- <script src="https://accounts.google.com/gsi/client" async defer></script> (DISABLED) -->
 <script>
   window.onload = () => {
     google.accounts.id.initialize({
@@ -434,10 +435,12 @@
     return JSON.parse(jsonPayload);
   }
 </script>
+-->
 
 <!-- 🔐 LOGIN.HTML PLACEHOLDER -->
-<div id="gSignIn" class="flex justify-center mt-8"></div>
+<!-- <div id="gSignIn" class="flex justify-center mt-8"></div> (DISABLED) -->
 
+<!-- DISABLED: Supabase OAuth Handler
 <!-- Google OAuth Login Handler -->
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
@@ -453,6 +456,7 @@
     if (error) console.error('Login error:', error.message)
   })
 </script>
+-->
 
 </body>
 </html>
