@@ -3,158 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Communications Office - Stacy</title>
+    <title>Admin Mail Room - Stacy</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
-    <div class="max-w-6xl mx-auto p-6">
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-green-500 to-teal-600 rounded-xl p-6 mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold flex items-center">
-                        📧 Communications Office - Stacy
-                    </h1>
-                    <p class="text-green-100 mt-2">Unified messaging hub - Email, WhatsApp, SMS across all brands</p>
-                </div>
-                <div class="text-right">
-                    <div class="text-2xl font-bold" id="pendingCount">15</div>
-                    <div class="text-sm text-green-200">Pending Messages</div>
-                </div>
-            </div>
-        </div>
+    <div class="p-6 max-w-6xl mx-auto">
+        <h1 class="text-2xl font-bold mb-4">📬 Admin Mail Room – Gmail</h1>
 
-        <div class="grid md:grid-cols-3 gap-6">
-            <!-- Unified Inbox -->
-            <div class="md:col-span-2 bg-gray-800 rounded-xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-bold">📥 Unified Inbox</h2>
-                    <div class="flex space-x-2">
-                        <button onclick="filterChannel('all')" id="filterAll" class="px-3 py-1 bg-green-600 rounded text-sm">All</button>
-                        <button onclick="filterChannel('email')" id="filterEmail" class="px-3 py-1 bg-gray-600 rounded text-sm">Email</button>
-                        <button onclick="filterChannel('whatsapp')" id="filterWhatsApp" class="px-3 py-1 bg-gray-600 rounded text-sm">WhatsApp</button>
-                        <button onclick="filterChannel('sms')" id="filterSMS" class="px-3 py-1 bg-gray-600 rounded text-sm">SMS</button>
-                    </div>
-                </div>
-                
-                <div id="messageList" class="space-y-3 max-h-96 overflow-y-auto">
-                    <!-- Email Message -->
-                    <div class="message-item bg-gray-700 rounded-lg p-4 border-l-4 border-blue-500" data-channel="email">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-blue-400">📧</span>
-                                <span class="font-semibold">john@example.com</span>
-                                <span class="bg-blue-600 text-xs px-2 py-1 rounded">Email</span>
-                            </div>
-                            <span class="text-xs text-gray-400">2 min ago</span>
-                        </div>
-                        <h3 class="font-medium mb-1">Gas Safety Certificate Query</h3>
-                        <p class="text-sm text-gray-300 mb-3">Hi, I need to schedule a gas safety inspection...</p>
-                        <div class="flex space-x-2">
-                            <button onclick="replyMessage('email', 'john@example.com')" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">Reply</button>
-                            <button onclick="routeMessage('virtual_engineer')" class="bg-yellow-600 hover:bg-yellow-700 px-3 py-1 rounded text-sm">→ Engineer</button>
-                        </div>
-                    </div>
+        <!-- Directive Box -->
+        <section class="mb-6">
+            <h2 class="text-lg font-semibold mb-1">AI Directive for Email Replies</h2>
+            <textarea
+                class="w-full border rounded-lg p-3 text-sm bg-yellow-50 text-gray-900"
+                rows="3"
+                id="directiveText"
+                placeholder="Never respond without approval unless explicitly permitted."
+            >Never respond without approval unless explicitly permitted.</textarea>
+            <button
+                onclick="updateDirective()"
+                class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm hover:bg-blue-700"
+            >
+                Save Directive
+            </button>
+        </section>
 
-                    <!-- WhatsApp Message -->
-                    <div class="message-item bg-gray-700 rounded-lg p-4 border-l-4 border-green-500" data-channel="whatsapp">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-green-400">📱</span>
-                                <span class="font-semibold">+44 7700 900123</span>
-                                <span class="bg-green-600 text-xs px-2 py-1 rounded">WhatsApp</span>
-                            </div>
-                            <span class="text-xs text-gray-400">5 min ago</span>
-                        </div>
-                        <h3 class="font-medium mb-1">Event Planning Inquiry</h3>
-                        <p class="text-sm text-gray-300 mb-3">Hello! Can you help me plan a birthday party?</p>
-                        <div class="flex space-x-2">
-                            <button onclick="replyMessage('whatsapp', '+44 7700 900123')" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">Reply</button>
-                            <button onclick="routeMessage('events')" class="bg-cyan-600 hover:bg-cyan-700 px-3 py-1 rounded text-sm">→ Events</button>
-                        </div>
-                    </div>
-
-                    <!-- SMS Message -->
-                    <div class="message-item bg-gray-700 rounded-lg p-4 border-l-4 border-purple-500" data-channel="sms">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-purple-400">💬</span>
-                                <span class="font-semibold">+44 7700 900456</span>
-                                <span class="bg-purple-600 text-xs px-2 py-1 rounded">SMS</span>
-                            </div>
-                            <span class="text-xs text-gray-400">8 min ago</span>
-                        </div>
-                        <h3 class="font-medium mb-1">Property Management</h3>
-                        <p class="text-sm text-gray-300 mb-3">Tenant reporting heating issue. Can you help?</p>
-                        <div class="flex space-x-2">
-                            <button onclick="replyMessage('sms', '+44 7700 900456')" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">Reply</button>
-                            <button onclick="routeMessage('coastview')" class="bg-teal-600 hover:bg-teal-700 px-3 py-1 rounded text-sm">→ CoastView</button>
-                        </div>
-                    </div>
-                </div>
-
-                <button onclick="loadMoreMessages()" class="w-full mt-4 bg-green-600 hover:bg-green-700 py-2 rounded-lg font-semibold">
-                    📬 Load More Messages
-                </button>
+        <!-- Email List -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="md:col-span-1">
+                <h2 class="text-lg font-semibold mb-2">Inbox</h2>
+                <ul class="space-y-2" id="emailList">
+                    <!-- Sample emails will be populated by JavaScript -->
+                </ul>
             </div>
 
-            <!-- Stacy's Assistant -->
-            <div class="bg-gray-800 rounded-xl p-6">
-                <h2 class="text-xl font-bold mb-4">🤖 Stacy AI Assistant</h2>
-                <div id="stacyChat" class="bg-gray-700 rounded-lg p-4 h-48 overflow-y-auto mb-4">
-                    <div class="text-green-400 mb-2">
-                        <strong>Stacy:</strong> Hi! I'm managing all communications. How can I help?
-                    </div>
-                </div>
-                <div class="flex">
-                    <input type="text" id="stacyInput" placeholder="Ask Stacy..." 
-                           class="flex-1 bg-gray-700 rounded-l-lg px-3 py-2 text-white text-sm">
-                    <button onclick="chatWithStacy()" 
-                            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-r-lg text-sm">
-                        Send
+            <!-- Email Viewer & AI Response -->
+            <div class="md:col-span-2">
+                <div class="bg-white border rounded-xl p-4 shadow-md text-gray-900" id="emailViewer" style="display: none;">
+                    <h3 class="text-lg font-bold mb-1" id="emailSubject"></h3>
+                    <p class="text-sm text-gray-600 mb-2" id="emailFrom"></p>
+                    <p class="text-sm mb-4" id="emailBody"></p>
+
+                    <button
+                        onclick="generateReply()"
+                        class="mb-3 px-3 py-1 bg-indigo-600 text-white rounded-xl text-sm hover:bg-indigo-700"
+                    >
+                        Suggest Reply
                     </button>
-                </div>
 
-                <!-- Quick Actions -->
-                <div class="mt-6">
-                    <h3 class="font-semibold mb-3">⚡ Quick Actions</h3>
-                    <div class="space-y-2">
-                        <button onclick="composeMessage()" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-sm">
-                            ✏️ Compose Message
-                        </button>
-                        <button onclick="scheduleMessage()" class="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded text-sm">
-                            ⏰ Schedule Message
-                        </button>
-                        <button onclick="bulkSend()" class="w-full bg-orange-600 hover:bg-orange-700 py-2 rounded text-sm">
-                            📢 Bulk Send
-                        </button>
+                    <div class="bg-gray-100 border p-3 rounded-xl" id="aiReplySection" style="display: none;">
+                        <p class="text-sm mb-2 text-gray-700" id="aiReplyText"></p>
+                        <div class="flex gap-2">
+                            <button onclick="approveAndSend()" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700">✅ Approve & Send</button>
+                            <button onclick="editBeforeSend()" class="bg-red-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-700">✏️ Edit Before Send</button>
+                        </div>
                     </div>
                 </div>
+                <p class="text-gray-500 text-sm" id="selectEmailPrompt">Select an email to view and reply.</p>
             </div>
-        </div>
-
-        <!-- Channel Statistics -->
-        <div class="mt-8 bg-gray-800 rounded-xl p-6">
-            <h2 class="text-xl font-bold mb-4">📈 Today's Communication Stats</h2>
-            <div class="grid md:grid-cols-4 gap-4">
-                <div class="text-center bg-blue-600 bg-opacity-20 rounded-lg p-4">
-                    <div class="text-2xl font-bold text-blue-400">86</div>
-                    <div class="text-sm text-gray-300">📧 Emails</div>
-                </div>
-                <div class="text-center bg-green-600 bg-opacity-20 rounded-lg p-4">
-                    <div class="text-2xl font-bold text-green-400">23</div>
-                    <div class="text-sm text-gray-300">📱 WhatsApp</div>
-                </div>
-                <div class="text-center bg-purple-600 bg-opacity-20 rounded-lg p-4">
-                    <div class="text-2xl font-bold text-purple-400">18</div>
-                    <div class="text-sm text-gray-300">💬 SMS</div>
-                </div>
-                <div class="text-center bg-yellow-600 bg-opacity-20 rounded-lg p-4">
-                    <div class="text-2xl font-bold text-yellow-400">97%</div>
-                    <div class="text-sm text-gray-300">📈 Response Rate</div>
-                </div>
-            </div>
-        </div>
+        </section>
 
         <!-- Back Button -->
         <div class="mt-8 text-center">
@@ -165,79 +71,113 @@
     </div>
 
     <script>
-        function filterChannel(channel) {
-            document.querySelectorAll('[id^="filter"]').forEach(btn => {
-                btn.className = 'px-3 py-1 bg-gray-600 rounded text-sm';
-            });
-            document.getElementById('filter' + channel.charAt(0).toUpperCase() + channel.slice(1)).className = 'px-3 py-1 bg-green-600 rounded text-sm';
-
-            document.querySelectorAll('.message-item').forEach(item => {
-                if (channel === 'all' || item.dataset.channel === channel) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        function replyMessage(channel, recipient) {
-            const message = prompt(`Reply via ${channel.toUpperCase()}\nTo: ${recipient}\n\nEnter your message:`);
-            if (message) {
-                alert(`✅ Message sent via ${channel.toUpperCase()}\nTo: ${recipient}\nStacy handled the delivery!`);
+        // Sample email data
+        let emails = [
+            {
+                id: 1,
+                subject: "Gas Safety Certificate Query",
+                from: "john@example.com",
+                snippet: "Hi, I need to schedule a gas safety inspection for my property...",
+                body: "Hi there,\n\nI hope this email finds you well. I need to schedule a gas safety inspection for my rental property at 123 Main Street. Could you please let me know your availability for the next two weeks?\n\nBest regards,\nJohn Smith"
+            },
+            {
+                id: 2,
+                subject: "Property Management Service",
+                from: "sarah@coastview.com",
+                snippet: "Looking for comprehensive property management services...",
+                body: "Dear Team,\n\nI own several properties in the coastal area and I'm looking for comprehensive property management services. Can you provide more information about your services and pricing?\n\nThank you,\nSarah Williams"
+            },
+            {
+                id: 3,
+                subject: "Account Statement Request",
+                from: "finance@company.co.uk",
+                snippet: "Could you please send us the latest account statement...",
+                body: "Hello,\n\nCould you please send us the latest account statement for our business account? We need it for our quarterly review.\n\nRegards,\nFinance Department"
             }
-        }
+        ];
 
-        function routeMessage(office) {
-            alert(`📤 Message Routed to ${office.charAt(0).toUpperCase() + office.slice(1)} Office\n\n✅ Appropriate agent will handle this inquiry.`);
-        }
+        let selectedEmail = null;
+        let directive = "Never respond without approval unless explicitly permitted.";
 
-        function chatWithStacy() {
-            const input = document.getElementById('stacyInput');
-            const chat = document.getElementById('stacyChat');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            chat.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
-            
-            setTimeout(() => {
-                const responses = [
-                    "I've processed 86 emails today and routed them to the right offices.",
-                    "I can help you compose messages for any channel - email, WhatsApp, or SMS.",
-                    "There are 15 pending messages that need your review.",
-                    "I've automatically sorted messages by brand and urgency level.",
-                    "Would you like me to schedule bulk messages for the weekend?"
-                ];
-                const response = responses[Math.floor(Math.random() * responses.length)];
-                chat.innerHTML += `<div class="text-green-400 mb-2"><strong>Stacy:</strong> ${response}</div>`;
-                chat.scrollTop = chat.scrollHeight;
-            }, 1000);
-            
-            input.value = '';
-        }
-
-        function composeMessage() {
-            alert('✏️ Compose New Message\n\nChoose channel:\n📧 Email\n📱 WhatsApp\n💬 SMS\n\nStacy will help you craft and deliver the message.');
-        }
-
-        function scheduleMessage() {
-            alert('⏰ Schedule Messages\n\nOptions:\n📅 Send later today\n📅 Schedule for tomorrow\n📅 Weekly recurring\n\nStacy will ensure optimal delivery times.');
-        }
-
-        function bulkSend() {
-            alert('📢 Bulk Message Campaign\n\nOptions:\n🎯 Customer newsletters\n📢 Service announcements\n📢 Promotional campaigns\n\nStacy will personalize by brand and segment.');
-        }
-
-        function loadMoreMessages() {
-            alert('📬 Loaded 15 additional messages\n📧 5 emails\n📱 7 WhatsApp\n💬 3 SMS\n\nAll sorted by priority and urgency!');
-        }
-
-        // Enter key support
-        document.getElementById('stacyInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                chatWithStacy();
-            }
+        // Initialize the email list on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            populateEmailList();
         });
+
+        function populateEmailList() {
+            const emailList = document.getElementById('emailList');
+            emailList.innerHTML = '';
+            
+            emails.forEach((email, index) => {
+                const li = document.createElement('li');
+                li.className = 'cursor-pointer border border-gray-600 p-3 rounded-lg hover:bg-gray-700';
+                li.onclick = () => selectEmail(email);
+                li.innerHTML = `
+                    <div class="font-medium text-white">${email.subject}</div>
+                    <div class="text-xs text-gray-400">${email.from}</div>
+                    <div class="text-xs text-gray-500 line-clamp-1">${email.snippet}</div>
+                `;
+                emailList.appendChild(li);
+            });
+        }
+
+        function selectEmail(email) {
+            selectedEmail = email;
+            
+            // Hide the prompt and show the email viewer
+            document.getElementById('selectEmailPrompt').style.display = 'none';
+            document.getElementById('emailViewer').style.display = 'block';
+            
+            // Populate email details
+            document.getElementById('emailSubject').textContent = email.subject;
+            document.getElementById('emailFrom').textContent = `From: ${email.from}`;
+            document.getElementById('emailBody').textContent = email.body;
+            
+            // Hide AI reply section initially
+            document.getElementById('aiReplySection').style.display = 'none';
+        }
+
+        function generateReply() {
+            if (!selectedEmail) return;
+            
+            // Simulate AI reply generation
+            const aiReplies = [
+                "Thank you for your inquiry. I'll be happy to help you with this request. Let me check our availability and get back to you shortly.",
+                "I've received your message and will route this to the appropriate department for immediate attention. You can expect a response within 24 hours.",
+                "Thank you for contacting us. I understand your concern and will personally ensure this matter is resolved promptly. I'll update you soon.",
+                "I appreciate you reaching out to us. Your request has been noted and I'm working on getting you the information you need right away."
+            ];
+            
+            const randomReply = aiReplies[Math.floor(Math.random() * aiReplies.length)];
+            
+            document.getElementById('aiReplyText').textContent = randomReply;
+            document.getElementById('aiReplySection').style.display = 'block';
+        }
+
+        function updateDirective() {
+            directive = document.getElementById('directiveText').value;
+            alert('✅ AI Directive Updated!\n\nNew directive saved successfully. All future AI replies will follow this guidance.');
+        }
+
+        function approveAndSend() {
+            if (!selectedEmail) return;
+            alert(`✅ Email Approved & Sent!\n\nReply sent to: ${selectedEmail.from}\nSubject: Re: ${selectedEmail.subject}\n\nThe AI-generated response has been delivered successfully.`);
+            
+            // Hide the AI reply section after sending
+            document.getElementById('aiReplySection').style.display = 'none';
+        }
+
+        function editBeforeSend() {
+            if (!selectedEmail) return;
+            const currentReply = document.getElementById('aiReplyText').textContent;
+            const editedReply = prompt(`Edit the reply before sending:\n\nTo: ${selectedEmail.from}\nSubject: Re: ${selectedEmail.subject}\n\nEdit your reply:`, currentReply);
+            
+            if (editedReply !== null) {
+                document.getElementById('aiReplyText').textContent = editedReply;
+                alert(`✅ Reply Updated & Sent!\n\nYour edited reply has been sent to: ${selectedEmail.from}`);
+                document.getElementById('aiReplySection').style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>
