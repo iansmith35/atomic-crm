@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar API Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">📅 Calendar API Test Page</h1>
+        
+        <!-- Test Results -->
+        <div id="results" class="mb-6 p-4 bg-white rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-3">Test Results</h2>
+            <div id="results-content" class="text-gray-600">
+                Click the buttons below to test the calendar API functions...
+            </div>
+        </div>
+
+        <!-- Test Controls -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <button 
+                id="testGet" 
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            >
+                🔍 Test Get Calendar Events
+            </button>
+            <button 
+                id="testPost" 
+                class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+            >
+                ➕ Test Create Event
+            </button>
+        </div>
+
+        <!-- Event Creation Form -->
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold mb-4">Create New Event</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input 
+                    id="eventTitle" 
+                    type="text" 
+                    placeholder="Event Title" 
+                    class="border border-gray-300 rounded px-3 py-2"
+                >
+                <input 
+                    id="eventDescription" 
+                    type="text" 
+                    placeholder="Description" 
+                    class="border border-gray-300 rounded px-3 py-2"
+                >
+                <input 
+                    id="eventStart" 
+                    type="datetime-local" 
+                    class="border border-gray-300 rounded px-3 py-2"
+                >
+                <input 
+                    id="eventEnd" 
+                    type="datetime-local" 
+                    class="border border-gray-300 rounded px-3 py-2"
+                >
+            </div>
+            <button 
+                id="createEvent" 
+                class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700"
+            >
+                Create Event & Refresh Calendar
+            </button>
+        </div>
+
+        <!-- Current Events Display -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Current Events</h2>
+            <div id="events-list" class="space-y-3">
+                <!-- Events will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Inline version of the API functions for testing
+        async function getCalendarEvents(calendarId = 'primary', timeMin = null) {
+            try {
+                const params = new URLSearchParams();
+                params.append('calendarId', calendarId);
+                if (timeMin) {
+                    params.append('timeMin', timeMin);
+                }
+
+                const response = await fetch(`/api/calendar/events?${params}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.events || data || [];
+            } catch (error) {
+                console.error('Error fetching calendar events:', error);
+                throw error;
+            }
+        }
+
+        async function postCalendarEvent(event) {
+            try {
+                if (!event || !event.summary) {
+                    throw new Error('Event must have a summary');
+                }
+
+                if (!event.start || !event.end) {
+                    throw new Error('Event must have start and end times');
+                }
+
+                const response = await fetch('/api/calendar/events', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ event }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error creating calendar event:', error);
+                throw error;
+            }
+        }
+
+        // State variables (simulating React state)
+        let events = [];
+
+        // DOM elements
+        const resultsContent = document.getElementById('results-content');
+        const eventsListElement = document.getElementById('events-list');
+        
+        // Test functions
+        async function testGet() {
+            try {
+                resultsContent.innerHTML = '<div class="text-blue-600">🔄 Fetching calendar events...</div>';
+                
+                // This matches the exact useEffect pattern from the problem statement
+                const fetchedEvents = await getCalendarEvents('primary', new Date().toISOString());
+                events = fetchedEvents;
+                
+                resultsContent.innerHTML = `
+                    <div class="text-green-600">✅ Successfully fetched ${events.length} events</div>
+                    <pre class="mt-2 text-sm bg-gray-100 p-2 rounded overflow-x-auto">${JSON.stringify(events, null, 2)}</pre>
+                `;
+                
+                renderEventsList();
+            } catch (error) {
+                resultsContent.innerHTML = `<div class="text-red-600">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testPost() {
+            try {
+                resultsContent.innerHTML = '<div class="text-blue-600">🔄 Creating test event...</div>';
+                
+                const testEvent = {
+                    summary: 'Test Event from Browser',
+                    description: 'This event was created from the browser test page',
+                    start: { dateTime: new Date(Date.now() + 3600000).toISOString() },
+                    end: { dateTime: new Date(Date.now() + 7200000).toISOString() }
+                };
+
+                const createdEvent = await postCalendarEvent(testEvent);
+                
+                resultsContent.innerHTML = `
+                    <div class="text-green-600">✅ Successfully created event: ${createdEvent.summary}</div>
+                    <pre class="mt-2 text-sm bg-gray-100 p-2 rounded overflow-x-auto">${JSON.stringify(createdEvent, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultsContent.innerHTML = `<div class="text-red-600">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // This matches the exact createEventHandler pattern from the problem statement
+        async function createEventHandler() {
+            const title = document.getElementById('eventTitle').value;
+            const description = document.getElementById('eventDescription').value;
+            const startISO = document.getElementById('eventStart').value ? new Date(document.getElementById('eventStart').value).toISOString() : '';
+            const endISO = document.getElementById('eventEnd').value ? new Date(document.getElementById('eventEnd').value).toISOString() : '';
+
+            if (!title || !startISO || !endISO) {
+                alert('Please fill in all required fields (title, start time, end time)');
+                return;
+            }
+
+            try {
+                resultsContent.innerHTML = '<div class="text-blue-600">🔄 Creating event and refreshing calendar...</div>';
+
+                const event = {
+                    summary: title,
+                    description: description,
+                    start: { dateTime: startISO },
+                    end: { dateTime: endISO }
+                };
+                
+                // This exactly matches the pattern from the problem statement
+                const res = await postCalendarEvent(event);
+                
+                // refresh calendar - exactly as in the problem statement
+                const ev = await getCalendarEvents('primary', new Date().toISOString());
+                events = ev;
+                
+                resultsContent.innerHTML = `
+                    <div class="text-green-600">✅ Event created and calendar refreshed!</div>
+                    <div class="mt-1 text-sm">Created: ${res.summary}</div>
+                    <div class="text-sm">Total events: ${events.length}</div>
+                `;
+                
+                // Clear form
+                document.getElementById('eventTitle').value = '';
+                document.getElementById('eventDescription').value = '';
+                document.getElementById('eventStart').value = '';
+                document.getElementById('eventEnd').value = '';
+                
+                renderEventsList();
+            } catch (error) {
+                resultsContent.innerHTML = `<div class="text-red-600">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        function renderEventsList() {
+            if (events.length === 0) {
+                eventsListElement.innerHTML = '<p class="text-gray-500">No events found.</p>';
+                return;
+            }
+
+            eventsListElement.innerHTML = events.map(event => `
+                <div class="border border-gray-200 rounded p-3">
+                    <h3 class="font-semibold">${event.summary}</h3>
+                    ${event.description ? `<p class="text-gray-600 text-sm mt-1">${event.description}</p>` : ''}
+                    <div class="text-xs text-gray-500 mt-2">
+                        <div><strong>Start:</strong> ${new Date(event.start?.dateTime || event.start).toLocaleString()}</div>
+                        <div><strong>End:</strong> ${new Date(event.end?.dateTime || event.end).toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Event listeners
+        document.getElementById('testGet').addEventListener('click', testGet);
+        document.getElementById('testPost').addEventListener('click', testPost);
+        document.getElementById('createEvent').addEventListener('click', createEventHandler);
+
+        // Initialize the page by loading events (simulating useEffect on mount)
+        document.addEventListener('DOMContentLoaded', async () => {
+            resultsContent.innerHTML = '<div class="text-blue-600">🔄 Initializing - fetching calendar events...</div>';
+            try {
+                // This exactly matches the useEffect pattern from the problem statement
+                events = await getCalendarEvents('primary', new Date().toISOString());
+                resultsContent.innerHTML = `<div class="text-green-600">✅ Initialized with ${events.length} events</div>`;
+                renderEventsList();
+            } catch (e) {
+                console.error('Calendar fetch error:', e);
+                resultsContent.innerHTML = `<div class="text-red-600">❌ Calendar fetch error: ${e.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

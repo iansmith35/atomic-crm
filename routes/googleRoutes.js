@@ -1,10 +1,10 @@
-// routes/googleRoutes.js
-// CommonJS wrapper for Google API routes
 
-const { listUnreadEmails, sendEmail, listCalendarEvents, createCalendarEvent } = require('../integrations/rubeGoogle.js');
-const { Router } = require('express');
+// CommonJS version of Google API routes for the Express server
+const express = require('express');
+const { listUnreadEmails, sendEmail, listCalendarEvents, createCalendarEvent } = require('../integrations/rubeGoogle-cjs.js');
 
-const router = Router();
+const router = express.Router();
+
 
 // GET /api/gmail/unread
 router.get('/gmail/unread', async (req, res) => {
@@ -31,7 +31,9 @@ router.post('/gmail/send', async (req, res) => {
 router.get('/calendar/events', async (req, res) => {
   const { calendarId, timeMin } = req.query;
   try {
-    const ev = await listCalendarEvents(calendarId, timeMin);
+
+    const ev = await listCalendarEvents(calendarId || 'primary', timeMin || new Date().toISOString());
+
     res.json(ev);
   } catch (e) {
     res.status(500).json({ error: e.message });

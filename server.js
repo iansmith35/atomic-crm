@@ -59,6 +59,8 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+
+
 // Catch-all handler for the SPA
 // app.get('*', (req, res) => {
 //   // If it's an API route that doesn't exist, return 404
@@ -70,10 +72,13 @@ app.get('/api/health', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'index.html'));
 // });
 
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Atomic CRM server running on port ${PORT}`);
   console.log(`📊 Accounting API available at http://localhost:${PORT}/api/accounting`);
+  console.log(`📅 Calendar API available at http://localhost:${PORT}/api/calendar/events`);
+  console.log(`📧 Gmail API available at http://localhost:${PORT}/api/gmail/unread`);
 });
 
 module.exports = app;
