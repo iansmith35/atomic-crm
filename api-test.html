@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail & Calendar API Test - Atomic CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-center">📧 Gmail & Calendar API Test</h1>
+        
+        <!-- Authentication Section -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">🔑 Authentication</h2>
+            <div class="flex gap-4 items-center">
+                <input type="text" id="bearerToken" placeholder="Bearer Token" 
+                       value="eyJhbGciOiJIUzI1NiJ9test_token"
+                       class="flex-1 border rounded px-3 py-2">
+                <button onclick="setToken()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Set Token
+                </button>
+            </div>
+            <p class="text-sm text-gray-600 mt-2">Default token is pre-filled for testing</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Gmail Section -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">📧 Gmail Operations</h2>
+                
+                <!-- Get Unread Emails -->
+                <div class="mb-4">
+                    <h3 class="font-medium mb-2">Get Unread Emails</h3>
+                    <div class="flex gap-2 mb-2">
+                        <input type="number" id="emailLimit" placeholder="Limit" value="5" class="border rounded px-2 py-1 w-20">
+                        <button onclick="getUnreadEmails()" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                            Get Unread
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Send Email -->
+                <div class="mb-4">
+                    <h3 class="font-medium mb-2">Send Email</h3>
+                    <input type="email" id="emailTo" placeholder="To" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="text" id="emailSubject" placeholder="Subject" class="border rounded px-2 py-1 w-full mb-2">
+                    <textarea id="emailBody" placeholder="Body" class="border rounded px-2 py-1 w-full mb-2" rows="2"></textarea>
+                    <button onclick="sendEmail()" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                        Send Email
+                    </button>
+                </div>
+
+                <!-- Search Emails -->
+                <div class="mb-4">
+                    <h3 class="font-medium mb-2">Search Emails</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="searchQuery" placeholder="Search query" class="border rounded px-2 py-1 flex-1">
+                        <button onclick="searchEmails()" class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">
+                            Search
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mark as Read -->
+                <div class="mb-4">
+                    <h3 class="font-medium mb-2">Mark Message as Read</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="messageId" placeholder="Message ID" class="border rounded px-2 py-1 flex-1">
+                        <button onclick="markAsRead()" class="bg-orange-600 text-white px-3 py-1 rounded text-sm hover:bg-orange-700">
+                            Mark Read
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Section -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">📅 Calendar Operations</h2>
+                
+                <!-- Get Events -->
+                <div class="mb-4">
+                    <h3 class="font-medium mb-2">Get Calendar Events</h3>
+                    <div class="flex gap-2 mb-2">
+                        <input type="number" id="eventLimit" placeholder="Limit" value="5" class="border rounded px-2 py-1 w-20">
+                        <button onclick="getCalendarEvents()" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                            Get Events
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Create Event -->
+                <div class="mb-4">
+                    <h3 class="font-medium mb-2">Create Event</h3>
+                    <input type="text" id="eventSummary" placeholder="Event Summary" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="datetime-local" id="eventStart" class="border rounded px-2 py-1 w-full mb-2">
+                    <input type="datetime-local" id="eventEnd" class="border rounded px-2 py-1 w-full mb-2">
+                    <textarea id="eventDescription" placeholder="Description" class="border rounded px-2 py-1 w-full mb-2" rows="2"></textarea>
+                    <button onclick="createCalendarEvent()" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                        Create Event
+                    </button>
+                </div>
+
+                <!-- Update Event -->
+                <div class="mb-4">
+                    <h3 class="font-medium mb-2">Update Event</h3>
+                    <div class="flex gap-2 mb-2">
+                        <input type="text" id="updateEventId" placeholder="Event ID" class="border rounded px-2 py-1 flex-1">
+                        <input type="text" id="updateEventSummary" placeholder="New Summary" class="border rounded px-2 py-1 flex-1">
+                    </div>
+                    <button onclick="updateEvent()" class="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700">
+                        Update Event
+                    </button>
+                </div>
+
+                <!-- Delete Event -->
+                <div class="mb-4">
+                    <h3 class="font-medium mb-2">Delete Event</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="deleteEventId" placeholder="Event ID" class="border rounded px-2 py-1 flex-1">
+                        <button onclick="deleteEvent()" class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">
+                            Delete Event
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="mt-6 bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">📊 Results</h2>
+            <div id="results" class="bg-gray-50 p-4 rounded border min-h-32 overflow-x-auto">
+                <p class="text-gray-500">Results will appear here...</p>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-6 text-center">
+            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold">
+                ← Back to Office Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let currentToken = 'eyJhbGciOiJIUzI1NiJ9test_token';
+
+        function setToken() {
+            currentToken = document.getElementById('bearerToken').value;
+            showResult({ message: 'Token updated successfully' });
+        }
+
+        function showResult(data, isError = false) {
+            const resultsDiv = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = isError ? 'text-red-800' : 'text-green-800';
+            resultsDiv.innerHTML = `
+                <div class="${className}">
+                    <strong>[${timestamp}]</strong>
+                    <pre class="mt-2 whitespace-pre-wrap text-sm">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+        }
+
+        async function makeRequest(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    showResult(data, true);
+                } else {
+                    showResult(data);
+                }
+            } catch (error) {
+                showResult({ error: error.message }, true);
+            }
+        }
+
+        // Gmail functions
+        async function getUnreadEmails() {
+            const limit = document.getElementById('emailLimit').value;
+            await makeRequest(`/api/gmail/unread?limit=${limit}`);
+        }
+
+        async function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+
+            if (!to || !subject || !body) {
+                showResult({ error: 'Please fill in all email fields' }, true);
+                return;
+            }
+
+            await makeRequest('/api/gmail/send', {
+                method: 'POST',
+                body: JSON.stringify({ to, subject, body })
+            });
+        }
+
+        async function searchEmails() {
+            const query = document.getElementById('searchQuery').value;
+            if (!query) {
+                showResult({ error: 'Please enter a search query' }, true);
+                return;
+            }
+
+            await makeRequest(`/api/gmail/search?q=${encodeURIComponent(query)}`);
+        }
+
+        async function markAsRead() {
+            const messageId = document.getElementById('messageId').value;
+            if (!messageId) {
+                showResult({ error: 'Please enter a message ID' }, true);
+                return;
+            }
+
+            await makeRequest(`/api/gmail/messages/${messageId}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ markAsRead: true })
+            });
+        }
+
+        // Calendar functions
+        async function getCalendarEvents() {
+            const limit = document.getElementById('eventLimit').value;
+            await makeRequest(`/api/calendar/events?limit=${limit}`);
+        }
+
+        async function createCalendarEvent() {
+            const summary = document.getElementById('eventSummary').value;
+            const start = document.getElementById('eventStart').value;
+            const end = document.getElementById('eventEnd').value;
+            const description = document.getElementById('eventDescription').value;
+
+            if (!summary || !start || !end) {
+                showResult({ error: 'Please fill in summary, start, and end time' }, true);
+                return;
+            }
+
+            await makeRequest('/api/calendar/events', {
+                method: 'POST',
+                body: JSON.stringify({
+                    summary,
+                    start: { dateTime: new Date(start).toISOString() },
+                    end: { dateTime: new Date(end).toISOString() },
+                    description
+                })
+            });
+        }
+
+        async function updateEvent() {
+            const eventId = document.getElementById('updateEventId').value;
+            const summary = document.getElementById('updateEventSummary').value;
+
+            if (!eventId || !summary) {
+                showResult({ error: 'Please enter event ID and new summary' }, true);
+                return;
+            }
+
+            await makeRequest(`/api/calendar/events/${eventId}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ summary })
+            });
+        }
+
+        async function deleteEvent() {
+            const eventId = document.getElementById('deleteEventId').value;
+            if (!eventId) {
+                showResult({ error: 'Please enter an event ID' }, true);
+                return;
+            }
+
+            await makeRequest(`/api/calendar/events/${eventId}`, {
+                method: 'DELETE'
+            });
+        }
+
+        // Set default datetime values
+        const now = new Date();
+        const startTime = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
+        const endTime = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
+
+        document.getElementById('eventStart').value = startTime.toISOString().slice(0, 16);
+        document.getElementById('eventEnd').value = endTime.toISOString().slice(0, 16);
+    </script>
+</body>
+</html>

@@ -30,6 +30,7 @@
   "homepage": "https://iansmith35.github.io/atomic-crm/",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "node-fetch": "^2.7.0"
   }
 }
