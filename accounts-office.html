@@ -3,51 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Accounts Office</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="shared-office-components.js"></script>
     <script src="https://rube.app/embed/chat?agent=crm-core-ai&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM" defer></script>
+    
+    <!-- Enhanced Styles -->
     <style>
+        .enhanced-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .enhanced-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .enhanced-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .nav-office-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            background: rgba(55, 65, 81, 0.5);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        
+        .nav-office-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .ai-pulse-indicator {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .financial-card {
+            transition: all 0.3s ease;
+        }
+        
+        .financial-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
         .status.warning { background-color: #d97706; }
         .status.ok { background-color: #059669; }
         .status.alert { background-color: #dc2626; }
     </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen">
     <div class="max-w-6xl mx-auto p-6">
-        <!-- Header -->
-        <div class="bg-gray-800 rounded-xl p-6 mb-8">
+        <!-- Enhanced Navigation Bar -->
+        <nav class="bg-gray-800/90 backdrop-blur-sm border-b border-gray-700 p-4 mb-6 rounded-xl">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="window.location.href='index.html'" 
+                            class="enhanced-btn bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300">
+                        ← Dashboard
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="text-2xl">📊</div>
+                        <div>
+                            <h1 class="text-xl font-bold">Accounts Office</h1>
+                            <p class="text-xs text-gray-400">Finance & bookkeeping management</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Quick Office Navigation -->
+                    <div class="hidden md:flex space-x-2">
+                        <button onclick="navigateToOffice('ai-chatbot.html')" 
+                                class="nav-office-btn" title="AI Assistant">🤖</button>
+                        <button onclick="navigateToOffice('ceo-office.html')" 
+                                class="nav-office-btn" title="CEO Office">💼</button>
+                        <button onclick="navigateToOffice('it-office.html')" 
+                                class="nav-office-btn" title="IT Support">💻</button>
+                        <button onclick="navigateToOffice('scheduling-office.html')" 
+                                class="nav-office-btn" title="Scheduling">📅</button>
+                    </div>
+                    <!-- Status Indicator -->
+                    <div class="text-right">
+                        <div class="text-sm font-bold text-green-400" id="officeStatus">Online</div>
+                        <div class="text-xs text-gray-400">Office Status</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- AI Task Bar -->
+        <div class="ai-task-bar bg-gradient-to-r from-gray-800 to-gray-700 rounded-xl p-4 mb-6 border border-gray-600">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="ai-pulse-indicator w-3 h-3 bg-green-500 rounded-full"></div>
+                    <div>
+                        <h3 class="font-semibold text-sm">AI Assistant Active</h3>
+                        <p class="text-xs text-gray-400">Ready to help with Accounts Office tasks</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="quickAIAction('create-task')" 
+                            class="ai-quick-btn bg-blue-600/20 hover:bg-blue-600/40 px-3 py-1 rounded text-xs">
+                        ✅ New Task
+                    </button>
+                    <button onclick="quickAIAction('get-summary')" 
+                            class="ai-quick-btn bg-purple-600/20 hover:bg-purple-600/40 px-3 py-1 rounded text-xs">
+                        📊 Summary
+                    </button>
+                    <button onclick="toggleAIChat()" 
+                            class="ai-quick-btn bg-green-600/20 hover:bg-green-600/40 px-3 py-1 rounded text-xs">
+                        💬 Chat
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Expandable AI Chat -->
+            <div id="aiChatPanel" class="ai-chat-panel mt-4 hidden">
+                <div class="bg-gray-900 rounded-lg p-4">
+                    <div id="aiChatMessages" class="h-32 overflow-y-auto mb-3 text-sm">
+                        <div class="text-blue-400 mb-2">
+                            <strong>AI:</strong> Hello! I'm ready to analyze your financial data and help with accounting tasks. What would you like to do?
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="aiChatInput" 
+                               placeholder="Ask about finances, create reports, manage invoices..." 
+                               class="flex-1 bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm"
+                               onkeypress="handleAIChatEnter(event)">
+                        <button onclick="sendAIMessage()" 
+                                class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Header -->
+        <div class="bg-gradient-to-r from-green-700 to-emerald-700 rounded-xl p-6 mb-8 shadow-2xl">
             <h2 class="text-2xl font-bold mb-2">📊 Accounts Office — Finance & Bookkeeping</h2>
-            <p class="text-gray-300">Manage cashflow, invoices, receipts, and live AI bookkeeping chat.</p>
+            <p class="text-green-100">Manage cashflow, invoices, receipts, and live AI bookkeeping chat.</p>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-gray-800 rounded-xl p-6">
-                <h3 class="text-lg font-semibold mb-3">📈 Live Cashflow</h3>
-                <p class="text-gray-300 mb-3">Net Position: <strong class="text-white">£12,847.32</strong></p>
-                <ul class="space-y-2 text-gray-300">
-                    <li>⬆️ Income (This Week): £5,420</li>
-                    <li>⬇️ Expenses (This Week): £2,300</li>
-                    <li>💰 Pending Invoices: 4</li>
-                </ul>
-                <button class="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">Export CSV</button>
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Live Tasks Widget -->
+            <div class="live-tasks-widget bg-gradient-to-br from-gray-800 to-gray-700 rounded-xl p-6 shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold flex items-center">
+                        📋 Active Tasks
+                        <span class="ml-2 bg-blue-600 text-xs px-2 py-1 rounded-full" id="taskCount">0</span>
+                    </h3>
+                    <button onclick="refreshTasks()" 
+                            class="text-gray-400 hover:text-white transition-colors">
+                        🔄
+                    </button>
+                </div>
+                
+                <div id="tasksList" class="space-y-2 mb-4">
+                    <!-- Tasks will be loaded here -->
+                    <div class="animate-pulse">
+                        <div class="bg-gray-600 h-4 rounded mb-2"></div>
+                        <div class="bg-gray-600 h-4 rounded w-3/4"></div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button onclick="createNewTask()" 
+                            class="flex-1 bg-green-600/20 hover:bg-green-600/40 border border-green-600/30 px-4 py-2 rounded text-sm transition-all">
+                        ➕ New Task
+                    </button>
+                    <button onclick="viewAllTasks()" 
+                            class="flex-1 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-600/30 px-4 py-2 rounded text-sm transition-all">
+                        📋 View All
+                    </button>
+                </div>
             </div>
 
-            <div class="bg-gray-800 rounded-xl p-6">
-                <h3 class="text-lg font-semibold mb-3">🧾 Invoice Console</h3>
-                <ul class="space-y-2 text-gray-300">
-                    <li>Jones Heating – £450 – <span class="status bg-yellow-600 px-2 py-1 rounded text-xs text-white">Due</span></li>
-                    <li>OVO Energy – £1,200 – <span class="status bg-green-600 px-2 py-1 rounded text-xs text-white">Paid</span></li>
-                    <li>Tenant Refund – £220 – <span class="status bg-red-600 px-2 py-1 rounded text-xs text-white">Overdue</span></li>
+            <!-- Enhanced Live Cashflow -->
+            <div class="financial-card bg-gradient-to-br from-gray-800 to-gray-700 rounded-xl p-6 shadow-lg">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">📈 Live Cashflow</h3>
+                <p class="text-gray-300 mb-3">Net Position: <strong class="text-green-400 text-xl">£12,847.32</strong></p>
+                <ul class="space-y-2 text-gray-300 mb-4">
+                    <li class="flex items-center justify-between">
+                        <span>⬆️ Income (This Week):</span>
+                        <span class="text-green-400 font-semibold">£5,420</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span>⬇️ Expenses (This Week):</span>
+                        <span class="text-red-400 font-semibold">£2,300</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span>💰 Pending Invoices:</span>
+                        <span class="text-yellow-400 font-semibold">4</span>
+                    </li>
                 </ul>
-                <button class="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">View All Invoices</button>
+                <button class="w-full enhanced-btn bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 px-4 py-2 rounded font-semibold">
+                    Export CSV Report
+                </button>
+            </div>
+
+            <!-- Enhanced Invoice Console -->
+            <div class="financial-card bg-gradient-to-br from-gray-800 to-gray-700 rounded-xl p-6 shadow-lg">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">🧾 Invoice Console</h3>
+                <ul class="space-y-3 text-gray-300 mb-4">
+                    <li class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+                        <div>
+                            <div class="font-medium">Jones Heating</div>
+                            <div class="text-sm text-gray-400">£450.00</div>
+                        </div>
+                        <span class="status bg-yellow-600 px-2 py-1 rounded text-xs text-white">Due</span>
+                    </li>
+                    <li class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+                        <div>
+                            <div class="font-medium">OVO Energy</div>
+                            <div class="text-sm text-gray-400">£1,200.00</div>
+                        </div>
+                        <span class="status bg-green-600 px-2 py-1 rounded text-xs text-white">Paid</span>
+                    </li>
+                    <li class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+                        <div>
+                            <div class="font-medium">Tenant Refund</div>
+                            <div class="text-sm text-gray-400">£220.00</div>
+                        </div>
+                        <span class="status bg-red-600 px-2 py-1 rounded text-xs text-white">Overdue</span>
+                    </li>
+                </ul>
+                <button class="w-full enhanced-btn bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-4 py-2 rounded font-semibold">
+                    View All Invoices
+                </button>
             </div>
         </div>
 
-        <div class="bg-gray-800 rounded-xl p-6 mb-6">
-            <h3 class="text-lg font-semibold mb-3">📥 Upload Bank Statements</h3>
-            <input type="file" multiple class="block w-full text-sm text-gray-300 border border-gray-600 rounded bg-gray-700 p-2 mb-2" />
+        <!-- Enhanced Upload Section -->
+        <div class="mt-8 bg-gradient-to-br from-gray-800 to-gray-700 rounded-xl p-6 shadow-lg">
+            <h3 class="text-lg font-semibold mb-3 flex items-center">📥 Upload Bank Statements</h3>
+            <input type="file" multiple 
+                   class="block w-full text-sm text-gray-300 border border-gray-600 rounded bg-gray-700 p-3 mb-4 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700" />
+            <div class="flex gap-4">
+                <button class="enhanced-btn bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 px-6 py-2 rounded font-semibold">
+                    🔍 Process & Analyze
+                </button>
+                <button class="enhanced-btn bg-gradient-to-r from-gray-600 to-gray-500 hover:from-gray-700 hover:to-gray-600 px-6 py-2 rounded font-semibold">
+                    📊 Generate Report
+                </button>
+            </div>
+        </div>
+    </div>
             <p class="text-xs text-gray-500">Drag & drop CSVs or PDFs from Gmail or Google Drive.</p>
         </div>
 
