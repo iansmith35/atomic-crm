@@ -458,5 +458,25 @@
 </script>
 -->
 
+<!-- AI Holiday Assistant Integration -->
+<script src="src/services/ai-bots.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const aiButton = document.createElement('button')
+  aiButton.innerHTML = '🏖️ AI Holiday Assistant'
+  aiButton.style.cssText = 'position: fixed; bottom: 20px; right: 20px; padding: 10px; border: none; border-radius: 5px; background: #2196F3; color: white; cursor: pointer;'
+  
+  aiButton.onclick = async function() {
+    const message = prompt('Ask the Holiday Office AI:')
+    if (message) {
+      const response = await window.AIBots.getChatResponse('holiday', message)
+      alert('AI Assistant: ' + response.response)
+    }
+  }
+  
+  document.body.appendChild(aiButton)
+})
+</script>
+
 </body>
 </html>
