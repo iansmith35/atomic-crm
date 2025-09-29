@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM API Integration Demo - Atomic CRM</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .header { text-align: center; background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .endpoint { background: white; margin: 15px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .method { background: #007bff; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; }
+        .url { font-family: monospace; background: #f8f9fa; padding: 10px; border-radius: 4px; margin: 10px 0; }
+        .response { background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+        .test-button { background: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .test-button:hover { background: #218838; }
+        .test-button:disabled { background: #6c757d; cursor: not-allowed; }
+        .search-section { display: flex; gap: 10px; align-items: center; margin: 10px 0; }
+        .search-input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; flex: 1; }
+        .demo-section { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .crm-class-demo { background: #e3f2fd; border-left: 4px solid #2196f3; }
+        .ai-demo { background: #f3e5f5; border-left: 4px solid #9c27b0; }
+        .loading { color: #666; font-style: italic; }
+        .error { color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 4px; }
+        .success { color: #155724; background: #d4edda; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔗 CRM API Integration</h1>
+        <h2>Supabase Edge Function & CRMIntegration Class Demo</h2>
+        <p>Test the CRM API endpoints and see the JavaScript integration class in action.</p>
+    </div>
+
+    <!-- API Endpoints Testing -->
+    <div class="endpoint">
+        <h3>📊 /companies - Get All Companies</h3>
+        <div class="method">GET</div>
+        <div class="url">/functions/v1/crm-api/companies</div>
+        <p>Fetches all companies from the atomic_crm database.</p>
+        <button class="test-button" onclick="testEndpoint('/companies', 'companiesResult')">Test Companies</button>
+        <div id="companiesResult" class="response" style="display:none;"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>👥 /contacts - Get Contacts with Company Data</h3>
+        <div class="method">GET</div>
+        <div class="url">/functions/v1/crm-api/contacts</div>
+        <p>Fetches contacts with their related company information.</p>
+        <button class="test-button" onclick="testEndpoint('/contacts', 'contactsResult')">Test Contacts</button>
+        <div id="contactsResult" class="response" style="display:none;"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>💼 /opportunities - Get Opportunities with Joins</h3>
+        <div class="method">GET</div>
+        <div class="url">/functions/v1/crm-api/opportunities</div>
+        <p>Fetches opportunities with contact and company relationships.</p>
+        <button class="test-button" onclick="testEndpoint('/opportunities', 'opportunitiesResult')">Test Opportunities</button>
+        <div id="opportunitiesResult" class="response" style="display:none;"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>🔍 /search?q=term - Search Contacts</h3>
+        <div class="method">GET</div>
+        <div class="url">/functions/v1/crm-api/search?q={searchTerm}</div>
+        <p>Searches contacts by name or email address.</p>
+        <div class="search-section">
+            <input type="text" class="search-input" id="searchInput" placeholder="Enter name or email..." value="john">
+            <button class="test-button" onclick="testSearch()">Search Contacts</button>
+        </div>
+        <div id="searchResult" class="response" style="display:none;"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>📈 /dashboard - Get Summary Counts</h3>
+        <div class="method">GET</div>
+        <div class="url">/functions/v1/crm-api/dashboard</div>
+        <p>Returns summary statistics including total counts and opportunity statuses.</p>
+        <button class="test-button" onclick="testEndpoint('/dashboard', 'dashboardResult')">Test Dashboard</button>
+        <div id="dashboardResult" class="response" style="display:none;"></div>
+    </div>
+
+    <!-- CRM Integration Class Demo -->
+    <div class="demo-section crm-class-demo">
+        <h2>🎯 CRMIntegration JavaScript Class Demo</h2>
+        <p>Test the CRMIntegration class methods that wrap the API endpoints.</p>
+        
+        <button class="test-button" onclick="testCRMClass()">Test CRM Class Methods</button>
+        <button class="test-button" onclick="testContactExtraction()">Test Contact Extraction</button>
+        <button class="test-button" onclick="clearCRMCache()">Clear Cache</button>
+        
+        <div id="crmClassResult" class="response" style="display:none;"></div>
+    </div>
+
+    <!-- AI Integration Demo -->
+    <div class="demo-section ai-demo">
+        <h2>🤖 AI Integration with CRM Context Demo</h2>
+        <p>See how the CRM data enriches AI conversations by detecting contacts and companies in messages.</p>
+        
+        <div class="search-section">
+            <input type="text" class="search-input" id="aiMessageInput" 
+                   placeholder="Enter a message mentioning contacts..." 
+                   value="I need to follow up with john@example.com about the proposal">
+            <button class="test-button" onclick="testAIEnrichment()">Enrich with CRM</button>
+        </div>
+        
+        <div id="aiEnrichmentResult" class="response" style="display:none;"></div>
+    </div>
+
+    <!-- Status & Implementation Info -->
+    <div class="header">
+        <h3>✅ Implementation Status</h3>
+        <div style="text-align: left; max-width: 600px; margin: 0 auto;">
+            <p><strong>Supabase Edge Function:</strong></p>
+            <ul>
+                <li>✅ CORS headers implemented</li>
+                <li>✅ Environment variables for Supabase connection</li>
+                <li>✅ All 5 required endpoints implemented</li>
+                <li>✅ JSON responses with error handling</li>
+                <li>✅ Database joins for relationships</li>
+            </ul>
+            
+            <p><strong>CRMIntegration Class:</strong></p>
+            <ul>
+                <li>✅ Fetches data from all endpoints</li>
+                <li>✅ enrichPrompt method for AI context</li>
+                <li>✅ Searches emails/names in user messages</li>
+                <li>✅ Formats CRM data for AI context</li>
+                <li>✅ Caching for performance</li>
+                <li>✅ Example usage provided</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Include the CRM Integration Class -->
+    <script src="integrations/crm-integration.js"></script>
+    <script src="integrations/crm-integration-example.js"></script>
+
+    <script>
+        // Initialize CRM integration
+        const crm = new CRMIntegration('/functions/v1/crm-api');
+
+        // Test API endpoints directly
+        async function testEndpoint(endpoint, resultId) {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading">Loading...</div>';
+
+            try {
+                const response = await fetch(`/functions/v1/crm-api${endpoint}`);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = JSON.stringify(data, null, 2);
+                resultDiv.className = 'response success';
+            } catch (error) {
+                resultDiv.innerHTML = `Error: ${error.message}`;
+                resultDiv.className = 'response error';
+            }
+        }
+
+        // Test search endpoint
+        async function testSearch() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (!searchTerm.trim()) {
+                alert('Please enter a search term');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('searchResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading">Searching...</div>';
+
+            try {
+                const response = await fetch(`/functions/v1/crm-api/search?q=${encodeURIComponent(searchTerm)}`);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = JSON.stringify(data, null, 2);
+                resultDiv.className = 'response success';
+            } catch (error) {
+                resultDiv.innerHTML = `Error: ${error.message}`;
+                resultDiv.className = 'response error';
+            }
+        }
+
+        // Test CRM Integration Class
+        async function testCRMClass() {
+            const resultDiv = document.getElementById('crmClassResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading">Testing CRM class methods...</div>';
+
+            try {
+                const results = {};
+                
+                // Test each method
+                results.companies = await crm.getCompanies();
+                results.contacts = await crm.getContacts();
+                results.opportunities = await crm.getOpportunities();
+                results.dashboard = await crm.getDashboardSummary();
+                results.searchTest = await crm.searchContacts('test');
+                results.cacheStats = crm.getCacheStats();
+                
+                resultDiv.innerHTML = JSON.stringify(results, null, 2);
+                resultDiv.className = 'response success';
+            } catch (error) {
+                resultDiv.innerHTML = `Error: ${error.message}`;
+                resultDiv.className = 'response error';
+            }
+        }
+
+        // Test contact extraction
+        async function testContactExtraction() {
+            const testMessages = [
+                "Please contact john.doe@example.com and Sarah Johnson about the meeting",
+                "I got an email from mike@techcorp.com regarding the proposal",
+                "Schedule a call with Jane Smith and Bob Wilson tomorrow"
+            ];
+
+            const resultDiv = document.getElementById('crmClassResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading">Testing contact extraction...</div>';
+
+            try {
+                const results = [];
+                for (const message of testMessages) {
+                    const extracted = crm.extractContactInfo(message);
+                    const found = await crm.findContactsInMessage(message);
+                    results.push({
+                        message,
+                        extracted,
+                        found: found.foundContacts.length
+                    });
+                }
+                
+                resultDiv.innerHTML = JSON.stringify(results, null, 2);
+                resultDiv.className = 'response success';
+            } catch (error) {
+                resultDiv.innerHTML = `Error: ${error.message}`;
+                resultDiv.className = 'response error';
+            }
+        }
+
+        // Test AI enrichment
+        async function testAIEnrichment() {
+            const message = document.getElementById('aiMessageInput').value;
+            if (!message.trim()) {
+                alert('Please enter a message');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('aiEnrichmentResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading">Enriching message with CRM context...</div>';
+
+            try {
+                const enriched = await crm.enrichPrompt(message, {
+                    includeFoundContacts: true,
+                    includeRecentOpportunities: true,
+                    includeDashboard: true
+                });
+                
+                resultDiv.innerHTML = JSON.stringify(enriched, null, 2);
+                resultDiv.className = 'response success';
+            } catch (error) {
+                resultDiv.innerHTML = `Error: ${error.message}`;
+                resultDiv.className = 'response error';
+            }
+        }
+
+        // Clear cache
+        function clearCRMCache() {
+            crm.clearCache();
+            const resultDiv = document.getElementById('crmClassResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Cache cleared successfully!';
+            resultDiv.className = 'response success';
+        }
+
+        // Enable Enter key for search inputs
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') testSearch();
+        });
+
+        document.getElementById('aiMessageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') testAIEnrichment();
+        });
+    </script>
+</body>
+</html>
