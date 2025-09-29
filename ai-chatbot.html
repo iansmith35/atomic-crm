@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://rube.app/embed/chat?agent=crm-core-ai&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM" defer></script>
+    <script src="src/services/ai-bots.js"></script>
+    <style>
+        .chat-message {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #6366f1;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { 
+                transform: scale(0);
+            } 40% { 
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-700 to-purple-800 rounded-xl p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold flex items-center">
+                        🤖 AI Chatbot Center
+                    </h1>
+                    <p class="text-blue-100 mt-2">Your intelligent AI assistant for all business needs and queries</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold" id="activeChatsCount">1</div>
+                    <div class="text-sm text-blue-200">Active Sessions</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Main Chat Interface -->
+            <div class="lg:col-span-2 bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4 flex items-center">💬 AI Assistant Chat</h2>
+                <div id="chatMessages" class="bg-gray-700 rounded-lg p-4 h-96 overflow-y-auto mb-4">
+                    <div class="chat-message text-blue-400 mb-4">
+                        <strong>AI Assistant:</strong> Hello! I'm your AI assistant ready to help with any questions or tasks you have. Whether you need help with business operations, scheduling, data analysis, or general inquiries, I'm here to assist you. What can I help you with today?
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="chatInput" placeholder="Ask me anything..." 
+                           class="flex-1 bg-gray-700 rounded-lg px-4 py-2 text-white border border-gray-600 focus:border-blue-500">
+                    <button onclick="sendMessage()" 
+                            class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-semibold">
+                        Send
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI Features Sidebar -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Quick AI Actions -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-lg font-bold mb-4">⚡ Quick Actions</h3>
+                    <div class="space-y-3">
+                        <button onclick="quickAction('schedule')" class="w-full bg-green-600 hover:bg-green-700 py-2 px-4 rounded text-sm">
+                            📅 Schedule Meeting
+                        </button>
+                        <button onclick="quickAction('tasks')" class="w-full bg-purple-600 hover:bg-purple-700 py-2 px-4 rounded text-sm">
+                            ✅ Manage Tasks
+                        </button>
+                        <button onclick="quickAction('analysis')" class="w-full bg-orange-600 hover:bg-orange-700 py-2 px-4 rounded text-sm">
+                            📊 Data Analysis
+                        </button>
+                        <button onclick="quickAction('support')" class="w-full bg-red-600 hover:bg-red-700 py-2 px-4 rounded text-sm">
+                            🆘 Technical Support
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Settings -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-lg font-bold mb-4">⚙️ Settings</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">AI Model</label>
+                            <select id="aiModel" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
+                                <option value="general">General Assistant</option>
+                                <option value="business">Business Focused</option>
+                                <option value="technical">Technical Expert</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Response Style</label>
+                            <select id="responseStyle" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
+                                <option value="concise">Concise</option>
+                                <option value="detailed">Detailed</option>
+                                <option value="creative">Creative</option>
+                            </select>
+                        </div>
+                        <button onclick="clearChat()" class="w-full bg-gray-600 hover:bg-gray-500 py-2 px-4 rounded text-sm">
+                            🗑️ Clear Chat
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat History -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-lg font-bold mb-4">📝 Recent Chats</h3>
+                    <div id="recentChats" class="space-y-2 text-sm">
+                        <div class="p-2 bg-gray-700 rounded cursor-pointer hover:bg-gray-600">
+                            Task management discussion
+                        </div>
+                        <div class="p-2 bg-gray-700 rounded cursor-pointer hover:bg-gray-600">
+                            Calendar scheduling help
+                        </div>
+                        <div class="p-2 bg-gray-700 rounded cursor-pointer hover:bg-gray-600">
+                            Data analysis request
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-8 text-center">
+            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
+                ← Back to Office Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let messageCount = 0;
+        
+        // Chat functionality
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addMessage('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                // Use AI Bots service if available
+                if (window.AIBots) {
+                    const response = await window.AIBots.getChatResponse('general', message);
+                    hideTypingIndicator();
+                    addMessage('ai', response.response || 'I apologize, but I encountered an issue processing your request. Please try again.');
+                } else {
+                    // Fallback response
+                    hideTypingIndicator();
+                    setTimeout(() => {
+                        addMessage('ai', generateAIResponse(message));
+                    }, 1000);
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                addMessage('ai', 'I apologize, but I encountered an error. Please try your request again.');
+                console.error('Chat error:', error);
+            }
+        }
+        
+        function addMessage(sender, text) {
+            const messages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message mb-4';
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `<div class="text-right"><span class="bg-blue-600 rounded-lg px-3 py-2 inline-block">${text}</span></div>`;
+            } else {
+                messageDiv.innerHTML = `<div class="text-blue-400"><strong>AI Assistant:</strong> ${text}</div>`;
+            }
+            
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+            messageCount++;
+        }
+        
+        function showTypingIndicator() {
+            const messages = document.getElementById('chatMessages');
+            const indicator = document.createElement('div');
+            indicator.id = 'typingIndicator';
+            indicator.className = 'typing-indicator text-gray-400 mb-4';
+            indicator.innerHTML = 'AI is typing... <span></span><span></span><span></span>';
+            messages.appendChild(indicator);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+        
+        function generateAIResponse(message) {
+            const responses = [
+                "I understand your question about: " + message + ". Let me help you with that.",
+                "That's an interesting point. Based on what you've shared, I'd suggest...",
+                "I can help you with that. Here's what I recommend...",
+                "Thank you for your question. Let me provide you with some guidance...",
+                "I see you're asking about " + message + ". Here's my analysis..."
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        function quickAction(action) {
+            const actions = {
+                'schedule': 'I can help you schedule a meeting. What time works best for you?',
+                'tasks': 'Let me help you manage your tasks. What would you like to add or update?',
+                'analysis': 'I can analyze data for you. What information would you like me to examine?',
+                'support': 'I\'m here to provide technical support. What issue are you experiencing?'
+            };
+            
+            addMessage('ai', actions[action] || 'How can I assist you with this?');
+        }
+        
+        function clearChat() {
+            const messages = document.getElementById('chatMessages');
+            messages.innerHTML = `
+                <div class="chat-message text-blue-400 mb-4">
+                    <strong>AI Assistant:</strong> Hello! I'm your AI assistant ready to help with any questions or tasks you have. What can I help you with today?
+                </div>
+            `;
+            messageCount = 0;
+        }
+        
+        // Enter key support
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Update active chats count periodically
+        setInterval(() => {
+            document.getElementById('activeChatsCount').textContent = Math.max(1, messageCount > 0 ? 1 : 0);
+        }, 5000);
+    </script>
+
+<!-- GLOBAL CRM SETUP PAYLOAD FOR COPILOT DEPLOYMENT -->
+<!-- DROP THIS INTO COPILOT AND DEPLOY ACROSS ALL HTML FILES -->
+<!-- REPLACES GOOGLE AUTH, SUPERBASE CONNECTION, AND BACKEND SYNC -->
+
+<!-- 🧠 LOAD RUBE CHATBOT WITH VOICE MAPPING -->
+<script src="https://rube.app/embed/chat?agent=ellie-ai&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM"></script>
+<script>
+  const officeName = document.title || "CEO Office";
+  const voiceMap = {
+    "CEO Office": "Brian",
+    "Admin Mailroom": "Stacy",
+    "Logistics Office": "Ellie",
+    "Accounts Office": "Ava",
+    "Virtual Engineer": "Riley",
+    "Therapy Room": "Luna",
+    "AI Chatbot": "Alex"
+  };
+  window.addEventListener("load", () => {
+    const aiAgent = document.querySelector("[rube-chat-agent]");
+    if (aiAgent && voiceMap[officeName]) {
+      aiAgent.setAttribute("voice", voiceMap[officeName]);
+    }
+  });
+</script>
+
+<!-- 🔑 SUPERBASE GLOBAL CONNECTION -->
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  window.supabase = createClient(
+    'https://mydxasjicsfetnglbppp.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE'
+  );
+</script>
+
+<!-- DISABLED: Google OAuth Block
+<!-- ✅ GOOGLE SIGN-IN SYSTEM -->
+<!-- <script src="https://accounts.google.com/gsi/client" async defer></script> (DISABLED) -->
+<script>
+  window.onload = () => {
+    google.accounts.id.initialize({
+      client_id: "624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com",
+      callback: handleCredentialResponse
+    });
+    google.accounts.id.renderButton(
+      document.getElementById("gSignIn"),
+      { theme: "outline", size: "large" }
+    );
+    google.accounts.id.prompt();
+  };
+
+  async function handleCredentialResponse(response) {
+    const userData = parseJwt(response.credential);
+    if (userData.email === "ian@ishe-ltd.co.uk") {
+      localStorage.setItem("user", JSON.stringify(userData));
+      window.location.href = "boss-office.html";
+    } else {
+      alert("Access Denied: Not authorised");
+    }
+  }
+
+  function parseJwt(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  }
+</script>
+-->
+
+<!-- 🔐 LOGIN.HTML PLACEHOLDER -->
+<!-- <div id="gSignIn" class="flex justify-center mt-8"></div> (DISABLED) -->
+
+<!-- DISABLED: Supabase OAuth Handler
+<!-- Google OAuth Login Handler -->
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  const supabase = createClient(
+    'https://mydxasjcsfetnglbppp.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE'
+  )
+  const loginBtn = document.querySelector('#login-button')
+  loginBtn.addEventListener('click', async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    })
+    if (error) console.error('Login error:', error.message)
+  })
+</script>
+-->
+
+</body>
+</html>
