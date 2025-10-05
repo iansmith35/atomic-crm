@@ -287,5 +287,42 @@
 </script>
 -->
 
+
+<script>
+// Load real dashboard stats from Supabase
+async function loadDashboardStats() {
+    try {
+        const supabase = window.supabase.createClient(
+            SUPABASE_CONFIG.url,
+            SUPABASE_CONFIG.anonKey
+        );
+
+        // Get task count
+        const { count: taskCount } = await supabase
+            .from('tasks')
+            .select('*', { count: 'exact', head: true })
+            .not('status', 'in', '("completed","closed")');
+
+        if (taskCount !== null) {
+            document.getElementById('activeTasksCount').textContent = taskCount;
+        }
+
+        // Get office count
+        const { count: officeCount } = await supabase
+            .from('office_personas')
+            .select('*', { count: 'exact', head: true });
+
+        if (officeCount !== null) {
+            document.getElementById('officesOnlineCount').textContent = officeCount;
+        }
+
+    } catch (error) {
+        console.error('Error loading dashboard stats:', error);
+    }
+}
+
+// Load stats when page loads
+document.addEventListener('DOMContentLoaded', loadDashboardStats);
+</script>
 </body>
 </html>
