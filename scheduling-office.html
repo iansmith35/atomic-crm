@@ -3,381 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scheduling Office - Calendar Management</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="config.js"></script>
+    <title>Alex's Office - Atomic CRM</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .office-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; }
+        .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .data-section { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .data-section h3 { margin-top: 0; color: #667eea; border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem; }
+        .task-item, .contact-item, .event-item { padding: 0.75rem; margin: 0.5rem 0; border-left: 3px solid #667eea; background: #f8f9fa; border-radius: 4px; }
+        .priority-high { border-left-color: #ff4757; }
+        .priority-medium { border-left-color: #ffa502; }
+        .loading { text-align: center; padding: 2rem; color: #999; }
+        .empty-state { text-align: center; padding: 2rem; color: #999; font-style: italic; }
+        .stats-bar { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .stat-card { flex: 1; min-width: 150px; background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #667eea; }
+        .stat-label { color: #666; font-size: 0.9rem; margin-top: 0.25rem; }
+        .chatbot-section { margin-top: 2rem; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .chatbot-iframe { width: 100%; height: 600px; border: none; border-radius: 8px; }
+    </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
-    <div class="max-w-6xl mx-auto p-6">
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-6 mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold flex items-center">
-                        📅 Scheduling Office
-                    </h1>
-                    <p class="text-indigo-100 mt-2">AI-powered calendar management & scheduling assistance</p>
-                </div>
-                <div class="text-right">
-                    <div class="text-2xl font-bold" id="activeTasksCount">7</div>
-                    <div class="text-sm text-indigo-200">Active Tasks</div>
-                </div>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>🏢 Alex's Office</h1>
+            <nav><a href="index.html">← Back to Dashboard</a></nav>
+        </header>
+
+        <div class="office-header">
+            <h2>Alex</h2>
+            <p><strong>Department:</strong> Operations | <strong>Business:</strong> ISHE</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card"><div class="stat-number" id="task-count">-</div><div class="stat-label">Active Tasks</div></div>
+            <div class="stat-card"><div class="stat-number" id="contact-count">-</div><div class="stat-label">Contacts</div></div>
+            <div class="stat-card"><div class="stat-number" id="event-count">-</div><div class="stat-label">Events</div></div>
+        </div>
+
+        <div class="content-grid">
+            <div class="data-section">
+                <h3>📋 Active Tasks</h3>
+                <div id="tasks-list" class="loading">Loading...</div>
+            </div>
+            <div class="data-section">
+                <h3>👥 Contacts</h3>
+                <div id="contacts-list" class="loading">Loading...</div>
+            </div>
+            <div class="data-section">
+                <h3>📅 Events</h3>
+                <div id="events-list" class="loading">Loading...</div>
             </div>
         </div>
 
-        <div class="grid lg:grid-cols-1 gap-8">
-            <!-- Calendar Overview -->
-            <section class="mb-8">
-                <h2 class="text-xl font-bold mb-4">📅 Calendar Events</h2>
-                <ul id="calendarEvents" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Calendar events will be loaded here -->
-                </ul>
-            </section>
-
-            <!-- Task Board -->
-            <section>
-                <h2 class="text-xl font-bold mb-4">📋 Scheduling Requests</h2>
-                <ul id="schedulingTasks" class="space-y-4">
-                    <!-- Scheduling tasks will be loaded here -->
-                </ul>
-            </section>
-        </div>
-
-        <!-- AI Suggestion Modal -->
-        <div id="aiSuggestionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div class="bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
-                <h3 class="text-lg font-bold mb-4">🤖 AI Scheduling Suggestion</h3>
-                <div id="aiSuggestionContent" class="mb-4 p-3 bg-gray-700 rounded-lg">
-                    <!-- AI suggestion content -->
-                </div>
-                <div class="flex gap-2">
-                    <button id="confirmSuggestion" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm flex-1">
-                        ✅ Confirm & Send
-                    </button>
-                    <button id="editSuggestion" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm flex-1">
-                        ✏️ Edit First
-                    </button>
-                    <button id="closeSuggestion" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm">
-                        ✕
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Back Button -->
-        <div class="mt-8 text-center">
-            <a href="index.html" class="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
-                ← Back to Office Dashboard
-            </a>
+        <div class="chatbot-section">
+            <h3>💬 Chat with Alex</h3>
+            <iframe class="chatbot-iframe" src="https://app.rube.ai/chat/embed/cm1hcbqj70012e5g33p0k9h8f" allow="clipboard-write"></iframe>
         </div>
     </div>
 
     <script>
-        // State management
-        let tasks = [];
-        let calendarEvents = [];
-        let currentAiSuggestion = null;
+        const API = 'https://mydxasjicsfetnglbppp.supabase.co/rest/v1';
+        const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY2NzYyMTQsImV4cCI6MjA0MjI1MjIxNH0.m0N4_7YqKq3-YmqPF-h_wNd6jgNpg8OjPGPRuDfVHQg';
+        const headers = { 'apikey': KEY, 'Authorization': `Bearer ${KEY}` };
 
-        // Sample data for demonstration
-        const sampleTasks = [
-            {
-                id: 1,
-                subject: "Meeting with John Smith",
-                description: "Discuss quarterly project goals and timeline adjustments"
-            },
-            {
-                id: 2,
-                subject: "Team standup",
-                description: "Weekly team synchronization and progress updates"
-            },
-            {
-                id: 3,
-                subject: "Client presentation",
-                description: "Present new features to the client stakeholders"
-            }
-        ];
-
-        const sampleCalendarEvents = [
-            {
-                summary: "Weekly Team Meeting",
-                start: "2024-01-15 10:00",
-                end: "2024-01-15 11:00",
-                source: "Google Calendar"
-            },
-            {
-                summary: "Client Call - ProjectX",
-                start: "2024-01-15 14:00",
-                end: "2024-01-15 15:30",
-                source: "Manual"
-            },
-            {
-                summary: "Design Review",
-                start: "2024-01-16 09:00",
-                end: "2024-01-16 10:00",
-                source: "Outlook"
-            }
-        ];
-
-        // AI suggestion responses
-        const aiSuggestions = [
-            "Based on your calendar, I suggest scheduling this meeting for Tuesday 2:00 PM - 3:00 PM. This slot avoids conflicts with your existing commitments and allows buffer time between meetings.",
-            "I recommend scheduling this for Wednesday morning at 10:00 AM. This time works well with team availability and follows your preferred meeting patterns.",
-            "The best available slot appears to be Thursday 3:00 PM - 4:00 PM. This gives everyone adequate preparation time and doesn't conflict with the quarterly review.",
-            "I suggest Monday 11:00 AM - 12:00 PM for this meeting. This timing optimizes for participant availability and energy levels based on historical data."
-        ];
-
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCalendarEvents();
-            loadSchedulingTasks();
-            setupEventListeners();
-        });
-
-        // Load calendar events
-        function loadCalendarEvents() {
-            const container = document.getElementById('calendarEvents');
-            
-            // Try to fetch from API first, fallback to sample data
-            fetchCalendarEvents().then(events => {
-                calendarEvents = events;
-                renderCalendarEvents();
-            }).catch(() => {
-                calendarEvents = sampleCalendarEvents;
-                renderCalendarEvents();
-            });
-        }
-
-        // Load scheduling tasks
-        function loadSchedulingTasks() {
-            fetchSchedulingTasks().then(fetchedTasks => {
-                tasks = fetchedTasks;
-                renderSchedulingTasks();
-            }).catch(() => {
-                tasks = sampleTasks;
-                renderSchedulingTasks();
-            });
-        }
-
-        // Render calendar events
-        function renderCalendarEvents() {
-            const container = document.getElementById('calendarEvents');
-            container.innerHTML = '';
-
-            calendarEvents.forEach((event, i) => {
-                const eventElement = document.createElement('li');
-                eventElement.className = 'p-4 border border-gray-600 rounded-xl bg-gray-800 shadow-sm';
-                eventElement.innerHTML = `
-                    <div class="font-bold text-white">${event.summary}</div>
-                    <div class="text-sm text-gray-400">${event.start} → ${event.end}</div>
-                    <div class="text-sm text-gray-500">From: ${event.source || "Manual"}</div>
-                `;
-                container.appendChild(eventElement);
-            });
-        }
-
-        // Render scheduling tasks
-        function renderSchedulingTasks() {
-            const container = document.getElementById('schedulingTasks');
-            container.innerHTML = '';
-
-            tasks.forEach((task) => {
-                const taskElement = document.createElement('li');
-                taskElement.className = 'p-4 border border-gray-600 rounded-xl bg-yellow-900 bg-opacity-30 shadow';
-                taskElement.innerHTML = `
-                    <div class="font-medium text-white">${task.subject}</div>
-                    <p class="text-sm text-gray-300 mb-2">${task.description}</p>
-                    <div class="flex gap-2">
-                        <button
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm"
-                            onclick="getAiSuggestion(${task.id})"
-                        >
-                            Ask AI for Date Options
-                        </button>
-                        <button 
-                            class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded-lg text-sm"
-                            onclick="markTaskDone(${task.id})"
-                        >
-                            Mark as Done
-                        </button>
-                    </div>
-                `;
-                container.appendChild(taskElement);
-            });
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
-            document.getElementById('confirmSuggestion').addEventListener('click', confirmSuggestion);
-            document.getElementById('editSuggestion').addEventListener('click', editSuggestion);
-            document.getElementById('closeSuggestion').addEventListener('click', closeSuggestionModal);
-        }
-
-        // Fetch calendar events from API
-        async function fetchCalendarEvents() {
-            const response = await fetch('/api/calendar/events');
-            const data = await response.json();
-            return data.events || [];
-        }
-
-        // Fetch scheduling tasks from API
-        async function fetchSchedulingTasks() {
-            const response = await fetch('/api/scheduling/tasks');
-            const data = await response.json();
-            return data.tasks || [];
-        }
-
-        // Get AI suggestion for a task
-        async function getAiSuggestion(taskId) {
+        async function loadTasks() {
             try {
-                const response = await fetch('/api/ai/scheduling', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ taskId })
-                });
-                const data = await response.json();
-                currentAiSuggestion = data.suggestion;
-                showAiSuggestion(currentAiSuggestion);
-            } catch (error) {
-                // Fallback to sample suggestions
-                const randomSuggestion = aiSuggestions[Math.floor(Math.random() * aiSuggestions.length)];
-                currentAiSuggestion = randomSuggestion;
-                showAiSuggestion(currentAiSuggestion);
-            }
+                const r = await fetch(`${API}/tasks?or=(category.eq.operations,business.eq.ISHE,assigned_to.ilike.%25Alex%25)&status=eq.open&limit=20`, {headers});
+                const tasks = await r.json();
+                document.getElementById('task-count').textContent = tasks.length;
+                document.getElementById('tasks-list').innerHTML = tasks.length ? tasks.map(t => 
+                    `<div class="task-item priority-${t.priority||'low'}"><strong>${t.title||t.task_name}</strong><p>${t.description||''}</p><small>Due: ${t.due_date||'TBD'}</small></div>`
+                ).join('') : '<div class="empty-state">No tasks</div>';
+            } catch(e) { document.getElementById('tasks-list').innerHTML = '<div class="empty-state">Error</div>'; }
         }
 
-        // Show AI suggestion modal
-        function showAiSuggestion(suggestion) {
-            document.getElementById('aiSuggestionContent').textContent = suggestion;
-            document.getElementById('aiSuggestionModal').classList.remove('hidden');
+        async function loadContacts() {
+            try {
+                const r = await fetch(`${API}/contacts?status=eq.active&limit=10&order=created_at.desc`, {headers});
+                const contacts = await r.json();
+                document.getElementById('contact-count').textContent = contacts.length;
+                document.getElementById('contacts-list').innerHTML = contacts.length ? contacts.map(c => 
+                    `<div class="contact-item"><strong>${c.name}</strong><p>${c.email||''}</p><small>${c.notes||''}</small></div>`
+                ).join('') : '<div class="empty-state">No contacts</div>';
+            } catch(e) { document.getElementById('contacts-list').innerHTML = '<div class="empty-state">Error</div>'; }
         }
 
-        // Close AI suggestion modal
-        function closeSuggestionModal() {
-            document.getElementById('aiSuggestionModal').classList.add('hidden');
-            currentAiSuggestion = null;
+        async function loadEvents() {
+            try {
+                const r = await fetch(`${API}/calendar_event_backups?limit=10&order=backup_timestamp.desc`, {headers});
+                const events = await r.json();
+                document.getElementById('event-count').textContent = events.length;
+                document.getElementById('events-list').innerHTML = events.length ? events.slice(0,5).map(e => {
+                    const s = e.event_snapshot || {};
+                    return `<div class="event-item"><strong>${s.summary||'Event'}</strong><p>${s.description||''}</p><small>${new Date(s.start?.dateTime||s.start?.date||e.backup_timestamp).toLocaleString()}</small></div>`;
+                }).join('') : '<div class="empty-state">No events</div>';
+            } catch(e) { document.getElementById('events-list').innerHTML = '<div class="empty-state">Error</div>'; }
         }
 
-        // Confirm AI suggestion
-        function confirmSuggestion() {
-            alert('✅ Scheduling confirmed! Email notification has been sent to all participants.');
-            closeSuggestionModal();
-        }
-
-        // Edit AI suggestion
-        function editSuggestion() {
-            const newSuggestion = prompt('Edit the AI suggestion:', currentAiSuggestion);
-            if (newSuggestion && newSuggestion.trim()) {
-                currentAiSuggestion = newSuggestion.trim();
-                showAiSuggestion(currentAiSuggestion);
-            }
-        }
-
-        // Mark task as done
-        function markTaskDone(taskId) {
-            tasks = tasks.filter(task => task.id !== taskId);
-            renderSchedulingTasks();
-            
-            // Update task count
-            const taskCount = document.getElementById('activeTasksCount');
-            taskCount.textContent = tasks.length;
-            
-            alert('✅ Task marked as completed!');
-        }
+        loadTasks(); loadContacts(); loadEvents();
+        setInterval(() => { loadTasks(); loadContacts(); loadEvents(); }, 30000);
     </script>
-
-<!-- GLOBAL CRM SETUP PAYLOAD FOR COPILOT DEPLOYMENT -->
-<!-- DROP THIS INTO COPILOT AND DEPLOY ACROSS ALL HTML FILES -->
-<!-- REPLACES GOOGLE AUTH, SUPERBASE CONNECTION, AND BACKEND SYNC -->
-
-<!-- 🧠 LOAD RUBE CHATBOT WITH VOICE MAPPING -->
-<script src="https://rube.app/embed/chat?agent=ellie-ai&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkwNzMzNjB9.dlelFFUO-TRCVA4Q7d4n5xArhN5sxCBBm4VLFxmaMZM"></script>
-<script>
-  const officeName = document.title || "CEO Office";
-  const voiceMap = {
-    "CEO Office": "Brian",
-    "Admin Mailroom": "Stacy",
-    "Logistics Office": "Ellie",
-    "Accounts Office": "Ava",
-    "Virtual Engineer": "Riley",
-    "Therapy Room": "Luna"
-  };
-  window.addEventListener("load", () => {
-    const aiAgent = document.querySelector("[rube-chat-agent]");
-    if (aiAgent && voiceMap[officeName]) {
-      aiAgent.setAttribute("voice", voiceMap[officeName]);
-    }
-  });
-</script>
-
-<!-- 🔑 SUPERBASE GLOBAL CONNECTION -->
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-  window.supabase = createClient(
-    'https://mydxasjicsfetnglbppp.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE'
-  );
-</script>
-
-<!-- DISABLED: Google OAuth Block
-<!-- ✅ GOOGLE SIGN-IN SYSTEM -->
-<!-- <script src="https://accounts.google.com/gsi/client" async defer></script> (DISABLED) -->
-<script>
-  window.onload = () => {
-    google.accounts.id.initialize({
-      client_id: "624596716963-huc2ef9rt7q8vckvjtbr84tfrjbs5cic.apps.googleusercontent.com",
-      callback: handleCredentialResponse
-    });
-    google.accounts.id.renderButton(
-      document.getElementById("gSignIn"),
-      { theme: "outline", size: "large" }
-    );
-    google.accounts.id.prompt();
-  };
-
-  async function handleCredentialResponse(response) {
-    const userData = parseJwt(response.credential);
-    if (userData.email === "ian@ishe-ltd.co.uk") {
-      localStorage.setItem("user", JSON.stringify(userData));
-      window.location.href = "boss-office.html";
-    } else {
-      alert("Access Denied: Not authorised");
-    }
-  }
-
-  function parseJwt(token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
-        .join('')
-    );
-    return JSON.parse(jsonPayload);
-  }
-</script>
--->
-
-<!-- 🔐 LOGIN.HTML PLACEHOLDER -->
-<!-- <div id="gSignIn" class="flex justify-center mt-8"></div> (DISABLED) -->
-
-<!-- DISABLED: Supabase OAuth Handler
-<!-- Google OAuth Login Handler -->
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-  const supabase = createClient(
-    'https://mydxasjcsfetnglbppp.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE'
-  )
-  const loginBtn = document.querySelector('#login-button')
-  loginBtn.addEventListener('click', async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    })
-    if (error) console.error('Login error:', error.message)
-  })
-</script>
--->
-
 </body>
 </html>
