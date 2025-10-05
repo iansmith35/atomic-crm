@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcus's Office - Atomic CRM</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .office-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, mininmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .data-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .data-section h3 {
+            margin-top: 0;
+            color: #667eea;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.5rem;
+        }
+        .task-item, .contact-item, .event-item {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-left: 3px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .priority-high { border-left-color: #ff4757; }
+        .priority-medium { border-left-color: #ffa502; }
+        .priority-low { border-left-color: #2ed573; }
+        .loading { text-align: center; padding: 2rem; color: #999; }
+        .empty-state { text-align: center; padding: 2rem; color: #999; font-style: italic; }
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            flex: 1;
+            min-width: 150px;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        .chatbot-section {
+            margin-top: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .chatbot-iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>🏢 Marcus's Office</h1>
+            <nav>
+                <a href="index.html">← Back to Dashboard</a>
+            </nav>
+        </header>
+
+        <div class="office-header">
+            <h2>Marcus</h2>
+            <p><strong>Department:</strong> Wellness | <strong>Business Unit:</strong> ZenDen</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number" id="task-count">-</div>
+                <div class="stat-label">Active Tasks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="contact-count">-</div>
+                <div class="stat-label">Related Contacts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="event-count">-</div>
+                <div class="stat-label">Upcoming Events</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="data-section">
+                <h3>📋 Active Tasks</h3>
+                <div id="tasks-list" class="loading">Loading tasks...</div>
+            </div>
+
+            <div class="data-section">
+                <h3>👥 Related Contacts</h3>
+                <div id="contacts-list" class="loading">Loading contacts...</div>
+            </div>
+
+            <div class="data-section">
+                <h3>📅 Upcoming Events</h3>
+                <div id="events-list" class="loading">Loading events...</div>
+            </div>
+        </div>
+
+        <div class="chatbot-section">
+            <h3>💬 Chat with Marcus</h3>
+            <iframe 
+                class="chatbot-iframe"
+                src="https://app.rube.ai/chat/embed/cm1hcbqj70012e5g33p0k9h8f"
+                allow="clipboard-write"
+            ></iframe>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://mydxasjicsfetnglbppp.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY2NzYyMTQsImV4cCI6MjA0MjI1MjIxNH0.m0N4_7YqKq3-YmqPF-h_wNd6jgNpg8OjPGPRuDfVHQg';
+        const OFFICE_KEY = 'zen-den';
+        const OFFICE_NAME = 'Marcus';
+        const CATEGORY = 'wellness';
+        const BUSINESS = 'ZenDen';
+
+        // Fetch tasks for this office
+        async function loadTasks() {
+            try {
+                // Query tasks by category or business
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/tasks?or=(category.eq.${CATEGORY},business.eq.${BUSINESS},assigned_to.ilike.%25${OFFICE_NAME}%25)&status=eq.open&limit=20`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                const tasks = await response.json();
+                const tasksList = document.getElementById('tasks-list');
+                document.getElementById('task-count').textContent = tasks.length;
+
+                if (tasks.length === 0) {
+                    tasksList.innerHTML = '<div class="empty-state">No active tasks</div>';
+                    return;
+                }
+
+                tasksList.innerHTML = tasks.map(task => `
+                    <div class="task-item priority-${task.priority || 'low'}">
+                        <strong>${task.title || task.task_name}</strong>
+                        <p>${task.description || ''}</p>
+                        <small>Due: ${task.due_date || 'No date'} | Priority: ${task.priority || 'low'}</small>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('tasks-list').innerHTML = '<div class="empty-state">Error loading tasks</div>';
+                console.error('Error loading tasks:', error);
+            }
+        }
+
+        // Fetch contacts
+        async function loadContacts() {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/contacts?status=eq.active&limit=10&order=created_at.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                const contacts = await response.json();
+                const contactsList = document.getElementById('contacts-list');
+                document.getElementById('contact-count').textContent = contacts.length;
+
+                if (contacts.length === 0) {
+                    contactsList.innerHTML = '<div class="empty-state">No contacts yet</div>';
+                    return;
+                }
+
+                contactsList.innerHTML = contacts.map(contact => `
+                    <div class="contact-item">
+                        <strong>${contact.name}</strong>
+                        <p>${contact.email || 'No email'}</p>
+                        <small>${contact.notes || ''}</small>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('contacts-list').innerHTML = '<div class="empty-state">Error loading contacts</div>';
+                console.error('Error loading contacts:', error);
+            }
+        }
+
+        // Fetch calendar events
+        async function loadEvents() {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/calendar_event_backups?limit=10&order=backup_timestamp.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                const events = await response.json();
+                const eventsList = document.getElementById('events-list');
+                document.getElementById('event-count').textContent = events.length;
+
+                if (events.length === 0) {
+                    eventsList.innerHTML = '<div class="empty-state">No upcoming events</div>';
+                    return;
+                }
+
+                eventsList.innerHTML = events.slice(0, 5).map(event => {
+                    const snapshot = event.event_snapshot || {};
+                    const summary = snapshot.summary || 'Untitled Event';
+                    const start = snapshot.start?.dateTime || snapshot.start?.date || 'No date';
+
+                    return `
+                        <div class="event-item">
+                            <strong>${summary}</strong>
+                            <p>${snapshot.description || 'No description'}</p>
+                            <small>${new Date(start).toLocaleString()}</small>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                document.getElementById('events-list').innerHTML = '<div class="empty-state">Error loading events</div>';
+                console.error('Error loading events:', error);
+            }
+        }
+
+        // Auto-refresh every 30 seconds
+        loadTasks();
+        loadContacts();
+        loadEvents();
+        setInterval(() => {
+            loadTasks();
+            loadContacts();
+            loadEvents();
+        }, 30000);
+    </script>
+</body>
+</html>
