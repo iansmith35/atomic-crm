@@ -3,236 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Therapy Office</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="shared-office-components.js"></script>
-    
-    <!-- Enhanced Styles -->
+    <title>Maya's Office - Atomic CRM</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        .enhanced-btn {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .enhanced-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-            transition: all 0.3s ease;
-            transform: translate(-50%, -50%);
-        }
-        
-        .enhanced-btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        .nav-office-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            border: 1px solid rgba(75, 85, 99, 0.5);
-            background: rgba(55, 65, 81, 0.5);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-        
-        .nav-office-btn:hover {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: rgba(59, 130, 246, 0.5);
-            transform: translateY(-2px);
-        }
-        
-        .chat-container {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
+        .office-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; }
+        .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .data-section { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .data-section h3 { margin-top: 0; color: #667eea; border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem; }
+        .task-item, .contact-item, .event-item { padding: 0.75rem; margin: 0.5rem 0; border-left: 3px solid #667eea; background: #f8f9fa; border-radius: 4px; }
+        .priority-high { border-left-color: #ff4757; }
+        .priority-medium { border-left-color: #ffa502; }
+        .loading { text-align: center; padding: 2rem; color: #999; }
+        .empty-state { text-align: center; padding: 2rem; color: #999; font-style: italic; }
+        .stats-bar { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .stat-card { flex: 1; min-width: 150px; background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #667eea; }
+        .stat-label { color: #666; font-size: 0.9rem; margin-top: 0.25rem; }
+        .chatbot-section { margin-top: 2rem; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .chatbot-iframe { width: 100%; height: 600px; border: none; border-radius: 8px; }
     </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
-    <!-- Navigation Bar -->
-    <nav class="bg-gray-800 border-b border-gray-700 p-4">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <!-- Back to Dashboard -->
-                <a href="index.html" class="nav-office-btn">
-                    🏠
-                </a>
-                
-                <!-- Office Title -->
-                <div>
-                    <h1 class="text-xl font-bold">🧘‍♀️ Therapy Office</h1>
-                    <p class="text-sm text-gray-400">Luna - AI Therapist</p>
-                </div>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>🏢 Maya's Office</h1>
+            <nav><a href="index.html">← Back to Dashboard</a></nav>
+        </header>
+
+        <div class="office-header">
+            <h2>Maya</h2>
+            <p><strong>Department:</strong> Health | <strong>Business:</strong> ZenDen</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card"><div class="stat-number" id="task-count">-</div><div class="stat-label">Active Tasks</div></div>
+            <div class="stat-card"><div class="stat-number" id="contact-count">-</div><div class="stat-label">Contacts</div></div>
+            <div class="stat-card"><div class="stat-number" id="event-count">-</div><div class="stat-label">Events</div></div>
+        </div>
+
+        <div class="content-grid">
+            <div class="data-section">
+                <h3>📋 Active Tasks</h3>
+                <div id="tasks-list" class="loading">Loading...</div>
             </div>
-            
-            <!-- Office Navigation -->
-            <div class="flex space-x-2">
-                <a href="ceo-office.html" class="nav-office-btn" title="CEO Office">💼</a>
-                <a href="accounts-office.html" class="nav-office-btn" title="Accounts">💰</a>
-                <a href="it-office.html" class="nav-office-btn" title="IT Office">🔧</a>
-                <a href="communications-office.html" class="nav-office-btn" title="Admin Mail">📬</a>
-                <a href="virtual-engineer-office.html" class="nav-office-btn" title="Virtual Engineer">⚙️</a>
-                <a href="Logistics-office.html" class="nav-office-btn" title="Logistics">📅</a>
-                <a href="boss-office.html" class="nav-office-btn" title="Boss Office">👔</a>
+            <div class="data-section">
+                <h3>👥 Contacts</h3>
+                <div id="contacts-list" class="loading">Loading...</div>
+            </div>
+            <div class="data-section">
+                <h3>📅 Events</h3>
+                <div id="events-list" class="loading">Loading...</div>
             </div>
         </div>
-    </nav>
 
-    <!-- Main Content -->
-    <main class="p-8">
-        <div class="max-w-6xl mx-auto">
-            <!-- Header Section -->
-            <div class="bg-gradient-to-br from-green-400 to-teal-500 p-8 rounded-xl mb-8">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-3xl font-bold mb-2">Welcome to the Therapy Office</h2>
-                        <p class="text-lg opacity-90 mb-4">Your safe space for mental wellness and support</p>
-                        <div class="flex space-x-6">
-                            <div class="text-center">
-                                <div class="text-2xl font-bold">3</div>
-                                <div class="text-sm opacity-80">Active Sessions</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-bold">Luna</div>
-                                <div class="text-sm opacity-80">AI Therapist</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-bold">24/7</div>
-                                <div class="text-sm opacity-80">Available</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-8xl opacity-20">🧘‍♀️</div>
-                </div>
-            </div>
-
-            <!-- Main Content Grid -->
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- AI Chat Interface -->
-                <div class="bg-gray-800 rounded-xl p-6">
-                    <div class="flex items-center mb-6">
-                        <div class="text-3xl mr-3">🧠</div>
-                        <div>
-                            <h3 class="text-xl font-bold">Luna - AI Therapist</h3>
-                            <p class="text-gray-400">Your personal mental wellness companion</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Chat Container -->
-                    <div class="chat-container rounded-lg p-4 h-96 mb-4 overflow-hidden">
-                        <div id="therapy-chat-container" class="h-full">
-                            <p class="text-green-400 mb-4">🌟 Luna is ready to support you...</p>
-                            <p class="text-gray-400">The AI therapist will load here with voice support and personalized guidance.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Quick Actions -->
-                    <div class="grid grid-cols-2 gap-2">
-                        <button class="enhanced-btn bg-green-600 hover:bg-green-700 p-3 rounded-lg text-sm">
-                            🎯 Start Session
-                        </button>
-                        <button class="enhanced-btn bg-blue-600 hover:bg-blue-700 p-3 rounded-lg text-sm">
-                            📝 View Notes
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Therapy Tools & Resources -->
-                <div class="space-y-6">
-                    <!-- Wellness Dashboard -->
-                    <div class="bg-gray-800 rounded-xl p-6">
-                        <h3 class="text-lg font-bold mb-4 flex items-center">
-                            <span class="text-2xl mr-2">📊</span>
-                            Wellness Dashboard
-                        </h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-gray-700 p-4 rounded-lg">
-                                <div class="text-2xl font-bold text-green-400">85%</div>
-                                <div class="text-sm text-gray-400">Mood Score</div>
-                            </div>
-                            <div class="bg-gray-700 p-4 rounded-lg">
-                                <div class="text-2xl font-bold text-blue-400">7</div>
-                                <div class="text-sm text-gray-400">Sessions This Month</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Tools -->
-                    <div class="bg-gray-800 rounded-xl p-6">
-                        <h3 class="text-lg font-bold mb-4 flex items-center">
-                            <span class="text-2xl mr-2">🛠️</span>
-                            Therapy Tools
-                        </h3>
-                        <div class="space-y-2">
-                            <button class="enhanced-btn w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg text-left">
-                                🧘 Mindfulness Exercise
-                            </button>
-                            <button class="enhanced-btn w-full bg-indigo-600 hover:bg-indigo-700 p-3 rounded-lg text-left">
-                                💭 Thought Journal
-                            </button>
-                            <button class="enhanced-btn w-full bg-pink-600 hover:bg-pink-700 p-3 rounded-lg text-left">
-                                😌 Breathing Exercise
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Privacy Notice -->
-                    <div class="bg-gray-800 border border-green-500 rounded-xl p-6">
-                        <h3 class="text-lg font-bold mb-2 flex items-center text-green-400">
-                            <span class="text-2xl mr-2">🔒</span>
-                            Privacy & Security
-                        </h3>
-                        <p class="text-sm text-gray-300">
-                            Your conversations are confidential and secure. Luna is designed to provide supportive guidance while maintaining the highest standards of privacy.
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div class="chatbot-section">
+            <h3>💬 Chat with Maya</h3>
+            <iframe class="chatbot-iframe" src="https://app.rube.ai/chat/embed/cm1hcbqj70012e5g33p0k9h8f" allow="clipboard-write"></iframe>
         </div>
-    </main>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-center p-6 mt-12 border-t border-gray-700">
-        <p class="text-gray-400">Therapy Office - ISHE Group CRM</p>
-        <p class="text-sm text-gray-500 mt-1">Professional mental wellness support</p>
-    </footer>
-
-    <!-- 🧠 LOAD RUBE CHATBOT WITH VOICE MAPPING -->
-    <script src="https://rube.app/embed/chat?agent=therapy-ai&voice=Luna-UK-Female&apikey=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJ1c2VyXzAxSzUyNDJUVllBTlBNTjIxTVdZWUtBVlk1Iiwib3JnSWQiOiJvcmdfMDFLNTI0MzI5TVkxOFo5SlhQQTJKM1kxOVkiLCJpYXQiOjE3NTkxNTIzMzN9.-RR_XvifD7r8Z0kWanIiR5Sy9y5EIzftPQqfd5jTLxM"></script>
     <script>
-      const officeName = "Therapy Office";
-      const voiceMap = {
-        "CEO Office": "Brian",
-        "Admin Mailroom": "Stacy",
-        "Logistics Office": "Ellie",
-        "Accounts Office": "Ava",
-        "Virtual Engineer": "Riley",
-        "Therapy Office": "Luna-UK-Female"
-      };
-      window.addEventListener("load", () => {
-        const aiAgent = document.querySelector("[rube-chat-agent]");
-        if (aiAgent && voiceMap[officeName]) {
-          aiAgent.setAttribute("voice", voiceMap[officeName]);
-        }
-      });
-    </script>
+        const API = 'https://mydxasjicsfetnglbppp.supabase.co/rest/v1';
+        const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY2NzYyMTQsImV4cCI6MjA0MjI1MjIxNH0.m0N4_7YqKq3-YmqPF-h_wNd6jgNpg8OjPGPRuDfVHQg';
+        const headers = { 'apikey': KEY, 'Authorization': `Bearer ${KEY}` };
 
-    <!-- 🔑 SUPABASE GLOBAL CONNECTION -->
-    <script type="module">
-      import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-      window.supabase = createClient(
-        'https://mydxasjicsfetnglbppp.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZHhhc2ppY3NmZXRuZ2xicHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMjYyNTQsImV4cCI6MjA3MzgwMjI1NH0.zdJa3T1WDdc6_JNQbh93oB7CnVWa5TQ5jLb1UN-8dLE'
-      );
+        async function loadTasks() {
+            try {
+                const r = await fetch(`${API}/tasks?or=(category.eq.health,business.eq.ZenDen,assigned_to.ilike.%25Maya%25)&status=eq.open&limit=20`, {headers});
+                const tasks = await r.json();
+                document.getElementById('task-count').textContent = tasks.length;
+                document.getElementById('tasks-list').innerHTML = tasks.length ? tasks.map(t => 
+                    `<div class="task-item priority-${t.priority||'low'}"><strong>${t.title||t.task_name}</strong><p>${t.description||''}</p><small>Due: ${t.due_date||'TBD'}</small></div>`
+                ).join('') : '<div class="empty-state">No tasks</div>';
+            } catch(e) { document.getElementById('tasks-list').innerHTML = '<div class="empty-state">Error</div>'; }
+        }
+
+        async function loadContacts() {
+            try {
+                const r = await fetch(`${API}/contacts?status=eq.active&limit=10&order=created_at.desc`, {headers});
+                const contacts = await r.json();
+                document.getElementById('contact-count').textContent = contacts.length;
+                document.getElementById('contacts-list').innerHTML = contacts.length ? contacts.map(c => 
+                    `<div class="contact-item"><strong>${c.name}</strong><p>${c.email||''}</p><small>${c.notes||''}</small></div>`
+                ).join('') : '<div class="empty-state">No contacts</div>';
+            } catch(e) { document.getElementById('contacts-list').innerHTML = '<div class="empty-state">Error</div>'; }
+        }
+
+        async function loadEvents() {
+            try {
+                const r = await fetch(`${API}/calendar_event_backups?limit=10&order=backup_timestamp.desc`, {headers});
+                const events = await r.json();
+                document.getElementById('event-count').textContent = events.length;
+                document.getElementById('events-list').innerHTML = events.length ? events.slice(0,5).map(e => {
+                    const s = e.event_snapshot || {};
+                    return `<div class="event-item"><strong>${s.summary||'Event'}</strong><p>${s.description||''}</p><small>${new Date(s.start?.dateTime||s.start?.date||e.backup_timestamp).toLocaleString()}</small></div>`;
+                }).join('') : '<div class="empty-state">No events</div>';
+            } catch(e) { document.getElementById('events-list').innerHTML = '<div class="empty-state">Error</div>'; }
+        }
+
+        loadTasks(); loadContacts(); loadEvents();
+        setInterval(() => { loadTasks(); loadContacts(); loadEvents(); }, 30000);
     </script>
 </body>
 </html>
