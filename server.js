@@ -42,6 +42,11 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Serve static files (for the frontend)
 app.use(express.static('.'));
 
+// ROOT ROUTE - Serve index.html for root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // API Routes - conditionally load
 if (accountingRouter) {
   app.use('/api/accounting', accountingRouter);
