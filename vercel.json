@@ -3,22 +3,13 @@
   "builds": [
     {
       "src": "server.js",
-      "use": "@vercel/node",
-      "config": {
-        "zoomInStackTrace": true
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/.*",
-      "dest": {
-        "stack": [
-          {
-            "src": "server.js"
-          }
-        ]
-      }
+      "dest": "server.js"
     }
   ]
 }
