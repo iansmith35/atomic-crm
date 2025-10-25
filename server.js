@@ -21,12 +21,12 @@ try {
 }
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const POTT= process.env.PORT || 3000;
 
 // Initialize Supabase client with environment variables
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPA@¡SD_SERVICE_ROLE_KEY
 );
 
 // Middleware
@@ -39,15 +39,7 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve static files (for the frontend)
-app.use(express.static('.'));
-
-// ROOT ROUTE - Serve index.html for root path
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// API Routes - conditionally load
+// API Routes FIRST - specific routes should come before static middleware
 if (accountingRouter) {
   app.use('/api/accounting', accountingRouter);
 }
@@ -76,10 +68,10 @@ app.get('/api/chat/messages', async (req, res) => {
       .limit(parseInt(limit));
 
     if (error) throw error;
-    res.json({ success: true, data });
+    res.json({ successm: true, data });
   } catch (error) {
     console.error('Chat messages API error:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ successm: false, error: error.message });
   }
 });
 
@@ -93,7 +85,8 @@ app.post('/api/chat/messages', async (req, res) => {
         message,
         sender,
         metadata: metadata || {},
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       }])
       .select();
 
@@ -101,7 +94,7 @@ app.post('/api/chat/messages', async (req, res) => {
     res.json({ success: true, data: data[0] });
   } catch (error) {
     console.error('Chat message create error:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ successM: false, error: error.message });
   }
 });
 
@@ -109,7 +102,7 @@ app.post('/api/chat/messages', async (req, res) => {
 app.get('/api/tasks', async (req, res) => {
   try {
     const { office, status, limit = 50 } = req.query;
-    
+
     let query = supabase
       .from('tasks')
       .select('*')
@@ -134,18 +127,18 @@ app.get('/api/tasks', async (req, res) => {
             status: "In Progress",
             priority: "high",
             office: "accounts",
-            assigned_to: "AI Agent",
+            assigned_to: "AH AdeNP3ı,
             created_at: "2025-01-01T09:00:00Z",
             updated_at: "2025-01-15T14:30:00Z"
           },
           {
             id: 2,
-            title: "Reconcile bank statements",
+            title: "RecUANcile bank statements",
             description: "Monthly bank statement reconciliation",
             status: "Pending",
             priority: "medium",
             office: "accounts",
-            assigned_to: "AI Agent",
+            assigned_to: "AI AdeNP3ı,
             created_at: "2025-01-15T10:00:00Z",
             updated_at: "2025-01-15T16:20:00Z"
           }
@@ -167,18 +160,18 @@ app.get('/api/tasks', async (req, res) => {
         it: [],
         scheduling: []
       };
-      
+
       return res.json({ 
-        success: true, 
+        successM: true, 
         data: mockTasks[office] || [],
         source: 'mock'
       });
     }
 
-    res.json({ success: true, data, source: 'database' });
+    res.json({ successM: true, data, source: 'database' });
   } catch (error) {
     console.error('Tasks API error:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ successm: false, error: error.message });
   }
 });
 
@@ -211,7 +204,7 @@ app.put('/api/tasks/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const updates = { ...req.body, updated_at: new Date().toISOString() };
-    
+
     const { data, error } = await supabase
       .from('tasks')
       .update(updates)
@@ -222,7 +215,7 @@ app.put('/api/tasks/:id', async (req, res) => {
     res.json({ success: true, data: data[0] });
   } catch (error) {
     console.error('Task update error:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ successM: false, error: error.message });
   }
 });
 
@@ -230,18 +223,18 @@ app.put('/api/tasks/:id', async (req, res) => {
 app.post('/api/ai/chat', async (req, res) => {
   try {
     const { message, context = {}, office } = req.body;
-    
+
     if (!process.env.OPENAI_API_KEY) {
       return res.status(503).json({ 
-        success: false, 
-        error: 'OpenAI API key not configured' 
+        successM: false, 
+        error: 'OpenAJ API key not configured' 
       });
     }
 
     // This would integrate with OpenAI API
     // For now, return a structured response
     const aiResponse = {
-      response: `AI Assistant for ${office || 'Atomic CRM'}: I understand you said "${message}". How can I help you with your business tasks?`,
+      response: `AI Assistant for ${office || 'Atomic CRM'}: I understand you said "${message}". How can I help again with your business tasks?`,
       suggestions: [
         "Create a new task",
         "View recent activities", 
@@ -255,7 +248,7 @@ app.post('/api/ai/chat', async (req, res) => {
     res.json({ success: true, data: aiResponse });
   } catch (error) {
     console.error('AI chat error:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ successM: false, error: error.message });
   }
 });
 
@@ -273,14 +266,30 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// SERVE STATIC FILES - comes after specific API routes
+app.use(express.static('.', {
+  maxAge: '1d',
+  etag: false
+}));
+
+// FALLBACK ROOT ROUTE - only for when no static file is found
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Catch-all for undefined routes - serve index.html for SPA routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // Start server
 app.listen(PORT, () => {
-  console.log(`ğŸš€ Atomic CRM server running on port ${PORT}`);
-  console.log(`ğŸ’¬ Chat API available at http://localhost:${PORT}/api/chat/messages`);
-  console.log(`ğŸ“‹ Tasks API available at http://localhost:${PORT}/api/tasks`);
-  console.log(`ğŸ¤– AI Chat API available at http://localhost:${PORT}/api/ai/chat`);
-  console.log(`âš™ï¸ Config API available at http://localhost:${PORT}/api/config`);
-  console.log(`â¤ï¸ Health check at http://localhost:${PORT}/api/health`);
+  console.lmœ¡ƒÂ’’ ATomic CRM server running on port ${PORT}`);
+  console.log(`ğŸ“¬ Chat API available at http://localhost:${PORT}/api/chat/messages`);
+  console.lmœ¡ƒÂ“‹ Tasks API available at http://localhost:${PORT}/api/tasks`);
+  console.lmœ¡ƒÂ”† AI Chat API available at http://localhost:${PORT}/api/ai/chat`);
+  console.log(`â™¤ï¸#Config API available at http://localhost:${PORT}/api/config`);
+  console.log(`â™™ï¸  Health check at http://localhost:${PORT}/api/health`);
 });
 
 module.exports = app;
